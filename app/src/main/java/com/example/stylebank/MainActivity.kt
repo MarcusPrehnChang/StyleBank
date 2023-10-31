@@ -9,9 +9,15 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.stylebank.ui.theme.StyleBankTheme
 
+val roboto: FontFamily = FontFamily.Default
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,25 +28,35 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting("Android")
+                    GreetingPreview()
                 }
             }
         }
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
 
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-    StyleBankTheme {
-        Greeting("Android")
-    }
+        Text(
+            buildAnnotatedString {
+                withStyle(
+                    style = SpanStyle(
+                        fontFamily = roboto,
+                        fontWeight = FontWeight(600)
+                    )
+                ){
+                    append("STYLE")
+                }
+                withStyle(
+                    style = SpanStyle(
+                        fontFamily = roboto,
+                        fontWeight = FontWeight(300)
+                    )
+                ){
+                    append("BANK")
+                }
+            }
+        )
 }
