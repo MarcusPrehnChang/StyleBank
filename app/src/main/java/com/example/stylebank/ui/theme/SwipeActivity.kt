@@ -43,6 +43,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -90,6 +91,8 @@ fun SwipeScreen() {
             )
         }
 
+
+
         Column(
             modifier = Modifier
                 .align(Alignment.BottomStart)
@@ -112,6 +115,43 @@ fun SwipeScreen() {
                     fontSize = 18.sp
                 ),
                 color = Color.Gray
+            )
+
+        }
+
+        Column(
+            modifier = Modifier
+                .align(Alignment.BottomStart)
+                .padding(40.dp,160.dp)
+        ) {
+            Text(
+                text = "STYLEBANK",
+                style = TextStyle(
+                    fontFamily = FontFamily.SansSerif,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp
+                ),
+                color = Color.Gray
+            )
+        }
+
+        Box(
+            modifier = Modifier
+                .padding(40.dp,110.dp)
+                .height(25.dp)
+                .width(65.dp)
+                .align(Alignment.BottomEnd)
+                .background(color = PriceTagGreen.copy(alpha = 0.5f),
+                    shape = RoundedCornerShape(4.dp))
+        ) {
+            Text(
+                text = "118£",
+                color = Color.Black,
+                style = TextStyle(
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = FontFamily.SansSerif),
+                modifier = Modifier.align(Alignment.Center)
             )
         }
 
