@@ -80,7 +80,6 @@ fun SwipeScreen() {
                 .padding(16.dp)
                 .background(color = Color.White, shape = RoundedCornerShape(20.dp))
         ){
-            val maxWidth = constraints.maxWidth.toFloat()
             val imagePainter = painterResource(id = R.drawable.sb_skjorte)
 
             Image(modifier = Modifier
@@ -125,10 +124,26 @@ fun SwipeScreen() {
                 .padding(40.dp,160.dp)
         ) {
             Text(
-                text = "STYLEBANK",
+                text = "STYLE",
                 style = TextStyle(
                     fontFamily = FontFamily.SansSerif,
                     fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp
+                ),
+                color = Color.Gray
+            )
+        }
+
+        Column(
+            modifier = Modifier
+                .align(Alignment.BottomStart)
+                .padding(100.dp,160.dp)
+        ) {
+            Text(
+                text = "BANK",
+                style = TextStyle(
+                    fontFamily = FontFamily.SansSerif,
+                    fontWeight = FontWeight.Normal,
                     fontSize = 20.sp
                 ),
                 color = Color.Gray
