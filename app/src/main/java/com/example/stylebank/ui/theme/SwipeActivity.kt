@@ -40,7 +40,11 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 class SwipeActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,7 +69,6 @@ fun SwipeScreen() {
         modifier = Modifier
             .fillMaxSize()
             .background(color = Color.White)
-            .padding(16.dp)
     ) {
 
 
@@ -73,6 +76,7 @@ fun SwipeScreen() {
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight(0.85f)
+                .padding(16.dp)
                 .background(color = Color.White, shape = RoundedCornerShape(20.dp))
         ){
             val maxWidth = constraints.maxWidth.toFloat()
@@ -83,11 +87,33 @@ fun SwipeScreen() {
                 .align(Alignment.Center),
                 painter = imagePainter,
                 contentDescription = null,
-                contentScale = ContentScale.Crop
             )
         }
 
-        
+        Column(
+            modifier = Modifier
+                .align(Alignment.BottomStart)
+                .padding(30.dp,90.dp)
+        ) {
+            Text(
+                text = "CAMO SHIRT",
+                style = TextStyle(
+                    fontFamily = FontFamily.SansSerif,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp
+                ),
+                color = Color.Black
+            )
+            Text(
+                text = "SAUNA",
+                style = TextStyle(
+                    fontFamily = FontFamily.SansSerif,
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 18.sp
+                ),
+                color = Color.Gray
+            )
+        }
 
         Box(
             modifier = Modifier
@@ -95,8 +121,11 @@ fun SwipeScreen() {
                 .wrapContentHeight()
                 .height(70.dp)
                 .align(Alignment.BottomCenter)
-                .background(color = Color.LightGray, shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
-                .padding(8.dp),
+                .padding(16.dp, 0.dp)
+                .background(
+                    color = MenubarGray,
+                    shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
+                ),
             contentAlignment = Alignment.Center
         ) {
             Row(
@@ -122,7 +151,9 @@ fun SwipeScreen() {
             }
         }
     }
+
 }
+
 
 @Composable
 fun IconButtonWithText(
@@ -133,8 +164,8 @@ fun IconButtonWithText(
     Button(
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(
-            Color.LightGray,
-            contentColor = Color.LightGray
+            MenubarGray,
+            contentColor = MenubarGray
         )
     ) {
         Row(
