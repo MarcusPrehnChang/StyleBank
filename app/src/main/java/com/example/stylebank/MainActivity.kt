@@ -28,7 +28,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    GreetingPreview()
+                    //GreetingPreview()
+                    MyBank(imageIds = imageID.toList())
                 }
             }
         }
