@@ -30,6 +30,7 @@ import com.example.stylebank.R
 import com.example.stylebank.ui.theme.SwipeScreen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -84,13 +85,13 @@ fun SwipeScreen() {
     )
 
     var currentImageIndex by remember { mutableStateOf(0) }
+    var isOverlayVisible by remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(color = Color.White)
     ) {
-
 
         BoxWithConstraints(
             modifier = Modifier
@@ -99,18 +100,24 @@ fun SwipeScreen() {
                 .padding(16.dp)
                 .background(color = Color.White, shape = RoundedCornerShape(20.dp))
                 .pointerInput(Unit) {
+                    detectTapGestures {
+                        isOverlayVisible = true
+                    }
+                }
+                .pointerInput(Unit) {
                     detectHorizontalDragGestures { change, _ ->
                         val offsetX = change.positionChange().x
 
-                        if (offsetX > 150f) {
+                        if (offsetX > 200f) {
                             // Swipe højre
                             currentImageIndex = (currentImageIndex + 1) % images.size
-                        } else if (offsetX < -150f) {
+                        } else if (offsetX < -200f) {
                             // Swiped venstre
                             currentImageIndex = (currentImageIndex - 1 + images.size) % images.size
                         }
                     }
                 }
+
 
         ) {
             val imagePainter = painterResource(id = images[currentImageIndex])
@@ -122,6 +129,8 @@ fun SwipeScreen() {
                 painter = imagePainter,
                 contentDescription = null,
             )
+
+
         }
 
             Column(
@@ -204,7 +213,24 @@ fun SwipeScreen() {
                     modifier = Modifier.align(Alignment.Center)
                 )
             }
-
+        if (isOverlayVisible) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.White)
+                    .padding(16.dp)
+            ) {
+                Text(
+                    text = "Your Overlay Content Here",
+                    style = TextStyle(
+                        color = Color.Black,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        fontFamily = FontFamily.SansSerif
+                    )
+                )
+            }
+        }
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
