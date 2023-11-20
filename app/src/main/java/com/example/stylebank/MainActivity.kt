@@ -16,6 +16,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.stylebank.ui.theme.StyleBankTheme
+import com.example.stylebank.ui.theme.SwipeScreen
+import com.example.stylebank.ui.theme.SwipeScreenPreview
 
 val roboto: FontFamily = FontFamily.Default
 class MainActivity : ComponentActivity() {
@@ -28,7 +30,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    GreetingPreview()
+                    SwipeScreenPreview()
                 }
             }
         }
