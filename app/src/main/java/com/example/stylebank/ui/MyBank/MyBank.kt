@@ -1,5 +1,6 @@
 package com.example.stylebank
 
+import com.example.stylebank.data.ClothingRepository
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -57,6 +58,7 @@ fun MyBankDisplay(){
     }
 
 
+
 @Composable
 fun ImageList(imageIds: List<Int>, onAddImageClick: () -> Unit) {
     LazyVerticalGrid(columns = GridCells.Fixed(2)) {
@@ -64,6 +66,7 @@ fun ImageList(imageIds: List<Int>, onAddImageClick: () -> Unit) {
             BankCloth(drawableResourceId = imageIds[index])
         }
     }
+
 
     AddImageButton(onClick = onAddImageClick)
 }
