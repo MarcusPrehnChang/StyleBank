@@ -2,11 +2,14 @@ package com.example.stylebank
 
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.icons.Icons
@@ -65,28 +68,22 @@ fun ImageList(imageIds: List<Int>, onAddImageClick: () -> Unit) {
 }
 @Composable
 fun AddImageButton(onClick: () -> Unit) {
-    Button(
-        onClick = onClick,
+    Box(
         modifier = Modifier
             .padding(16.dp)
-            .fillMaxWidth(),
+            .width(200.dp)
+
     ) {
-        Icon(imageVector = Icons.Default.Add, contentDescription = null)
-        Spacer(modifier = Modifier.width(8.dp))
-        Text("Add Image to List")
+        Button(
+            onClick = onClick,
+            modifier = Modifier
+                .padding(16.dp),
+        ) {
+            Icon(imageVector = Icons.Default.Add, contentDescription = null)
+            Spacer(modifier = Modifier.width(8.dp))
+            Text("Add Image to List")
+        }
     }
-}
-
-@Composable
-fun MYbankIcon(){
-
-    Image(
-        painter = painterResource(id = R.drawable.mybank),
-        contentDescription = null,
-        modifier = Modifier
-            .height(81.dp)
-            .width(152.dp)
-    )
 }
 
 @Composable
@@ -104,7 +101,6 @@ fun BankCloth(drawableResourceId: Int){
 @Preview(showBackground = true)
 @Composable
 fun GreetingtooPreview() {
-    val imageIdState = remember{ mutableStateOf(listOf<Int>())}
     StyleBankTheme {
         MyBankDisplay()
     }
