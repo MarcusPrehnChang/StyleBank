@@ -53,7 +53,7 @@ fun WholeScreen() { // Klassen der styre hierchiet for siden
         PictureBox()
         Row (modifier = Modifier
             ){
-            PictureText()
+            PictureText("Woodwood", "200kr")
         }
     }
 }
@@ -69,11 +69,13 @@ fun PictureBox() {
 }
 
 @Composable
-fun PictureText(){
+fun PictureText(tøjMærke: String, pris: String){
     Row(){
-    Text(text = "Tøj Mærke"+ ":" + "Prisen")
+    Text(text = "$tøjMærke: $pris")
     }
 }
+
+
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
