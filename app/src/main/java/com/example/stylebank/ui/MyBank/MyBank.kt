@@ -21,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -66,8 +67,6 @@ fun ImageList(imageIds: List<Int>, onAddImageClick: () -> Unit) {
             BankCloth(drawableResourceId = imageIds[index])
         }
     }
-
-
     AddImageButton(onClick = onAddImageClick)
 }
 @Composable
@@ -75,17 +74,16 @@ fun AddImageButton(onClick: () -> Unit) {
     Box(
         modifier = Modifier
             .padding(16.dp)
-            .width(200.dp)
-
+            .width(100.dp)
     ) {
         Button(
             onClick = onClick,
             modifier = Modifier
-                .padding(16.dp),
+                .padding(16.dp)
+                .align(Alignment.CenterStart),
         ) {
             Icon(imageVector = Icons.Default.Add, contentDescription = null)
             Spacer(modifier = Modifier.width(8.dp))
-            Text("Add Image to List")
         }
     }
 }
