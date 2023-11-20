@@ -1,32 +1,22 @@
 package com.example.stylebank
 
-import com.example.stylebank.data.ClothingRepository
-import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -34,9 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.stylebank.ui.theme.StyleBankTheme
 
-class MyBank : ComponentActivity() {
-
-}
+class MyBank : ComponentActivity() {}
 val imageID = arrayOf(
     R.drawable.jakke,
     R.drawable.roedt,
@@ -54,16 +42,44 @@ val imageID = arrayOf(
     )
 
 @Composable
-fun MyBank(imageIds: List<Int>){
-    LazyVerticalGrid(columns = GridCells.Fixed(2)){
-        items(imageIds.size){ index ->
+fun MyBankDisplay(){
+    val (imageIds, setImageIds) = remember { mutableStateOf(imageID.toList()) }
+
+    ImageList(imageIds = imageIds) {
+        // Add a new image ID to the list
+        val newImageId = R.drawable.roedt
+        setImageIds(imageIds + listOf(newImageId))
+    }
+    }
+
+
+@Composable
+fun ImageList(imageIds: List<Int>, onAddImageClick: () -> Unit) {
+    LazyVerticalGrid(columns = GridCells.Fixed(2)) {
+        items(imageIds.size) { index ->
             BankCloth(drawableResourceId = imageIds[index])
-            }
         }
     }
 
+    AddImageButton(onClick = onAddImageClick)
+}
+@Composable
+fun AddImageButton(onClick: () -> Unit) {
+    Button(
+        onClick = onClick,
+        modifier = Modifier
+            .padding(16.dp)
+            .fillMaxWidth(),
+    ) {
+        Icon(imageVector = Icons.Default.Add, contentDescription = null)
+        Spacer(modifier = Modifier.width(8.dp))
+        Text("Add Image to List")
+    }
+}
+
 @Composable
 fun MYbankIcon(){
+
     Image(
         painter = painterResource(id = R.drawable.mybank),
         contentDescription = null,
@@ -72,6 +88,7 @@ fun MYbankIcon(){
             .width(152.dp)
     )
 }
+
 @Composable
 fun BankCloth(drawableResourceId: Int){
     Image(
@@ -87,39 +104,8 @@ fun BankCloth(drawableResourceId: Int){
 @Preview(showBackground = true)
 @Composable
 fun GreetingtooPreview() {
+    val imageIdState = remember{ mutableStateOf(listOf<Int>())}
     StyleBankTheme {
-        val scrollState = rememberScrollState()
-
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .then(Modifier.verticalScroll(scrollState))
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .offset(0.dp, 77.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                MYbankIcon()
-                Spacer(modifier = Modifier.height(16.dp))
-                Row {
-                    BankCloth(drawableResourceId = R.drawable.jakke)
-                    BankCloth(drawableResourceId = R.drawable.roedt)
-                }
-                Spacer(modifier = Modifier.height(16.dp))
-                Row {
-                    BankCloth(drawableResourceId = R.drawable.sortt)
-                    BankCloth(drawableResourceId = R.drawable.groent)
-                }
-                Spacer(modifier = Modifier.height(16.dp))
-                Row {
-                    BankCloth(drawableResourceId = R.drawable.hvidt)
-                    BankCloth(drawableResourceId = R.drawable.versacet)
-                }
-                Spacer(modifier = Modifier.height(16.dp))
-
-            }
-        }
+        MyBankDisplay()
     }
 }

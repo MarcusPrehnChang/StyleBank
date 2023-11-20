@@ -29,7 +29,8 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     //GreetingPreview()
-                    MyBank(imageIds = imageID.toList())
+                    MyBankDisplay()
+
                 }
             }
         }
