@@ -25,9 +25,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.fragment.app.Fragment
 import com.example.stylebank.ui.theme.StyleBankTheme
 
-class MyBank : ComponentActivity() {}
+class MyBank : Fragment() {}
 val imageID = arrayOf(
     R.drawable.jakke,
     R.drawable.roedt,
