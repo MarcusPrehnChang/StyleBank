@@ -84,13 +84,13 @@ fun SwipeScreen() {
     var currentImageIndex by remember { mutableStateOf(0) }
     var isOverlayVisible by remember { mutableStateOf(false) }
 
-    Box(
+    Box( // Den hvide baggrund - Tjek
         modifier = Modifier
             .fillMaxSize()
             .background(color = Color.White)
     ) {
 
-        BoxWithConstraints(
+        BoxWithConstraints( //boksen for billedet - tjek
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight(0.85f)
@@ -101,7 +101,7 @@ fun SwipeScreen() {
                         isOverlayVisible = true
                     }
                 }
-                .pointerInput(Unit) {
+                .pointerInput(Unit) { // Swipe mechanic
                     detectHorizontalDragGestures { change, _ ->
                         val offsetX = change.positionChange().x
 
@@ -114,23 +114,21 @@ fun SwipeScreen() {
                         }
                     }
                 }
-
-
         ) {
-            val imagePainter = painterResource(id = images[currentImageIndex])
+            val imagePainter = painterResource(id = images[currentImageIndex]) //Tracker billeder
 
-            Image(
+            Image( //Billedet i boksen
                 modifier = Modifier
                     .fillMaxSize()
                     .align(Alignment.Center),
                 painter = imagePainter,
                 contentDescription = null,
             )
-
-
         }
 
-            Column(
+
+
+            Column( // Række for tekst - Composable
                 modifier = Modifier
                     .align(Alignment.BottomStart)
                     .padding(30.dp, 90.dp)
@@ -156,7 +154,7 @@ fun SwipeScreen() {
 
             }
 
-            Column(
+            Column( //Vandmærket - hav med i boksen med billedet
                 modifier = Modifier
                     .align(Alignment.BottomStart)
                     .padding(40.dp, 160.dp)
@@ -172,7 +170,7 @@ fun SwipeScreen() {
                 )
             }
 
-            Column(
+            Column( // Vandmærket - for det andet ord bank
                 modifier = Modifier
                     .align(Alignment.BottomStart)
                     .padding(100.dp, 160.dp)
@@ -188,7 +186,7 @@ fun SwipeScreen() {
                 )
             }
 
-            Box(
+            Box( //Pris skiltet
                 modifier = Modifier
                     .padding(40.dp, 110.dp)
                     .height(25.dp)
@@ -211,7 +209,7 @@ fun SwipeScreen() {
                 )
             }
 
-            Box(
+            Box( //Menu bar box - composeable for menubar
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight()
@@ -248,38 +246,38 @@ fun SwipeScreen() {
                 }
             }
         }
-    if (isOverlayVisible) {
-        Box(
+    if (isOverlayVisible) { // overlay
+        Box( //Baggrunden hvid
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color.White)
                 .padding(16.dp)
         ) {
-            Column(
+            Column( // Indeholder det store billede
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.Start
             ) {
-                Box(
+                Box( // Det store billede
                     modifier = Modifier
                         .fillMaxWidth()
                         .fillMaxHeight(0.5f)
                         .padding(start = 16.dp, top = 0.dp, end = 16.dp, bottom = 16.dp)
                         .background(color = Color.Gray, shape = RoundedCornerShape(40.dp))
                 )
-                Row(
+                Row( // Rækken for de to små billeder
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.Bottom
                 ) {
-                    Box(
+                    Box( // Venstre mindre billede
                         modifier = Modifier
                             .height(180.dp)
                             .width(180.dp)
                             .padding(start = 16.dp, top = 0.dp, end = 0.dp, bottom = 0.dp)
                             .background(color = Color.Gray, shape = RoundedCornerShape(40.dp))
                     )
-                    Box(
+                    Box( // Højre mindre billede
                         modifier = Modifier
                             .height(180.dp)
                             .width(180.dp)
@@ -288,18 +286,18 @@ fun SwipeScreen() {
                     )
 
                 }
-                Row(
+                Row( //Rækken for store boksen
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.Bottom
                 ) {
-                    Box(
+                    Box( // Den sorte box
                         modifier = Modifier
                             .height(100.dp)
                             .fillMaxWidth()
                             .padding(16.dp)
                             .background(color = Color.Black, shape = RoundedCornerShape(10.dp))
                     ) {
-                        Text(
+                        Text( // teksten
                             text = "STORE",
                             color = Color.White,
                             style = TextStyle(
@@ -309,7 +307,7 @@ fun SwipeScreen() {
                             ),
                             modifier = Modifier.align(Alignment.Center)
                         )
-                        Image(
+                        Image( //logo'et for tasken
                             painter = painterResource(id = R.drawable.store),
                             contentDescription = null,
                             modifier = Modifier
@@ -319,7 +317,7 @@ fun SwipeScreen() {
                         )
                     }
                 }
-                Column(
+                Column( //Rækken til camo shirt, og tøjmærket
                     modifier = Modifier.fillMaxWidth(),
                 ) {
                     Row(
@@ -366,7 +364,7 @@ fun SwipeScreen() {
                         ),
                         color = Color.Gray
                     )
-                    Row(
+                    Row( // Bank knappen og indeholder krydset (luk overlay)
                         modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.Bottom,
                         horizontalArrangement = Arrangement.Center
@@ -467,8 +465,115 @@ fun ExitButton(
     }
 }
 
+@Composable
+fun structureOfScreen(){
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .background(Color.White)
+    ){
+        Column(modifier = Modifier
+            .fillMaxSize()
 
-    @Preview
-    @Composable
-    fun SwipeScreenPreview() {
-        SwipeScreen() }
+        ){
+        pictureBox(
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+
+        )
+        informationOfPicture(
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+
+        )
+        }
+    }
+}
+@Composable
+fun pictureBox(modifier: Modifier = Modifier){
+
+    val images = listOf(
+        R.drawable.sb_skjorte,
+        R.drawable.image1,
+        R.drawable.image2,
+        R.drawable.image3,
+        R.drawable.image4,
+        R.drawable.image5,
+        R.drawable.image6
+    )
+
+    var currentImageIndex by remember { mutableStateOf(0) }
+    var isOverlayVisible by remember { mutableStateOf(false) }
+
+    Box(modifier = Modifier
+        .fillMaxWidth()
+        .fillMaxHeight(0.85f)
+        .padding(16.dp)
+        .background(Color.White, shape = RoundedCornerShape(20.dp))
+        .pointerInput(Unit) {
+            detectTapGestures {
+                isOverlayVisible = true
+            }
+        }
+        .pointerInput(Unit) {
+            detectHorizontalDragGestures { change, _ ->
+                val offsetX = change.positionChange().x
+                if (offsetX > 200f) {
+                    //swipe til højre
+                    currentImageIndex = (currentImageIndex + 1) % images.size
+                } else if (offsetX < -200f) {
+                    //swipe til venstre
+                    currentImageIndex = (currentImageIndex - 1 + images.size) % images.size
+                }
+            }
+        }
+    ){
+        val imagePainter = painterResource(id = images[currentImageIndex])
+        Image( //Billedet i boksen
+            modifier = Modifier
+                .fillMaxSize()
+                .align(Alignment.Center),
+            painter = imagePainter,
+            contentDescription = null,
+        )
+    }
+}
+
+@Composable
+fun informationOfPicture(modifier: Modifier = Modifier){
+    Column( // Række for tekst - Composable
+        modifier = Modifier
+            .padding(20.dp, 8.dp)
+    ){
+        Text(
+            text = "CAMO SHIRT",
+            style = TextStyle(
+                fontFamily = FontFamily.SansSerif,
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp
+            ),
+            color = Color.Black
+        )
+        Text(
+            text ="SAUNA",
+            style = TextStyle(
+                fontFamily = FontFamily.SansSerif,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 18.sp
+            ),
+            color = Color.Gray
+        )
+    }
+
+
+}
+
+
+@Preview
+@Composable
+fun SwipeScreenPreview() {
+structureOfScreen()
+
+
+//SwipeScreen()
+}
+//SwipeScreen() }
