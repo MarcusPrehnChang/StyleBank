@@ -390,7 +390,8 @@ fun SwipeScreen() {
                         ExitButton(
                             onClick = { /* Handle button click */ },
                             icon = painterResource(id = R.drawable.cross),
-                            paddingValue = 10.dp
+                            paddingValue = 10.dp,
+                            closeOverlay = { isOverlayVisible = false }
                             )
                         }
                     }
@@ -430,14 +431,19 @@ fun ExitButton(
     onClick: () -> Unit,
     icon: Painter,
     iconSize: Dp = 24.dp,
-    paddingValue: Dp = 0.dp
+    paddingValue: Dp = 0.dp,
+    closeOverlay: () -> Unit
 ) {
     Button(
-        onClick = onClick,
+        onClick = {
+            onClick()
+            closeOverlay()
+        },
         colors = ButtonDefaults.buttonColors(
             Color.White,
             contentColor = Color.White
-        ), modifier = Modifier.padding(paddingValue)
+        ),
+        modifier = Modifier.padding(paddingValue)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically
@@ -450,6 +456,7 @@ fun ExitButton(
         }
     }
 }
+
 
     @Preview
     @Composable
