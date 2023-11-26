@@ -186,7 +186,7 @@ fun SwipeScreen() {
                 )
             }
 
-            Box( //Pris skiltet
+            Box( //Pris skiltet Tjek
                 modifier = Modifier
                     .padding(40.dp, 110.dp)
                     .height(25.dp)
@@ -209,7 +209,7 @@ fun SwipeScreen() {
                 )
             }
 
-            Box( //Menu bar box - composeable for menubar
+            Box( //Menu bar box - composeable for menubar - Tjek
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight()
@@ -486,11 +486,13 @@ fun structureOfScreen(){
                 informationOfPicture(
                     modifier = Modifier
                 )
-                Spacer(modifier = Modifier.width(140.dp))
+                Spacer(modifier = Modifier.width(100.dp))
                 prisSkilt(
                     modifier = Modifier
+                        .padding(30.dp)
                     )
                 }
+            Menubar()
             }
         }
     }
@@ -514,7 +516,7 @@ fun pictureBox(modifier: Modifier = Modifier){
     Box(modifier = Modifier
         .fillMaxWidth()
         .fillMaxHeight(0.85f)
-        .padding(16.dp)
+        .padding(16.dp) // Måske lav paddingen om med vertical og horizontal
         .background(Color.White, shape = RoundedCornerShape(20.dp))
         .pointerInput(Unit) {
             detectTapGestures {
@@ -549,7 +551,7 @@ fun pictureBox(modifier: Modifier = Modifier){
 fun informationOfPicture(modifier: Modifier = Modifier){
     Column( // Række for tekst - Composable
         modifier = Modifier
-            .padding(15.dp, 0.dp,)
+            .padding(30.dp, 0.dp)
     ){
         Text(
             text = "CAMO SHIRT",
@@ -596,6 +598,46 @@ fun prisSkilt(modifier: Modifier = Modifier){
         )
     }
 }
+
+@Composable
+fun Menubar(modifier: Modifier = Modifier){
+    Box( //Menu bar box - composeable for menubar
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+            .height(78.dp)
+            .padding(16.dp, 0.dp)
+            .background(
+                color = MenubarGray,
+                shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
+            ),
+        contentAlignment = Alignment.Center
+
+    ) {
+        Row(
+            modifier = Modifier.fillMaxSize(),
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            MenuBarButton(
+                onClick = { /* handle button click */ },
+                icon = painterResource(id = R.drawable.icon_ild),
+            )
+
+            MenuBarButton(
+                onClick = { /* handle button click */ },
+                icon = painterResource(id = R.drawable.icon_swipe),
+                iconSize = 38.dp
+            )
+
+            MenuBarButton(
+                onClick = { /* handle button click */ },
+                icon = painterResource(id = R.drawable.icon_mb),
+            )
+        }
+    }
+}
+
 
 
 @Preview
