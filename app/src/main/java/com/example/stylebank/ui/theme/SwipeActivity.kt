@@ -482,6 +482,7 @@ fun structureOfScreen(){
         )
         informationOfPicture(
             modifier = Modifier
+                .padding(15.dp)
                 .align(Alignment.CenterHorizontally)
 
         )
@@ -542,7 +543,6 @@ fun pictureBox(modifier: Modifier = Modifier){
 fun informationOfPicture(modifier: Modifier = Modifier){
     Column( // Række for tekst - Composable
         modifier = Modifier
-            .padding(20.dp, 8.dp)
     ){
         Text(
             text = "CAMO SHIRT",
