@@ -58,7 +58,6 @@ class SwipeActivity : ComponentActivity() {
         }
     }
 }
-
 @Composable
 fun SwipeScreen() {
 
@@ -411,8 +410,8 @@ fun SwipeScreen() {
 
 
 
-    @Composable
-    fun MenuBarButton(
+@Composable
+fun MenuBarButton(
         onClick: () -> Unit,
         icon: Painter,
         iconSize: Dp = 24.dp,
@@ -466,7 +465,7 @@ fun ExitButton(
 }
 
 @Composable
-fun structureOfScreen(){
+fun structureOfScreen(){ // Holder strukturen for skærmen
     Box (modifier = Modifier
         .fillMaxSize()
         .background(Color.White)
