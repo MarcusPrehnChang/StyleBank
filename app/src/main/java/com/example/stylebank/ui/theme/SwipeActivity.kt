@@ -41,6 +41,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChange
+import com.example.stylebank.model.Clothing
 
 class SwipeActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,6 +61,15 @@ class SwipeActivity : ComponentActivity() {
 
 @Composable
 fun SwipeScreen() {
+
+    val SaunaSkjorte = Clothing(
+        pictures = arrayOf("image1.png",),
+        objectName = "Knitted Sweat",
+        brandName = "Skagen",
+        price = 115,
+        link = "https://skagen-clothing.dk/products/striktroje-sort",
+        firebaseId = "trHZGNbEcI7imNF0GTfI"
+    )
 
     val images = listOf(
         R.drawable.sb_skjorte,
