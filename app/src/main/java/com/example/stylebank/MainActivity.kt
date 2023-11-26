@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.stylebank.ui.theme.StyleBankTheme
+import com.example.stylebank.ui.theme.WhatsHotPreview
 import com.example.stylebank.ui.theme.Whatshot
 import com.example.stylebank.ui.theme.whatsHot
 
@@ -42,6 +43,5 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-    StyleBankTheme {
-    }
+    WhatsHotPreview()
 }

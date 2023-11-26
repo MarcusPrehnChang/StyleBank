@@ -45,12 +45,16 @@ class Whatshot : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             StyleBankTheme {
-                // A surface container using the 'background' color from the theme
-                    WholeScreen();
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    WholeScreen()
                 }
             }
         }
     }
+}
 
 @Composable
 fun WholeScreen() { // Laver hierchiet for hele siden
@@ -146,7 +150,7 @@ fun listPictures(){
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun GreetingPreview() {
+fun WhatsHotPreview() {
     StyleBankTheme {
         WholeScreen()
     }
