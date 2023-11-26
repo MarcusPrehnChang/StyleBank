@@ -33,22 +33,14 @@ class MainActivity : ComponentActivity() {
         setContent {
             val navController = rememberNavController()
 
-
             StyleBankTheme {
                 NavHost(navController = navController, startDestination = "swipeScreen") {
-                    composable("swipeActivity") {
-                        SwipeActivity(navController = navController)
+                    composable("swipeScreen") {
+                        SwipeScreen(navController = navController)
                     }
                     composable("MyBank") {
                         MyBank(navController = navController)
                     }
-                }
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    SwipeActivity(navController)
                 }
             }
         }

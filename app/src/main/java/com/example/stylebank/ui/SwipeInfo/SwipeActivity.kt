@@ -50,8 +50,14 @@ import com.example.stylebank.ui.theme.BankBlue
 import com.example.stylebank.ui.theme.MenubarGray
 import com.example.stylebank.ui.theme.PriceTagGreen
 import com.example.stylebank.ui.theme.StyleBankTheme
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.rememberNavController
 
-class SwipeActivity(private val navController: NavController) : ComponentActivity() {
+class SwipeActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -60,13 +66,13 @@ class SwipeActivity(private val navController: NavController) : ComponentActivit
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    SwipeScreen(navController)
+                    val navController = rememberNavController()
+                    SwipeScreen(navController = navController)
                 }
             }
         }
     }
 }
-
 
 
 @Composable
@@ -514,3 +520,12 @@ fun ExitButton(
         }
     }
 }
+
+
+    @Preview
+    @Composable
+    fun SwipeScreenPreview() {
+        StyleBankTheme {
+            SwipeScreen(navController = rememberNavController())
+        }
+    }
