@@ -33,6 +33,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -41,6 +42,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChange
+import androidx.compose.ui.layout.ContentScale
 import com.example.stylebank.model.Clothing
 
 class SwipeActivity : ComponentActivity() {
@@ -62,14 +64,16 @@ class SwipeActivity : ComponentActivity() {
 @Composable
 fun SwipeScreen() {
 
-    val SaunaSkjorte = Clothing(
-        pictures = arrayOf("image1.png",),
+   /* val SkagenSkjorte = Clothing(
+        pictures = arrayOf("https://skagen-clothing.dk/cdn/shop/files/1_19c37989-1486-4ddf-9dbc-19fe56da4316.jpg?v=1685527748&width=1000",
+            "https://skagen-clothing.dk/cdn/shop/files/3_ec39fe7b-7568-48c7-8215-dab1acc8ad9e.jpg?v=1685527754&width=1000",
+            "https://skagen-clothing.dk/cdn/shop/files/8.jpg?v=1685527833&width=1000"),
         objectName = "Knitted Sweat",
         brandName = "Skagen",
-        price = 115,
+        price = 399,
         link = "https://skagen-clothing.dk/products/striktroje-sort",
         firebaseId = "trHZGNbEcI7imNF0GTfI"
-    )
+    ) */
 
     val images = listOf(
         R.drawable.sb_skjorte,
@@ -79,6 +83,12 @@ fun SwipeScreen() {
         R.drawable.image4,
         R.drawable.image5,
         R.drawable.image6
+    )
+
+    val imagesInfo = listOf(
+        R.drawable.sb_skjorte,
+        R.drawable.sb_skjorte,
+        R.drawable.sb_skjorte,
     )
 
     var currentImageIndex by remember { mutableStateOf(0) }
@@ -266,7 +276,16 @@ fun SwipeScreen() {
                         .fillMaxHeight(0.5f)
                         .padding(start = 16.dp, top = 0.dp, end = 16.dp, bottom = 16.dp)
                         .background(color = Color.Gray, shape = RoundedCornerShape(40.dp))
-                )
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.skagen1),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .clip(RoundedCornerShape(40.dp)),
+                        contentScale = ContentScale.Crop
+                    )
+                }
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -278,14 +297,32 @@ fun SwipeScreen() {
                             .width(180.dp)
                             .padding(start = 16.dp, top = 0.dp, end = 0.dp, bottom = 0.dp)
                             .background(color = Color.Gray, shape = RoundedCornerShape(40.dp))
-                    )
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.skagen2),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clip(RoundedCornerShape(40.dp)),
+                            contentScale = ContentScale.Crop
+                        )
+                    }
                     Box(
                         modifier = Modifier
                             .height(180.dp)
                             .width(180.dp)
                             .padding(start = 0.dp, top = 0.dp, end = 16.dp, bottom = 0.dp)
                             .background(color = Color.Gray, shape = RoundedCornerShape(40.dp))
-                    )
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.skagen3),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clip(RoundedCornerShape(40.dp)),
+                            contentScale = ContentScale.Crop
+                        )
+                    }
 
                 }
                 Row(
@@ -328,7 +365,7 @@ fun SwipeScreen() {
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = "CAMO SHIRT",
+                            text = "KNITTED SWEAT",
                             style = TextStyle(
                                 fontFamily = FontFamily.SansSerif,
                                 fontWeight = FontWeight.Bold,
@@ -358,7 +395,7 @@ fun SwipeScreen() {
                         }
                     }
                     Text(
-                        text = "SAUNA",
+                        text = "SKAGEN",
                         style = TextStyle(
                             fontFamily = FontFamily.SansSerif,
                             fontWeight = FontWeight.SemiBold,
