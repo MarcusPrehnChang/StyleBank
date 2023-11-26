@@ -467,28 +467,34 @@ fun ExitButton(
 
 @Composable
 fun structureOfScreen(){
-    Box(modifier = Modifier
+    Box (modifier = Modifier
         .fillMaxSize()
         .background(Color.White)
-    ){
-        Column(modifier = Modifier
-            .fillMaxSize()
-
-        ){
-        pictureBox(
+    ) {
+        Column(
             modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-
-        )
-        informationOfPicture(
-            modifier = Modifier
-                .padding(15.dp)
-                .align(Alignment.CenterHorizontally)
-
-        )
+                .fillMaxSize()
+        ) {
+            pictureBox(
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+            )
+            Row (
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                informationOfPicture(
+                    modifier = Modifier
+                )
+                Spacer(modifier = Modifier.width(140.dp))
+                prisSkilt(
+                    modifier = Modifier
+                    )
+                }
+            }
         }
     }
-}
+
 @Composable
 fun pictureBox(modifier: Modifier = Modifier){
 
@@ -543,6 +549,7 @@ fun pictureBox(modifier: Modifier = Modifier){
 fun informationOfPicture(modifier: Modifier = Modifier){
     Column( // Række for tekst - Composable
         modifier = Modifier
+            .padding(15.dp, 0.dp,)
     ){
         Text(
             text = "CAMO SHIRT",
@@ -563,8 +570,31 @@ fun informationOfPicture(modifier: Modifier = Modifier){
             color = Color.Gray
         )
     }
+}
 
-
+@Composable
+fun prisSkilt(modifier: Modifier = Modifier){
+    Box( //Pris skiltet
+        modifier = Modifier
+            .padding(0.dp, 0.dp)
+            .height(25.dp)
+            .width(65.dp)
+            .background(
+                color = PriceTagGreen.copy(alpha = 0.5f),
+                shape = RoundedCornerShape(8.dp)
+            )
+    ) {
+        Text(
+            text = "118£",
+            color = Color.Black,
+            style = TextStyle(
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                fontFamily = FontFamily.SansSerif
+            ),
+            modifier = Modifier.align(Alignment.Center)
+        )
+    }
 }
 
 
@@ -572,8 +602,5 @@ fun informationOfPicture(modifier: Modifier = Modifier){
 @Composable
 fun SwipeScreenPreview() {
 structureOfScreen()
-
-
-//SwipeScreen()
 }
 //SwipeScreen() }
