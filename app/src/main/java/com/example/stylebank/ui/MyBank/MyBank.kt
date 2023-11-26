@@ -72,6 +72,7 @@ fun ImageList(imageIds: List<Int>, onAddImageClick: () -> Unit) {
     }
     AddImageButton(onClick = onAddImageClick)
 }
+
 @Composable
 fun AddImageButton(onClick: () -> Unit) {
     Box(
