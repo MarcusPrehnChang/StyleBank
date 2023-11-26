@@ -1,4 +1,4 @@
-package com.example.stylebank.ui.theme
+package com.example.stylebank.ui.SwipeInfo
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -43,9 +43,15 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChange
 import androidx.compose.ui.layout.ContentScale
-import com.example.stylebank.model.Clothing
+import androidx.navigation.NavController
+import com.example.stylebank.MyBank
+import com.example.stylebank.MyBankDisplay
+import com.example.stylebank.ui.theme.BankBlue
+import com.example.stylebank.ui.theme.MenubarGray
+import com.example.stylebank.ui.theme.PriceTagGreen
+import com.example.stylebank.ui.theme.StyleBankTheme
 
-class SwipeActivity : ComponentActivity() {
+class SwipeActivity(private val navController: NavController) : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -54,15 +60,17 @@ class SwipeActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    SwipeScreen()
+                    SwipeScreen(navController)
                 }
             }
         }
     }
 }
 
+
+
 @Composable
-fun SwipeScreen() {
+fun SwipeScreen(navController: NavController) {
 
    /* val SkagenSkjorte = Clothing(
         pictures = arrayOf("https://skagen-clothing.dk/cdn/shop/files/1_19c37989-1486-4ddf-9dbc-19fe56da4316.jpg?v=1685527748&width=1000",
@@ -252,7 +260,7 @@ fun SwipeScreen() {
                     )
 
                     MenuBarButton(
-                        onClick = { /* handle button click */ },
+                        onClick = {navController.navigate("MyBankDisplay")},
                         icon = painterResource(id = R.drawable.icon_mb),
                     )
                 }
@@ -403,6 +411,9 @@ fun SwipeScreen() {
                         ),
                         color = Color.Gray
                     )
+
+                    //val navController = rememberNavController()
+
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.Bottom,
@@ -503,9 +514,3 @@ fun ExitButton(
         }
     }
 }
-
-
-    @Preview
-    @Composable
-    fun SwipeScreenPreview() {
-        SwipeScreen() }

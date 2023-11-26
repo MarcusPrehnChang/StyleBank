@@ -15,22 +15,40 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavHost
+import androidx.navigation.compose.rememberNavController
+import com.example.stylebank.ui.SwipeInfo.SwipeScreen
 import com.example.stylebank.ui.theme.StyleBankTheme
-import com.example.stylebank.ui.theme.SwipeScreen
-import com.example.stylebank.ui.theme.SwipeScreenPreview
+import androidx.navigation.compose.composable
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.NavType
+import androidx.navigation.compose.*
+import com.example.stylebank.ui.SwipeInfo.SwipeActivity
 
 val roboto: FontFamily = FontFamily.Default
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            val navController = rememberNavController()
+
+
             StyleBankTheme {
+                NavHost(navController = navController, startDestination = "swipeScreen") {
+                    composable("swipeActivity") {
+                        SwipeActivity(navController = navController)
+                    }
+                    composable("MyBank") {
+                        MyBank(navController = navController)
+                    }
+                }
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    SwipeScreenPreview()
+                    SwipeActivity(navController)
                 }
             }
         }

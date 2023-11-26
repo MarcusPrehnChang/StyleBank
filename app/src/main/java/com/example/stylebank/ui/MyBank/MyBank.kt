@@ -31,10 +31,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
 import com.example.stylebank.ui.theme.StyleBankTheme
 
-class MyBank : Fragment() {}
-val imageID = arrayOf(
+class MyBank(private val navController: NavController) : Fragment() {}
+/*val imageID = arrayOf(
     R.drawable.jakke,
     R.drawable.roedt,
     R.drawable.sortt,
@@ -48,18 +49,19 @@ val imageID = arrayOf(
     R.drawable.hvidt,
     R.drawable.versacet,
     R.drawable.jakke
-    )
+    )*/
 
 @Composable
 fun MyBankDisplay(){
-    val (imageIds, setImageIds) = remember { mutableStateOf(imageID.toList()) }
+  /*    val (imageIds, setImageIds) = remember { mutableStateOf(imageID.toList()) }
 
     ImageList(imageIds = imageIds) {
         // Add a new image ID to the list
         val newImageId = R.drawable.roedt
         setImageIds(imageIds + listOf(newImageId))
+    } */
     }
-    }
+
 
 
 
@@ -113,7 +115,7 @@ fun GreetingtooPreview() {
             color = MaterialTheme.colorScheme.background
         ) {
             //GreetingPreview()
-            MyBankDisplay()
+            //MyBankDisplay(nav)
 
         }
     }
