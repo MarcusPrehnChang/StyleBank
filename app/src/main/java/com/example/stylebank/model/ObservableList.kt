@@ -1,7 +1,5 @@
 package com.example.stylebank.model
 
-import android.database.Observable
-
 class ObservableList<T> : ArrayList<T>() {
     private val observers = mutableListOf<ObservableListObserver<T>>()
 

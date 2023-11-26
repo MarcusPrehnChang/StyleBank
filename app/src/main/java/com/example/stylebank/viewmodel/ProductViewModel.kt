@@ -1,6 +1,5 @@
 package com.example.stylebank.viewmodel
 
-import androidx.lifecycle.MutableLiveData
 import com.example.stylebank.data.ClothingRepository
 import com.example.stylebank.model.Banner
 import com.example.stylebank.model.Clothing
@@ -15,4 +14,10 @@ class ProductViewModel(private val repository: ClothingRepository) { //List to l
     fun getList(key: String): ObservableList<Any>?{
         return listsMap[key] as? ObservableList<Any>
     }
+
+    fun <T> addItem(key : String, item : T){
+        (listsMap[key] as? ObservableList<T>)?.add(item)
+    }
+
+
 }
