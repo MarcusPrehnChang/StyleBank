@@ -53,8 +53,9 @@ import com.example.stylebank.ui.theme.StyleBankTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.NavType
+import androidx.navigation.compose.*
 import androidx.navigation.compose.rememberNavController
 
 class SwipeActivity : ComponentActivity() {
@@ -67,7 +68,7 @@ class SwipeActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val navController = rememberNavController()
-                    SwipeScreen(navController = navController)
+                    SwipeScreen()
                 }
             }
         }
@@ -76,7 +77,8 @@ class SwipeActivity : ComponentActivity() {
 
 
 @Composable
-fun SwipeScreen(navController: NavController) {
+fun SwipeScreen() {
+
 
    /* val SkagenSkjorte = Clothing(
         pictures = arrayOf("https://skagen-clothing.dk/cdn/shop/files/1_19c37989-1486-4ddf-9dbc-19fe56da4316.jpg?v=1685527748&width=1000",
@@ -233,43 +235,6 @@ fun SwipeScreen(navController: NavController) {
                     ),
                     modifier = Modifier.align(Alignment.Center)
                 )
-            }
-
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight()
-                    .height(70.dp)
-                    .align(Alignment.BottomCenter)
-                    .padding(16.dp, 0.dp)
-                    .background(
-                        color = MenubarGray,
-                        shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
-                    ),
-                contentAlignment = Alignment.Center
-
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxSize(),
-                    horizontalArrangement = Arrangement.SpaceEvenly,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    MenuBarButton(
-                        onClick = { /* handle button click */ },
-                        icon = painterResource(id = R.drawable.icon_ild),
-                    )
-
-                    MenuBarButton(
-                        onClick = { /* handle button click */ },
-                        icon = painterResource(id = R.drawable.icon_swipe),
-                        iconSize = 38.dp
-                    )
-
-                    MenuBarButton(
-                        onClick = {navController.navigate("MyBankDisplay")},
-                        icon = painterResource(id = R.drawable.icon_mb),
-                    )
-                }
             }
         }
     if (isOverlayVisible) {
@@ -467,28 +432,6 @@ fun SwipeScreen(navController: NavController) {
 
 
 
-    @Composable
-    fun MenuBarButton(
-        onClick: () -> Unit,
-        icon: Painter,
-        iconSize: Dp = 24.dp,
-        paddingValue: Dp = 0.dp
-    ) {
-        Button(
-            onClick = onClick,
-            colors = ButtonDefaults.buttonColors(
-                MenubarGray,
-                contentColor = MenubarGray
-            ), modifier = Modifier.padding(paddingValue),
-
-        ) {
-            Image(
-                    painter = icon,
-                    contentDescription = null,
-                    modifier = Modifier.size(iconSize)
-            )
-        }
-    }
 
 @Composable
 fun ExitButton(
@@ -526,6 +469,6 @@ fun ExitButton(
     @Composable
     fun SwipeScreenPreview() {
         StyleBankTheme {
-            SwipeScreen(navController = rememberNavController())
+            SwipeScreen()
         }
     }

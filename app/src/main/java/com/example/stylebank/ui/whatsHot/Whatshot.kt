@@ -1,4 +1,4 @@
-package com.example.stylebank.ui.theme
+package com.example.stylebank.ui.whatsHot
 
 import com.example.stylebank.R
 
@@ -37,7 +37,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontStyle
+import com.example.stylebank.ui.theme.StyleBankTheme
 
 
 class Whatshot : ComponentActivity() {

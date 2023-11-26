@@ -34,32 +34,29 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import com.example.stylebank.ui.theme.StyleBankTheme
 
-class MyBank(private val navController: NavController) : Fragment() {}
-/*val imageID = arrayOf(
-    R.drawable.jakke,
-    R.drawable.roedt,
-    R.drawable.sortt,
-    R.drawable.groent,
-    R.drawable.hvidt,
-    R.drawable.versacet,
-    R.drawable.jakke,
-    R.drawable.roedt,
-    R.drawable.sortt,
-    R.drawable.groent,
-    R.drawable.hvidt,
-    R.drawable.versacet,
-    R.drawable.jakke
-    )*/
+class MyBank() : Fragment() {}
+val imageID = arrayOf(
+    R.drawable.image1,
+    R.drawable.image2,
+    R.drawable.image3,
+    R.drawable.image4,
+    R.drawable.image5,
+    R.drawable.image6,
+    R.drawable.sb_skjorte,
+    R.drawable.skagen1,
+    R.drawable.skagen2,
+    R.drawable.skagen3,
+    )
 
 @Composable
 fun MyBankDisplay(){
-  /*    val (imageIds, setImageIds) = remember { mutableStateOf(imageID.toList()) }
+     val (imageIds, setImageIds) = remember { mutableStateOf(imageID.toList()) }
 
     ImageList(imageIds = imageIds) {
         // Add a new image ID to the list
-        val newImageId = R.drawable.roedt
+        val newImageId = R.drawable.image1
         setImageIds(imageIds + listOf(newImageId))
-    } */
+    }
     }
 
 
