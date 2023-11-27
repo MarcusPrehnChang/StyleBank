@@ -485,7 +485,7 @@ fun structureOfScreen(){ // Holder strukturen for skærmen
                 informationOfPicture(
                     modifier = Modifier
                 )
-                Spacer(modifier = Modifier.width(100.dp))
+                Spacer(modifier = Modifier.width(120.dp))
                 prisSkilt(
                     modifier = Modifier
                         .padding(30.dp)
@@ -515,7 +515,7 @@ fun pictureBox(modifier: Modifier = Modifier){
     Box(modifier = Modifier
         .fillMaxWidth()
         .fillMaxHeight(0.85f)
-        .padding(16.dp) // Måske lav paddingen om med vertical og horizontal
+        .padding(16.dp,16.dp,16.dp,0.dp) // Måske lav paddingen om med vertical og horizontal
         .background(Color.White, shape = RoundedCornerShape(20.dp))
         .pointerInput(Unit) {
             detectTapGestures {
