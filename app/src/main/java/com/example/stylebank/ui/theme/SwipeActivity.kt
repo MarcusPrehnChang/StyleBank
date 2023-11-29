@@ -22,25 +22,22 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.ui.tooling.preview.Preview
 import com.example.stylebank.R
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
+
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -48,7 +45,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChange
+import androidx.fragment.app.Fragment
 import com.example.stylebank.model.Clothing
+import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 
 class SwipeActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,11 +64,35 @@ class SwipeActivity : ComponentActivity() {
         }
     }
 }
+class Listofclothing : Fragment(){}
+val imageID = arrayOf(
+    R.drawable.sb_skjorte,
+    R.drawable.image3,
+    R.drawable.image2,
+)
+
 
 @Composable
-fun GetClothingPiece(){ // Lav en metode som laver et nyt clothing piece.
-
+fun SetBackGround(color: Color){
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .background(color)
+        )
 }
+/*
+@Composable
+fun MainPicture(imageId : imageID){
+    Box(
+        modifier = Modifier
+        .fillMaxSize(0.65f)
+        .clip(RoundedCornerShape(20.dp))
+        .background(Color.LightGray)
+        ){
+
+    }
+}
+
+ */
 
 @Composable
 fun SwipeScreen() {
@@ -497,7 +520,7 @@ fun structureOfScreen(){ // Holder strukturen for skærmen
         ) {
             pictureBox(
                 modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
+                    .align(Alignment.CenterHorizontally),
             )
             Row (
                 modifier = Modifier
@@ -532,8 +555,9 @@ fun UpDateList(images: ArrayList<Int>): ArrayList<Int> {
 
 
 
+
 @Composable
-fun pictureBox(modifier: Modifier = Modifier){
+fun pictureBox(modifier: Modifier = Modifier, ){
 /*
     val images = listOf(
         R.drawable.sb_skjorte,
@@ -544,11 +568,13 @@ fun pictureBox(modifier: Modifier = Modifier){
         R.drawable.image5,
         R.drawable.image6
     )
-
  */
-    var images by remember { mutableStateOf(InitList()) }
+
+    val (imageIds, setImageIds) = remember { mutableStateOf(imageID.toList()) }
+
     var currentImageIndex by remember { mutableStateOf(0) }
     var isOverlayVisible by remember { mutableStateOf(false) }
+
 
     Box(modifier = Modifier
         .fillMaxWidth()
@@ -565,17 +591,16 @@ fun pictureBox(modifier: Modifier = Modifier){
                 val offsetX = change.positionChange().x
                 if (offsetX > 200f) {
                     //swipe til højre
-                    currentImageIndex = (currentImageIndex + 1) % images.size
+                    currentImageIndex = (currentImageIndex + 1) % imageIds.size
 
                 } else if (offsetX < -200f) {
                     //swipe til venstre
-                    currentImageIndex = (currentImageIndex - 1 + images.size) % images.size
-                  
+                    currentImageIndex = (currentImageIndex - 1 + imageIds.size) % imageIds.size
                 }
             }
         }
     ){
-        val imagePainter = painterResource(id = images[currentImageIndex])
+        val imagePainter = painterResource(id = imageIds[currentImageIndex])
         Image( //Billedet i boksen
             modifier = Modifier
                 .fillMaxSize()
@@ -585,6 +610,8 @@ fun pictureBox(modifier: Modifier = Modifier){
         )
     }
 }
+
+
 
 
 
@@ -681,9 +708,9 @@ fun Menubar(modifier: Modifier = Modifier){
 
 
 
-@Preview
+//@Preview
 @Composable
 fun SwipeScreenPreview() {
-structureOfScreen()
+
 }
 //SwipeScreen() }
