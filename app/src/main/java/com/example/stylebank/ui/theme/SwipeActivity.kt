@@ -1,5 +1,6 @@
 package com.example.stylebank.ui.theme
 
+import android.media.Image
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -24,11 +25,17 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.stylebank.R
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -52,12 +59,18 @@ class SwipeActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    SwipeScreen()
+                    structureOfScreen()
                 }
             }
         }
     }
 }
+
+@Composable
+fun GetClothingPiece(){ // Lav en metode som laver et nyt clothing piece.
+
+}
+
 @Composable
 fun SwipeScreen() {
 
@@ -80,8 +93,13 @@ fun SwipeScreen() {
         R.drawable.image6
     )
 
+
+
     var currentImageIndex by remember { mutableStateOf(0) }
     var isOverlayVisible by remember { mutableStateOf(false) }
+
+    //Use LazyListState to keep track of the current image index
+    val lazyListState = rememberLazyListState(currentImageIndex)
 
     Box( // Den hvide baggrund - Tjek
         modifier = Modifier
@@ -113,6 +131,8 @@ fun SwipeScreen() {
                         }
                     }
                 }
+
+
         ) {
             val imagePainter = painterResource(id = images[currentImageIndex]) //Tracker billeder
 
@@ -127,124 +147,124 @@ fun SwipeScreen() {
 
 
 
-            Column( // Række for tekst - Composable
-                modifier = Modifier
-                    .align(Alignment.BottomStart)
-                    .padding(30.dp, 90.dp)
-            ) {
-                Text(
-                    text = "CAMO SHIRT",
-                    style = TextStyle(
-                        fontFamily = FontFamily.SansSerif,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 20.sp
-                    ),
-                    color = Color.Black
+        Column( // Række for tekst - Composable
+            modifier = Modifier
+                .align(Alignment.BottomStart)
+                .padding(30.dp, 90.dp)
+        ) {
+            Text(
+                text = "CAMO SHIRT",
+                style = TextStyle(
+                    fontFamily = FontFamily.SansSerif,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp
+                ),
+                color = Color.Black
+            )
+            Text(
+                text = "SAUNA",
+                style = TextStyle(
+                    fontFamily = FontFamily.SansSerif,
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 18.sp
+                ),
+                color = Color.Gray
+            )
+
+        }
+
+        Column( //Vandmærket - hav med i boksen med billedet
+            modifier = Modifier
+                .align(Alignment.BottomStart)
+                .padding(40.dp, 160.dp)
+        ) {
+            Text(
+                text = "STYLE",
+                style = TextStyle(
+                    fontFamily = FontFamily.SansSerif,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp
+                ),
+                color = Color.Gray
+            )
+        }
+
+        Column( // Vandmærket - for det andet ord bank
+            modifier = Modifier
+                .align(Alignment.BottomStart)
+                .padding(100.dp, 160.dp)
+        ) {
+            Text(
+                text = "BANK",
+                style = TextStyle(
+                    fontFamily = FontFamily.SansSerif,
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 20.sp
+                ),
+                color = Color.Gray
+            )
+        }
+
+        Box( //Pris skiltet Tjek
+            modifier = Modifier
+                .padding(40.dp, 110.dp)
+                .height(25.dp)
+                .width(65.dp)
+                .align(Alignment.BottomEnd)
+                .background(
+                    color = PriceTagGreen.copy(alpha = 0.5f),
+                    shape = RoundedCornerShape(8.dp)
                 )
-                Text(
-                    text = "SAUNA",
-                    style = TextStyle(
-                        fontFamily = FontFamily.SansSerif,
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = 18.sp
-                    ),
-                    color = Color.Gray
+        ) {
+            Text(
+                text = "118£",
+                color = Color.Black,
+                style = TextStyle(
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = FontFamily.SansSerif
+                ),
+                modifier = Modifier.align(Alignment.Center)
+            )
+        }
+
+        Box( //Menu bar box - composeable for menubar - Tjek
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .height(70.dp)
+                .align(Alignment.BottomCenter)
+                .padding(16.dp, 0.dp)
+                .background(
+                    color = MenubarGray,
+                    shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
+                ),
+            contentAlignment = Alignment.Center
+
+        ) {
+            Row(
+                modifier = Modifier.fillMaxSize(),
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                MenuBarButton(
+                    onClick = { /* handle button click */ },
+                    icon = painterResource(id = R.drawable.icon_ild),
                 )
 
-            }
-
-            Column( //Vandmærket - hav med i boksen med billedet
-                modifier = Modifier
-                    .align(Alignment.BottomStart)
-                    .padding(40.dp, 160.dp)
-            ) {
-                Text(
-                    text = "STYLE",
-                    style = TextStyle(
-                        fontFamily = FontFamily.SansSerif,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 20.sp
-                    ),
-                    color = Color.Gray
+                MenuBarButton(
+                    onClick = { /* handle button click */ },
+                    icon = painterResource(id = R.drawable.icon_swipe),
+                    iconSize = 38.dp
                 )
-            }
 
-            Column( // Vandmærket - for det andet ord bank
-                modifier = Modifier
-                    .align(Alignment.BottomStart)
-                    .padding(100.dp, 160.dp)
-            ) {
-                Text(
-                    text = "BANK",
-                    style = TextStyle(
-                        fontFamily = FontFamily.SansSerif,
-                        fontWeight = FontWeight.Normal,
-                        fontSize = 20.sp
-                    ),
-                    color = Color.Gray
+                MenuBarButton(
+                    onClick = { /* handle button click */ },
+                    icon = painterResource(id = R.drawable.icon_mb),
                 )
-            }
-
-            Box( //Pris skiltet Tjek
-                modifier = Modifier
-                    .padding(40.dp, 110.dp)
-                    .height(25.dp)
-                    .width(65.dp)
-                    .align(Alignment.BottomEnd)
-                    .background(
-                        color = PriceTagGreen.copy(alpha = 0.5f),
-                        shape = RoundedCornerShape(8.dp)
-                    )
-            ) {
-                Text(
-                    text = "118£",
-                    color = Color.Black,
-                    style = TextStyle(
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold,
-                        fontFamily = FontFamily.SansSerif
-                    ),
-                    modifier = Modifier.align(Alignment.Center)
-                )
-            }
-
-            Box( //Menu bar box - composeable for menubar - Tjek
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight()
-                    .height(70.dp)
-                    .align(Alignment.BottomCenter)
-                    .padding(16.dp, 0.dp)
-                    .background(
-                        color = MenubarGray,
-                        shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
-                    ),
-                contentAlignment = Alignment.Center
-
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxSize(),
-                    horizontalArrangement = Arrangement.SpaceEvenly,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    MenuBarButton(
-                        onClick = { /* handle button click */ },
-                        icon = painterResource(id = R.drawable.icon_ild),
-                    )
-
-                    MenuBarButton(
-                        onClick = { /* handle button click */ },
-                        icon = painterResource(id = R.drawable.icon_swipe),
-                        iconSize = 38.dp
-                    )
-
-                    MenuBarButton(
-                        onClick = { /* handle button click */ },
-                        icon = painterResource(id = R.drawable.icon_mb),
-                    )
-                }
             }
         }
+    }
     if (isOverlayVisible) { // overlay
         Box( //Baggrunden hvid
             modifier = Modifier
@@ -399,13 +419,13 @@ fun SwipeScreen() {
                             icon = painterResource(id = R.drawable.cross),
                             paddingValue = 10.dp,
                             closeOverlay = { isOverlayVisible = false }
-                            )
-                        }
+                        )
                     }
                 }
             }
         }
     }
+}
 
 
 
@@ -432,6 +452,7 @@ fun MenuBarButton(
             )
         }
     }
+
 
 @Composable
 fun ExitButton(
@@ -497,8 +518,23 @@ fun structureOfScreen(){ // Holder strukturen for skærmen
     }
 
 @Composable
-fun pictureBox(modifier: Modifier = Modifier){
+fun InitList(): ArrayList<Int>{
+    return arrayListOf(
+     R.drawable.sb_skjorte,
+        R.drawable.image3
+ )
+}
+@Composable
+fun UpDateList(images: ArrayList<Int>): ArrayList<Int> {
+    images.add(R.drawable.image2)
+    return images
+}
 
+
+
+@Composable
+fun pictureBox(modifier: Modifier = Modifier){
+/*
     val images = listOf(
         R.drawable.sb_skjorte,
         R.drawable.image1,
@@ -509,13 +545,15 @@ fun pictureBox(modifier: Modifier = Modifier){
         R.drawable.image6
     )
 
+ */
+    var images by remember { mutableStateOf(InitList()) }
     var currentImageIndex by remember { mutableStateOf(0) }
     var isOverlayVisible by remember { mutableStateOf(false) }
 
     Box(modifier = Modifier
         .fillMaxWidth()
         .fillMaxHeight(0.85f)
-        .padding(16.dp,16.dp,16.dp,0.dp) // Måske lav paddingen om med vertical og horizontal
+        .padding(16.dp, 16.dp, 16.dp, 0.dp) // Måske lav paddingen om med vertical og horizontal
         .background(Color.White, shape = RoundedCornerShape(20.dp))
         .pointerInput(Unit) {
             detectTapGestures {
@@ -528,9 +566,11 @@ fun pictureBox(modifier: Modifier = Modifier){
                 if (offsetX > 200f) {
                     //swipe til højre
                     currentImageIndex = (currentImageIndex + 1) % images.size
+
                 } else if (offsetX < -200f) {
                     //swipe til venstre
                     currentImageIndex = (currentImageIndex - 1 + images.size) % images.size
+                  
                 }
             }
         }
@@ -545,6 +585,8 @@ fun pictureBox(modifier: Modifier = Modifier){
         )
     }
 }
+
+
 
 @Composable
 fun informationOfPicture(modifier: Modifier = Modifier){
