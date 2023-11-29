@@ -1,17 +1,13 @@
 package com.example.stylebank
 
 import com.example.stylebank.data.ClothingRepository
-import androidx.activity.ComponentActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.icons.Icons
@@ -20,7 +16,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,9 +27,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
+import com.example.stylebank.model.Clothing
+import com.example.stylebank.model.ObservableListObserver
 import com.example.stylebank.ui.theme.StyleBankTheme
+import com.example.stylebank.viewmodel.ProductViewModel
 
-class MyBank() : Fragment() {}
+class MyBank() : Fragment() {
+    //MyBankDisplay()
+}
 val imageID = arrayOf(
     R.drawable.image1,
     R.drawable.image2,
@@ -47,17 +47,40 @@ val imageID = arrayOf(
     R.drawable.skagen2,
     R.drawable.skagen3,
     )
+val clothingObserver = object : ObservableListObserver<Any> {
+    private var onItemAddedListener: ((item: Any) -> Unit)? = null
+
+    override fun onItemAdded(item: Any) {
+        onItemAddedListener?.invoke(item)
+    }
+
+    override fun setOnItemAddedListener(listener: ((item: Any) -> Unit)?) {
+        onItemAddedListener = listener
+    }
+}
+
 
 @Composable
-fun MyBankDisplay(){
-     val (imageIds, setImageIds) = remember { mutableStateOf(imageID.toList()) }
+fun MyBankDisplay() {
+    val repository = ClothingRepository()
+    val viewModel = ProductViewModel(repository)
+    viewModel.getList("bank")?.registerObserver(clothingObserver)
+    val (imageIds, setImageIds) = remember { mutableStateOf(imageID.toList()) }
 
-    ImageList(imageIds = imageIds) {
-        // Add a new image ID to the list
+    fun addImage() {
         val newImageId = R.drawable.image1
         setImageIds(imageIds + listOf(newImageId))
     }
+
+    clothingObserver.setOnItemAddedListener {
+        addImage()
     }
+
+    ImageList(imageIds = imageIds) {
+        // Add a new image ID to the list
+        viewModel.getList("bank")?.add()
+    }
+}
 
 
 
@@ -71,6 +94,7 @@ fun ImageList(imageIds: List<Int>, onAddImageClick: () -> Unit) {
     }
     AddImageButton(onClick = onAddImageClick)
 }
+
 @Composable
 fun AddImageButton(onClick: () -> Unit) {
     Box(

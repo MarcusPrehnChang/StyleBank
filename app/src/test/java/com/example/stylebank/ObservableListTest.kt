@@ -16,6 +16,10 @@ class ObservableListTest {
             override fun onItemAdded(item: String) {
                 notificationReceived = true
             }
+
+            override fun setOnItemAddedListener(listener: ((item: String) -> Unit)?) {
+                //
+            }
         }
         list.registerObserver(observer)
         list.add("testingString")
@@ -39,6 +43,10 @@ class ObservableListTest {
             override fun onItemAdded(item: String) {
                 amountReceived++
             }
+
+            override fun setOnItemAddedListener(listener: ((item: String) -> Unit)?) {
+                //
+            }
         }
         list.registerObserver(observer)
         list.add("testingString")
@@ -58,6 +66,10 @@ class ObservableListTest {
         val observer = object : ObservableListObserver<String>{
             override fun onItemAdded(item: String) {
                 textReceived = item
+            }
+
+            override fun setOnItemAddedListener(listener: ((item: String) -> Unit)?) {
+                //
             }
         }
         list.registerObserver(observer)
