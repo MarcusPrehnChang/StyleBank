@@ -32,6 +32,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -46,10 +48,15 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChange
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModel
 import com.example.stylebank.model.Clothing
 import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 
-class SwipeActivity : ComponentActivity() {
+// Define the ObservableListObserver interface
+interface ObservableListObserver<T> {
+    fun onItemAdded(item: T)
+}
+class SwipeActivity : ComponentActivity(), ObservableListObserver<Int>  {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -63,15 +70,16 @@ class SwipeActivity : ComponentActivity() {
             }
         }
     }
+
+
+override fun onItemAdded(item: Int) {
+
+    }
 }
 
 
 
 
-@Composable
-fun CreateList(imageIds: List<Int>, listCreated: () -> Unit) {
-    val newImageId = R.drawable.image5
-}
 
 class Listofclothing : Fragment(){}
 val imageID = arrayOf(
@@ -508,6 +516,7 @@ fun structureOfScreen(){ // Holder strukturen for skærmen
                 .fillMaxSize()
         ) {
             pictureBox(
+                imageObserver = observer,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally),
             )
@@ -530,18 +539,27 @@ fun structureOfScreen(){ // Holder strukturen for skærmen
 
 
 
+val observer = object : ObservableListObserver<Int> {
+    override fun onItemAdded(item: Int) {
+        // Handle the item added event
+        println("Item added: $item")
+    }
+}
+
+
 
 @Composable
-fun pictureBox(modifier: Modifier = Modifier, ){
-
-
-    val (imageIds, setImageIds) = remember { mutableStateOf(imageID.toList()) }
+fun pictureBox(
+    modifier: Modifier = Modifier,
+    imageObserver: ObservableListObserver<Int>
+){
+val (imageIds, setImageIds) = remember { mutableStateOf(imageID.toList()) }
     val newImageId = R.drawable.image5
     setImageIds(imageIds + listOf(newImageId))
+    imageObserver.onItemAdded(newImageId)
 
 
-
-    var currentImageIndex by remember { mutableStateOf(0) }
+    var currentImageIndex by remember { mutableIntStateOf(0) }
     var isOverlayVisible by remember { mutableStateOf(false) }
 
 
@@ -561,6 +579,7 @@ fun pictureBox(modifier: Modifier = Modifier, ){
                 if (offsetX > 200f) {
                     //swipe til højre
                     currentImageIndex = (currentImageIndex + 1) % imageIds.size
+
 
                 } else if (offsetX < -200f) {
                     //swipe til venstre
