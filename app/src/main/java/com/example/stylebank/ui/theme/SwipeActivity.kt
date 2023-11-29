@@ -64,6 +64,15 @@ class SwipeActivity : ComponentActivity() {
         }
     }
 }
+
+
+
+
+@Composable
+fun CreateList(imageIds: List<Int>, listCreated: () -> Unit) {
+    val newImageId = R.drawable.image5
+}
+
 class Listofclothing : Fragment(){}
 val imageID = arrayOf(
     R.drawable.sb_skjorte,
@@ -72,27 +81,7 @@ val imageID = arrayOf(
 )
 
 
-@Composable
-fun SetBackGround(color: Color){
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .background(color)
-        )
-}
-/*
-@Composable
-fun MainPicture(imageId : imageID){
-    Box(
-        modifier = Modifier
-        .fillMaxSize(0.65f)
-        .clip(RoundedCornerShape(20.dp))
-        .background(Color.LightGray)
-        ){
 
-    }
-}
-
- */
 
 @Composable
 fun SwipeScreen() {
@@ -540,37 +529,18 @@ fun structureOfScreen(){ // Holder strukturen for skærmen
         }
     }
 
-@Composable
-fun InitList(): ArrayList<Int>{
-    return arrayListOf(
-     R.drawable.sb_skjorte,
-        R.drawable.image3
- )
-}
-@Composable
-fun UpDateList(images: ArrayList<Int>): ArrayList<Int> {
-    images.add(R.drawable.image2)
-    return images
-}
-
 
 
 
 @Composable
 fun pictureBox(modifier: Modifier = Modifier, ){
-/*
-    val images = listOf(
-        R.drawable.sb_skjorte,
-        R.drawable.image1,
-        R.drawable.image2,
-        R.drawable.image3,
-        R.drawable.image4,
-        R.drawable.image5,
-        R.drawable.image6
-    )
- */
+
 
     val (imageIds, setImageIds) = remember { mutableStateOf(imageID.toList()) }
+        val newImageId = R.drawable.image5
+        setImageIds(imageIds + listOf(newImageId))
+
+
 
     var currentImageIndex by remember { mutableStateOf(0) }
     var isOverlayVisible by remember { mutableStateOf(false) }
