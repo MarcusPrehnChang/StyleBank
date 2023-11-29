@@ -47,39 +47,33 @@ val imageID = arrayOf(
     R.drawable.skagen2,
     R.drawable.skagen3,
     )
-val clothingObserver = object : ObservableListObserver<Any> {
-    private var onItemAddedListener: ((item: Any) -> Unit)? = null
-
-    override fun onItemAdded(item: Any) {
-        onItemAddedListener?.invoke(item)
-    }
-
-    override fun setOnItemAddedListener(listener: ((item: Any) -> Unit)?) {
-        onItemAddedListener = listener
-    }
-}
+val repository = ClothingRepository()
+val viewModel = ProductViewModel(repository)
 
 
 @Composable
 fun MyBankDisplay() {
-    val repository = ClothingRepository()
-    val viewModel = ProductViewModel(repository)
-    viewModel.getList("bank")?.registerObserver(clothingObserver)
     val (imageIds, setImageIds) = remember { mutableStateOf(imageID.toList()) }
+    val clothingObserver = object : ObservableListObserver<Any> {
+        //private var onItemAddedListener: ((item: Any) -> Unit)? = null
+        override fun onItemAdded(item: Any) {
+            println("check")
+            //onItemAddedListener?.invoke(item)
+            val newImageId = R.drawable.image1
+            setImageIds(imageIds + listOf(newImageId))
+        }
+    }
+    viewModel.getList("likedItem")?.registerObserver(clothingObserver)
 
-    fun addImage() {
+    ImageList(imageIds = imageIds) {
+        // Add a new image ID to the list
         val newImageId = R.drawable.image1
         setImageIds(imageIds + listOf(newImageId))
     }
 
-    clothingObserver.setOnItemAddedListener {
-        addImage()
-    }
 
-    ImageList(imageIds = imageIds) {
-        // Add a new image ID to the list
-        viewModel.getList("bank")?.add()
-    }
+
+
 }
 
 
@@ -92,7 +86,11 @@ fun ImageList(imageIds: List<Int>, onAddImageClick: () -> Unit) {
             BankCloth(drawableResourceId = imageIds[index])
         }
     }
-    AddImageButton(onClick = onAddImageClick)
+    AddImageButton(){
+        val array = arrayOf("test")
+        val clothing = Clothing(array, "testName", "testBrand", "123", "123", "123")
+        viewModel.getList("likedItem")?.add(clothing)
+    }
 }
 
 @Composable

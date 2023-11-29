@@ -17,9 +17,9 @@ class ObservableListTest {
                 notificationReceived = true
             }
 
-            override fun setOnItemAddedListener(listener: ((item: String) -> Unit)?) {
+            /*override fun setOnItemAddedListener(listener: ((item: String) -> Unit)?) {
                 //
-            }
+            }*/
         }
         list.registerObserver(observer)
         list.add("testingString")
@@ -44,9 +44,6 @@ class ObservableListTest {
                 amountReceived++
             }
 
-            override fun setOnItemAddedListener(listener: ((item: String) -> Unit)?) {
-                //
-            }
         }
         list.registerObserver(observer)
         list.add("testingString")
@@ -68,9 +65,6 @@ class ObservableListTest {
                 textReceived = item
             }
 
-            override fun setOnItemAddedListener(listener: ((item: String) -> Unit)?) {
-                //
-            }
         }
         list.registerObserver(observer)
         list.add("testingString")
