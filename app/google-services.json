@@ -8,9 +8,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:415759798304:android:f8c16c7f07f2edc976ec45",
+        "mobilesdk_app_id": "1:415759798304:android:197f95ded0582e0976ec45",
         "android_client_info": {
-          "package_name": "com.project.group24.firebase"
+          "package_name": "com.example.stylebank"
         }
       },
       "oauth_client": [

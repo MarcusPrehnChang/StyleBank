@@ -35,7 +35,7 @@ class ViewModelTest {
 
     @Test
     fun testObserve() {
-        var gotNotification = false;
+        var gotNotification = false
 
         val observer = object : ObservableListObserver<Any> {
             override fun onItemAdded(item: Any) {
@@ -44,14 +44,14 @@ class ViewModelTest {
         }
         viewModel.getList("product")?.registerObserver(observer)
         val array = arrayOf("test")
-        val clothing = Clothing(array, "testname", "testBrand", 123, "123", "123")
+        val clothing = Clothing(array, "testName", "testBrand", "123", "123", "123")
         viewModel.addItem("product", clothing)
         assertTrue(gotNotification)
     }
 
     @Test
     fun properUpdate() {
-        var clothingGet = Clothing(arrayOf(), "", "", 0, "", "")
+        var clothingGet = Clothing(arrayOf(), "", "", "0", "", "")
 
         val observer = object : ObservableListObserver<Any> {
             override fun onItemAdded(item: Any) {
@@ -60,7 +60,7 @@ class ViewModelTest {
         }
         viewModel.getList("product")?.registerObserver(observer)
         val array = arrayOf("test")
-        val clothing = Clothing(array, "testname", "testBrand", 123, "123", "123")
+        val clothing = Clothing(array, "testName", "testBrand", "123", "123", "123")
         viewModel.addItem("product", clothing)
         assertEquals(clothingGet, clothing)
     }
