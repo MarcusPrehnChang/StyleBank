@@ -41,6 +41,10 @@ class ViewModelTest {
             override fun onItemAdded(item: Any) {
                 gotNotification = true
             }
+
+            /*override fun setOnItemAddedListener(listener: ((item: Any) -> Unit)?) {
+                TODO("Not yet implemented")
+            }*/
         }
         viewModel.getList("product")?.registerObserver(observer)
         val array = arrayOf("test")
@@ -57,6 +61,10 @@ class ViewModelTest {
             override fun onItemAdded(item: Any) {
                 clothingGet = item as Clothing
             }
+
+            /*override fun setOnItemAddedListener(listener: ((item: Any) -> Unit)?) {
+                //
+            }*/
         }
         viewModel.getList("product")?.registerObserver(observer)
         val array = arrayOf("test")

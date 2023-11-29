@@ -43,12 +43,27 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.*
+import com.example.stylebank.data.ClothingRepository
+import com.example.stylebank.model.Clothing
+import com.example.stylebank.model.ObservableListObserver
+import com.example.stylebank.ui.SwipeInfo.SwipeActivity
 
 import com.example.stylebank.ui.theme.MenubarGray
 import com.example.stylebank.ui.theme.structureOfScreen
 import com.example.stylebank.ui.whatsHot.WholeScreen
+import com.example.stylebank.viewmodel.ProductViewModel
 
 val roboto: FontFamily = FontFamily.Default
+
+
+
+
+
+
+
+
+
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,9 +74,16 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
+
+
 @Composable
 fun app(){
+    val repository = ClothingRepository()
+    val viewModel = ProductViewModel(repository)
+    viewModel.getList("bank")
     val navController = rememberNavController()
+
     NavHost(navController = navController,
         startDestination = "swipeFragment"
     ){
