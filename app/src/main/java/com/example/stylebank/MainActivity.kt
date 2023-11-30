@@ -34,19 +34,16 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHost
+
 import androidx.navigation.compose.rememberNavController
 
 import com.example.stylebank.ui.theme.StyleBankTheme
 import androidx.navigation.compose.composable
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
-import androidx.navigation.NavType
+
 import androidx.navigation.compose.*
 import com.example.stylebank.data.ClothingRepository
-import com.example.stylebank.model.Clothing
-import com.example.stylebank.model.ObservableListObserver
-import com.example.stylebank.ui.SwipeInfo.SwipeActivity
+
 
 import com.example.stylebank.ui.theme.MenubarGray
 import com.example.stylebank.ui.theme.structureOfScreen
