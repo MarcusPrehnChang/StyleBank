@@ -76,7 +76,9 @@ val add = viewModel.getList("product")?.registerObserver(clothingObserver)
 
 
 class Listofclothing : Fragment(){}
-/*val imageID = arrayOf(
+
+/*
+val imageID = arrayOf(
     R.drawable.sb_skjorte,
     R.drawable.image3,
     R.drawable.image2,
