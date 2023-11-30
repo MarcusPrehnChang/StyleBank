@@ -55,13 +55,12 @@ android {
 }
 
 dependencies {
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1:") //CUCUMBER IMPLEMENTATIONS
-    androidTestImplementation("info.cukes:cucumber-android:1.2.5@jar")
-    androidTestImplementation("info.cukes:cucumber-picocontainer:1.2.4")
+    implementation("io.cucumber:cucumber-java:7.7.0")
+    implementation("io.cucumber:cucumber-junit:7.7.0")
 
-    androidTestImplementation("com.android.support.test:rules:1.0.2")//CUCUMBER IMPLEMENTATIONS
+    androidTestImplementation("com.android.support.test:rules:1.0.2")
     androidTestImplementation("com.android.support.test:runner:1.0.2")
-    androidTestImplementation("androidx.test.espresso:espresso-web:3.5.1")
+    //androidTestImplementation("androidx.test.espresso:espresso-web:3.5.1")
 
     implementation ("io.coil-kt:coil-compose:1.3.2")
     testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.1")

@@ -11,6 +11,7 @@ import com.example.stylebank.model.ObservableList
 class ProductViewModel(private val repository: ClothingRepository) {
     //List to listen to, using some kind of observable pattern, i believe Kotlin has a unique one that is best to use.
     var index by mutableStateOf(0)
+    var isInitialized = false
     private val listsMap: Map<String, ObservableList<out Any>> = mapOf(
         "product" to ObservableList<Clothing>(),
         "banner" to ObservableList<Banner>(),
@@ -32,6 +33,7 @@ class ProductViewModel(private val repository: ClothingRepository) {
             for (likedItem in likedList){
                 (listsMap["likedItem"] as? ObservableList<Clothing>)?.add(likedItem)
             }
+            isInitialized = true
         }
     }
 
