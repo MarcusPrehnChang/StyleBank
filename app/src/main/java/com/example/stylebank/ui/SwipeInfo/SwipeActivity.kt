@@ -30,6 +30,7 @@ import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -153,8 +154,14 @@ fun structureOfScreen(){ // Holder strukturen for skærmen
                 )
             }
         }
-        AddImageButton {
-            println("PIK")
+        Box(modifier = Modifier
+            .align(Alignment.TopEnd)){
+            bankButton {
+                viewModel.fetchOne()
+                viewModel.addItem("likedItem", currentPiece)
+            }
+        }
+        dislike {
             viewModel.fetchOne()
         }
     }
@@ -202,7 +209,7 @@ fun pictureBox(
     }
 }
 @Composable
-fun AddImageButton(onClick: () -> Unit) {
+fun bankButton(onClick: () -> Unit) {
     Box(
         modifier = Modifier
             .padding(16.dp)
@@ -219,6 +226,26 @@ fun AddImageButton(onClick: () -> Unit) {
         }
     }
 }
+@Composable
+fun dislike(onClick: () -> Unit) {
+    Box(
+        modifier = Modifier
+            .padding(16.dp)
+            .width(100.dp)
+    ) {
+        Button(
+            onClick = onClick,
+            modifier = Modifier
+                .padding(16.dp)
+                .align(Alignment.CenterStart),
+        ) {
+            Icon(imageVector = Icons.Default.Clear, contentDescription = null)
+            Spacer(modifier = Modifier.width(8.dp))
+        }
+    }
+}
+
+
 @Composable
 fun informationOfPicture(
     name : String,
