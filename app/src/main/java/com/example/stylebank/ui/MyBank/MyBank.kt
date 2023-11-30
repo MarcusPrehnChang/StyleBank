@@ -1,5 +1,9 @@
 package com.example.stylebank
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.widget.Button
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
@@ -20,6 +24,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -47,42 +52,50 @@ val add = viewModel.getList("likedItem")?.registerObserver(bankObserver)
 fun MyBankDisplay() {
     val imageIds = remember { mutableStateOf(list) }
     val imageUrls = mutableListOf<String>()
+    val imageLinks = mutableListOf<String>()
     if (list != null) {
         for(item in list){
             if(item is Clothing){
                 imageUrls.add(item.pictures[0])
+                imageLinks.add(item.link)
             }
         }
     }
-    ImageList(imageUrls)
+    ImageList(imageUrls, imageLinks)
 }
 
 
 
 
 @Composable
-fun ImageList(imageIds: List<String>) {
+fun ImageList(imageIds: List<String>, imageLinks: List<String>) {
     LazyVerticalGrid(columns = GridCells.Fixed(2)) {
         items(imageIds.size) { index ->
-            BankCloth(imageIds[index])
+            BankCloth(imageIds[index], imageLinks[index])
         }
     }
 }
 
 @Composable
-fun BankCloth(imageUrl : String){
-    Image(
-        painter = rememberImagePainter(
-            data = imageUrl,
-            builder = {
-                crossfade(true)
-                placeholder(R.drawable.loading)
-            }
-        ), contentDescription = null,
-        modifier = Modifier
-            .height(170.dp)
-            .width(170.dp)
-    )
+fun BankCloth(imageUrl : String, link : String){
+    val context = LocalContext.current
+    Box(modifier = Modifier
+        .height(170.dp)
+        .width(170.dp)){
+        Image(
+            painter = rememberImagePainter(
+                data = imageUrl,
+                builder = {
+                    crossfade(true)
+                    placeholder(R.drawable.loading)
+                }
+            ), contentDescription = null,
+            modifier = Modifier
+                .height(170.dp)
+                .width(170.dp)
+        )
+        Button(onClick = { openLink(context, link) }) {}
+    }
 }
 
 
@@ -98,6 +111,19 @@ fun GreetingtooPreview() {
             //GreetingPreview()
             //MyBankDisplay(nav)
 
+        }
+    }
+}
+
+
+fun openLink(context: Context, url: String) {
+    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+    println(url)
+    if(url.isNotBlank()){
+        if (intent.resolveActivity(context.packageManager) != null) {
+            context.startActivity(intent)
+        }else{
+            println("some error occured")
         }
     }
 }
