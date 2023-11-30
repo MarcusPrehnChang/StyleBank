@@ -20,7 +20,6 @@ class FirebaseRepository {
         }
 
         query.get().addOnSuccessListener { result ->
-            println("SuccessListener was called")
             val idList = mutableListOf<String>()
 
             for (document in result){
@@ -28,7 +27,6 @@ class FirebaseRepository {
                 idList.add(id)
             }
             iterator = result.documents.lastOrNull()
-            //println(idList.size)
             callback(idList)
         }
     }
@@ -51,7 +49,6 @@ class FirebaseRepository {
                 idList.add(id)
             }
             iterator = result.documents.lastOrNull()
-            //println(idList.size)
             callback(idList)
         }
     }
@@ -71,7 +68,6 @@ class FirebaseRepository {
                     val price = documentSnapshot.getString("price") ?: " "
                     val pictures = documentSnapshot?.get("pictures") as? List<String> ?: emptyList()
 
-                    println("pcitures array was : " + pictures.size)
                     val clothing = Clothing(pictures, brandName, name, price, link, id)
                     callback(clothing)
                 }else{
@@ -79,7 +75,6 @@ class FirebaseRepository {
                 }
             }
             .addOnFailureListener { exception ->
-                println("Error getting documents: $exception")
                 // Handle the error as needed
             }
     }

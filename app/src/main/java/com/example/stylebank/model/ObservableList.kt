@@ -12,7 +12,6 @@ class ObservableList<T> : ArrayList<T>() {
     }
 
     override fun add(element: T): Boolean{
-        println("Thing was added")
         val result = super.add(element)
         if(result){
             notifyItemAdded(element)
@@ -22,7 +21,6 @@ class ObservableList<T> : ArrayList<T>() {
 
     private fun notifyItemAdded(item : T){
         observers.forEach{
-            println("Checkus cockus")
             it.onItemAdded(item)
         }
     }

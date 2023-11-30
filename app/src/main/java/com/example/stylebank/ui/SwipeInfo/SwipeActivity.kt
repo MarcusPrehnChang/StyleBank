@@ -62,7 +62,6 @@ open class SwipeActivity : ComponentActivity() {
 val list = viewModel.getList("product")
 val clothingObserver = object : ObservableListObserver<Any> {
     override fun onItemAdded(item: Any) {
-        println("triggered")
         viewModel.index = viewModel.index + 1
     }
 }
@@ -118,7 +117,7 @@ fun ExitButton(
 
 @Composable
 fun structureOfScreen(){ // Holder strukturen for skærmen
-    println("recomposition")
+
     var currentIndex by remember { mutableIntStateOf(viewModel.index) }
     LaunchedEffect(viewModel.index) {
         currentIndex = viewModel.index
@@ -178,7 +177,6 @@ fun pictureBox(
     mainPicture : String
 
 ){
-    println("Main picture : $mainPicture")
     var isOverlayVisible by remember { mutableStateOf(false) }
 
 
@@ -193,7 +191,6 @@ fun pictureBox(
             }
         }
     ){
-        println("Main picture : $mainPicture")
         val painter = rememberImagePainter(
             data = mainPicture,
             builder = {

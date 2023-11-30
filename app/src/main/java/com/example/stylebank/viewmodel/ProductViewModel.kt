@@ -20,12 +20,10 @@ class ProductViewModel(private val repository: ClothingRepository) {
     init{
         if (!isTestEnvironment()){
             repository.updateList {
-                println("call back update")
                 val clothingList = repository.getProductList()
                 for (clothing in clothingList){
                     (listsMap["product"] as? ObservableList<Clothing>)?.add(clothing)
                 }
-                println("Size of product list" + listsMap["product"]?.size)
                 val bannerList = repository.getBanners()
                 for(banner in bannerList){
                     (listsMap["banner"] as? ObservableList<Banner>)?.add(banner)
@@ -59,8 +57,6 @@ class ProductViewModel(private val repository: ClothingRepository) {
         }
     }
     fun fetchOne(){
-        println("COCKKQLY")
-        println("viewmodel index is :$index")
         repository.addOne {
             val result = repository.getProductList()
             addItem("product", result[result.size - 1])

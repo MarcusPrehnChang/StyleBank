@@ -42,7 +42,6 @@ class MyBank() : Fragment() {
 val list = viewModel.getList("likedItem")
 val bankObserver = object : ObservableListObserver<Any> {
     override fun onItemAdded(item: Any) {
-        println("triggered")
     }
 }
 val add = viewModel.getList("likedItem")?.registerObserver(bankObserver)
@@ -118,7 +117,6 @@ fun GreetingtooPreview() {
 
 fun openLink(context: Context, url: String) {
     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-    println(url)
     if(url.isNotBlank()){
         if (intent.resolveActivity(context.packageManager) != null) {
             context.startActivity(intent)

@@ -17,11 +17,9 @@ class ClothingRepository {
                 val count = result.size
                 var completed = 0
                 for (id in result){
-                    //println("adding id : $id")
                     firebaseRepository.getClothing(id) { clothing ->
                         if (clothing != null) {
                             productList.add(clothing)
-                            println("added clothing to productList")
                         }
                         completed++
                         if(completed == count){
@@ -30,7 +28,6 @@ class ClothingRepository {
                     }
                 }
             }
-            println(productList.size)
         }
     }
 
@@ -40,11 +37,9 @@ class ClothingRepository {
                 val count = result.size
                 var completed = 0
                 for (id in result){
-                    //println("adding id : $id")
                     firebaseRepository.getClothing(id) { clothing ->
                         if (clothing != null) {
                             productList.add(clothing)
-                            println("added clothing to productList")
                         }
                         completed++
                         if(completed == count){
@@ -53,7 +48,6 @@ class ClothingRepository {
                     }
                 }
             }
-            println(productList.size)
         }
     }
 
