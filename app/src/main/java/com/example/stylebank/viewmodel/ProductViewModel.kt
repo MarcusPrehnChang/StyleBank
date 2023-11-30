@@ -1,5 +1,8 @@
 package com.example.stylebank.viewmodel
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import com.example.stylebank.data.ClothingRepository
 import com.example.stylebank.model.Banner
 import com.example.stylebank.model.Clothing
@@ -7,7 +10,7 @@ import com.example.stylebank.model.ObservableList
 
 class ProductViewModel(private val repository: ClothingRepository) {
     //List to listen to, using some kind of observable pattern, i believe Kotlin has a unique one that is best to use.
-
+    var index by mutableStateOf(0)
     private val listsMap: Map<String, ObservableList<out Any>> = mapOf(
         "product" to ObservableList<Clothing>(),
         "banner" to ObservableList<Banner>(),
@@ -41,13 +44,22 @@ class ProductViewModel(private val repository: ClothingRepository) {
         (listsMap[key] as? ObservableList<T>)?.add(item)
     }
 
+
     fun fetchBatch(){
         repository.updateList(){
 
         }
-        var result = repository.getProductList()
+        val result = repository.getProductList()
         for (clothes in result){
             addItem("product", clothes)
+        }
+    }
+    fun fetchOne(){
+        println("COCKKQLY")
+        println("viewmodel index is :$index")
+        repository.addOne {
+            val result = repository.getProductList()
+            addItem("product", result[result.size - 1])
         }
     }
 }

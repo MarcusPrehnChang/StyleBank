@@ -11,6 +11,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import coil.request.ImageRequest
+import coil.ImageLoader
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -26,6 +28,9 @@ import com.example.stylebank.R
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -39,7 +44,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChange
+import androidx.compose.ui.platform.LocalContext
 import androidx.fragment.app.Fragment
+import coil.compose.rememberImagePainter
 
 import com.example.stylebank.model.Clothing
 import com.example.stylebank.model.ObservableListObserver
@@ -51,7 +58,14 @@ class SwipeActivity : ComponentActivity() {
 
 }
 
-
+val list = viewModel.getList("product")
+val clothingObserver = object : ObservableListObserver<Any> {
+    override fun onItemAdded(item: Any) {
+        println("triggered")
+        viewModel.index = viewModel.index + 1
+    }
+}
+val add = viewModel.getList("product")?.registerObserver(clothingObserver)
 //val repository = ClothingRepository()
 //val viewModel = ProductViewModel(repository)
 
@@ -61,11 +75,11 @@ class SwipeActivity : ComponentActivity() {
 
 
 class Listofclothing : Fragment(){}
-val imageID = arrayOf(
+/*val imageID = arrayOf(
     R.drawable.sb_skjorte,
     R.drawable.image3,
     R.drawable.image2,
-)
+)*/
 
 
 @Composable
@@ -101,9 +115,14 @@ fun ExitButton(
 
 @Composable
 fun structureOfScreen(){ // Holder strukturen for skærmen
-    var list = viewModel.getList("product")
-    println("size of thing here: " + list?.size)
-    println(list?.size)
+    println("recomposition")
+    var currentIndex by remember { mutableIntStateOf(viewModel.index) }
+    LaunchedEffect(viewModel.index) {
+        currentIndex = viewModel.index
+    }
+    val clothing = list?.get(currentIndex)
+
+    var currentPiece : Clothing = clothing as Clothing
     Box (modifier = Modifier
         .fillMaxSize()
         .background(Color.White)
@@ -115,22 +134,31 @@ fun structureOfScreen(){ // Holder strukturen for skærmen
             pictureBox(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally),
+                currentPiece.pictures[0]
             )
             Row (
                 modifier = Modifier
                     .fillMaxWidth()
             ) {
                 informationOfPicture(
+                    currentPiece.objectName,
+                    currentPiece.brandName,
                     modifier = Modifier
                 )
                 Spacer(modifier = Modifier.width(120.dp))
                 prisSkilt(
                     modifier = Modifier
-                        .padding(30.dp)
+                        .padding(30.dp),
+                    currentPiece.price
                 )
             }
         }
+        AddImageButton {
+            println("PIK")
+            viewModel.fetchOne()
+        }
     }
+
 }
 
 
@@ -138,20 +166,10 @@ fun structureOfScreen(){ // Holder strukturen for skærmen
 @Composable
 fun pictureBox(
     modifier: Modifier = Modifier,
-
+    mainPicture : String
 
 ){
-    val (imageIds, setImageIds) = remember { mutableStateOf(imageID.toList()) }
-    val clothingObserver = object : ObservableListObserver<Any> {
-        override fun onItemAdded(item: Any) {
-            var piece : Clothing? = item as Clothing
-            val newImageId = R.drawable.image1
-            setImageIds(imageIds + listOf(newImageId))
-        }
-    }
-    viewModel.getList("product")?.registerObserver(clothingObserver)
-
-    var currentImageIndex by remember { mutableIntStateOf(0) }
+    println("Main picture : $mainPicture")
     var isOverlayVisible by remember { mutableStateOf(false) }
 
 
@@ -165,46 +183,46 @@ fun pictureBox(
                 isOverlayVisible = true
             }
         }
-        .pointerInput(Unit) {
-            detectHorizontalDragGestures { change, _ ->
-                val offsetX = change.positionChange().x
-                if (offsetX > 200f) {
-                    //swipe til højre
-                    currentImageIndex = (currentImageIndex + 1)
-                    println(viewModel.getList("product")?.size)
-                    val array = arrayOf("test")
-                    val clothing = Clothing(array, "testName", "testBrand", "123", "123", "123")
-                    viewModel.getList("product")?.add(clothing)
-                } else if (offsetX < -200f) {
-                    //swipe til venstre
-                    currentImageIndex = (currentImageIndex + 1) % 3
-                    println(viewModel.getList("product")?.size)
-                    val array = arrayOf("test")
-                    val clothing = Clothing(array, "testName", "testBrand", "123", "123", "123")
-                    viewModel.getList("product")?.add(clothing)
-                }
-            }
-        }
     ){
-        val imagePainter = painterResource(id = imageIds[currentImageIndex])
-        Image( //Billedet i boksen
-            modifier = Modifier
-                .fillMaxSize()
-                .align(Alignment.Center),
-            painter = imagePainter,
-            contentDescription = null,
+        println("Main picture : $mainPicture")
+        val painter = rememberImagePainter(
+            data = mainPicture,
+            builder = {
+                crossfade(true)
+                placeholder(R.drawable.loading)
+                //error("error")
+            }
+        )
+
+        Image(
+            painter = painter,
+            contentDescription = null, // Set a meaningful content description if needed
+            modifier = Modifier.fillMaxSize()
         )
     }
 }
-
-
-
-
-
+@Composable
+fun AddImageButton(onClick: () -> Unit) {
+    Box(
+        modifier = Modifier
+            .padding(16.dp)
+            .width(100.dp)
+    ) {
+        Button(
+            onClick = onClick,
+            modifier = Modifier
+                .padding(16.dp)
+                .align(Alignment.CenterStart),
+        ) {
+            Icon(imageVector = Icons.Default.Add, contentDescription = null)
+            Spacer(modifier = Modifier.width(8.dp))
+        }
+    }
+}
 @Composable
 fun informationOfPicture(
-    //name : String,
-    //brandName : String,
+    name : String,
+    brandName : String,
     modifier: Modifier = Modifier
 ){
     Column( // Række for tekst - Composable
@@ -212,7 +230,7 @@ fun informationOfPicture(
             .padding(30.dp, 0.dp)
     ){
         Text(
-            text = "CAMO SHIRT",
+            text = name,
             style = TextStyle(
                 fontFamily = FontFamily.SansSerif,
                 fontWeight = FontWeight.Bold,
@@ -221,7 +239,7 @@ fun informationOfPicture(
             color = Color.Black
         )
         Text(
-            text ="SAUNA",
+            text =brandName,
             style = TextStyle(
                 fontFamily = FontFamily.SansSerif,
                 fontWeight = FontWeight.SemiBold,
@@ -233,7 +251,7 @@ fun informationOfPicture(
 }
 
 @Composable
-fun prisSkilt(modifier: Modifier = Modifier){
+fun prisSkilt(modifier: Modifier = Modifier, price : String){
     Box( //Pris skiltet
         modifier = Modifier
             .padding(0.dp, 0.dp)
@@ -245,7 +263,7 @@ fun prisSkilt(modifier: Modifier = Modifier){
             )
     ) {
         Text(
-            text = "118£",
+            text = price,
             color = Color.Black,
             style = TextStyle(
                 fontSize = 20.sp,

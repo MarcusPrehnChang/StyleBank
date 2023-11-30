@@ -1,6 +1,5 @@
 package com.example.stylebank
 
-import com.example.stylebank.data.ClothingRepository
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
@@ -21,16 +20,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavController
 import com.example.stylebank.model.Clothing
 import com.example.stylebank.model.ObservableListObserver
 import com.example.stylebank.ui.theme.StyleBankTheme
-import com.example.stylebank.viewmodel.ProductViewModel
 
 class MyBank() : Fragment() {
     //MyBankDisplay()
@@ -88,8 +84,8 @@ fun ImageList(imageIds: List<Int>, onAddImageClick: () -> Unit) {
     }
     AddImageButton(){
         val array = arrayOf("test")
-        val clothing = Clothing(array, "testName", "testBrand", "123", "123", "123")
-        viewModel.getList("likedItem")?.add(clothing)
+        //val clothing = Clothing(array, "testName", "testBrand", "123", "123", "123")
+        //viewModel.getList("likedItem")?.add(clothing)
     }
 }
 
