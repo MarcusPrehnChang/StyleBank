@@ -52,7 +52,7 @@ import coil.compose.rememberImagePainter
 import com.example.stylebank.model.Clothing
 import com.example.stylebank.model.ObservableListObserver
 import com.example.stylebank.viewModel
-
+////////
 // Define the ObservableListObserver interface
 
 class SwipeActivity : ComponentActivity() {
