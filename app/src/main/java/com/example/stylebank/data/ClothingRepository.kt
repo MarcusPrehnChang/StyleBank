@@ -10,18 +10,27 @@ class ClothingRepository {
     private var firebaseRepository: FirebaseRepository = FirebaseRepository()
     private var serverCommunication: ServerCommunication = ServerCommunication(firebaseRepository)
 
-    fun updateList(){
+
+    fun updateList(onUpdateComplete: () -> Unit){
         serverCommunication.getClothing{ result ->
             if (result != null) {
+                val count = result.size
+                var completed = 0
                 for (id in result){
+                    //println("adding id : $id")
                     firebaseRepository.getClothing(id) { clothing ->
                         if (clothing != null) {
                             productList.add(clothing)
+                            println("added clothing to productList")
+                        }
+                        completed++
+                        if(completed == count){
+                            onUpdateComplete()
                         }
                     }
                 }
             }
-
+            println(productList.size)
         }
     }
 

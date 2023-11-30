@@ -14,11 +14,14 @@ class FirebaseRepository {
         val query = if (iterator != null){
             db.collection("products")
                 .startAfter(iterator as QueryDocumentSnapshot)
+                .limit(5)
         } else {
             db.collection("products")
+                .limit(5)
         }
 
         query.get().addOnSuccessListener { result ->
+            println("SuccessListener was called")
             val idList = mutableListOf<String>()
 
             for (document in result){
@@ -26,6 +29,7 @@ class FirebaseRepository {
                 idList.add(id)
             }
             iterator = result.documents.lastOrNull()
+            //println(idList.size)
             callback(idList)
         }
     }
@@ -43,10 +47,10 @@ class FirebaseRepository {
                     val name = documentSnapshot.getString("headtext2") ?: " "
                     val link = documentSnapshot.getString("link") ?: " "
                     val price = documentSnapshot.getString("price") ?: " "
-                    val pictures = documentSnapshot.get("pictures") as? List<String> ?: emptyList()
+                    val pictures = documentSnapshot.get("pictures") as? Array<String> ?: emptyArray()
 
 
-                    val clothing = Clothing(pictures as Array<String>, brandName, name, price, link, id)
+                    val clothing = Clothing(pictures, brandName, name, price, link, id)
                     callback(clothing)
                 }else{
                     callback(null)

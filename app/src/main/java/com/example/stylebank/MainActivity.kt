@@ -72,17 +72,15 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-
+val repository = ClothingRepository()
+val viewModel = ProductViewModel(repository)
 
 @Composable
 fun app(){
-    val repository = ClothingRepository()
-    val viewModel = ProductViewModel(repository)
-    viewModel.getList("bank")
     val navController = rememberNavController()
 
     NavHost(navController = navController,
-        startDestination = "swipeFragment"
+        startDestination = "whatsHot"
     ){
         composable("swipeFragment"){
             structureOfScreen()

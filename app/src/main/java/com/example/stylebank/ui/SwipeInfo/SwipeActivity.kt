@@ -26,19 +26,12 @@ import com.example.stylebank.R
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -47,20 +40,20 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChange
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModel
-import com.example.stylebank.data.ClothingRepository
+
 import com.example.stylebank.model.Clothing
 import com.example.stylebank.model.ObservableListObserver
-import com.example.stylebank.viewmodel.ProductViewModel
-import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
+import com.example.stylebank.viewModel
 
 // Define the ObservableListObserver interface
 
-class SwipeActivity : ComponentActivity() {}
+class SwipeActivity : ComponentActivity() {
+
+}
 
 
-val repository = ClothingRepository()
-val viewModel = ProductViewModel(repository)
+//val repository = ClothingRepository()
+//val viewModel = ProductViewModel(repository)
 
 
 
@@ -73,30 +66,6 @@ val imageID = arrayOf(
     R.drawable.image3,
     R.drawable.image2,
 )
-
-
-@Composable
-fun MenuBarButton(
-    onClick: () -> Unit,
-    icon: Painter,
-    iconSize: Dp = 24.dp,
-    paddingValue: Dp = 0.dp
-) {
-    Button(
-        onClick = onClick,
-        colors = ButtonDefaults.buttonColors(
-            MenubarGray,
-            contentColor = MenubarGray
-        ), modifier = Modifier.padding(paddingValue),
-
-        ) {
-        Image(
-            painter = icon,
-            contentDescription = null,
-            modifier = Modifier.size(iconSize)
-        )
-    }
-}
 
 
 @Composable
@@ -132,15 +101,9 @@ fun ExitButton(
 
 @Composable
 fun structureOfScreen(){ // Holder strukturen for skærmen
-    val (imageIds, setImageIds) = remember { mutableStateOf(imageID.toList()) }
-    val clothingObserver = object : ObservableListObserver<Any> {
-        override fun onItemAdded(item: Any) {
-            println("check")
-            val newImageId = R.drawable.image1
-            setImageIds(imageIds + listOf(newImageId))
-        }
-    }
-    viewModel.getList("likedItem")?.registerObserver(clothingObserver)
+    var list = viewModel.getList("product")
+    println("size of thing here: " + list?.size)
+    println(list?.size)
     Box (modifier = Modifier
         .fillMaxSize()
         .background(Color.White)
@@ -176,11 +139,12 @@ fun structureOfScreen(){ // Holder strukturen for skærmen
 fun pictureBox(
     modifier: Modifier = Modifier,
 
+
 ){
-val (imageIds, setImageIds) = remember { mutableStateOf(imageID.toList()) }
+    val (imageIds, setImageIds) = remember { mutableStateOf(imageID.toList()) }
     val clothingObserver = object : ObservableListObserver<Any> {
         override fun onItemAdded(item: Any) {
-
+            var piece : Clothing? = item as Clothing
             val newImageId = R.drawable.image1
             setImageIds(imageIds + listOf(newImageId))
         }
@@ -206,13 +170,15 @@ val (imageIds, setImageIds) = remember { mutableStateOf(imageID.toList()) }
                 val offsetX = change.positionChange().x
                 if (offsetX > 200f) {
                     //swipe til højre
-                    currentImageIndex = (currentImageIndex + 1) % imageIds.size
+                    currentImageIndex = (currentImageIndex + 1)
+                    println(viewModel.getList("product")?.size)
                     val array = arrayOf("test")
                     val clothing = Clothing(array, "testName", "testBrand", "123", "123", "123")
                     viewModel.getList("product")?.add(clothing)
                 } else if (offsetX < -200f) {
                     //swipe til venstre
-                    currentImageIndex = (currentImageIndex - 1 + imageIds.size) % imageIds.size
+                    currentImageIndex = (currentImageIndex + 1) % 3
+                    println(viewModel.getList("product")?.size)
                     val array = arrayOf("test")
                     val clothing = Clothing(array, "testName", "testBrand", "123", "123", "123")
                     viewModel.getList("product")?.add(clothing)
@@ -396,7 +362,11 @@ val (imageIds, setImageIds) = remember { mutableStateOf(imageID.toList()) }
 
 
 @Composable
-fun informationOfPicture(modifier: Modifier = Modifier){
+fun informationOfPicture(
+    //name : String,
+    //brandName : String,
+    modifier: Modifier = Modifier
+){
     Column( // Række for tekst - Composable
         modifier = Modifier
             .padding(30.dp, 0.dp)
