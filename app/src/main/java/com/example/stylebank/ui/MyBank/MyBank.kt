@@ -35,6 +35,8 @@ import com.example.stylebank.model.ObservableListObserver
 import com.example.stylebank.ui.theme.StyleBankTheme
 import com.example.stylebank.ui.theme.clothingObserver
 
+//test
+
 class MyBank() : Fragment() {
     //MyBankDisplay()
 }
