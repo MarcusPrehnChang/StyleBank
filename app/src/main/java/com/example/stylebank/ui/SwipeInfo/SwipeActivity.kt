@@ -153,22 +153,22 @@ fun structureOfScreen(){ // Holder strukturen for skærmen
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally),
             )
-            Row (
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                informationOfPicture(
-                    modifier = Modifier
-                )
-                Spacer(modifier = Modifier.width(120.dp))
-                prisSkilt(
-                    modifier = Modifier
-                        .padding(30.dp)
-                )
+            //Row (
+             ///   modifier = Modifier
+                //    .fillMaxWidth()
+            //) {
+                //informationOfPicture(
+                //    modifier = Modifier
+                //)
+                //Spacer(modifier = Modifier.width(120.dp))
+                //prisSkilt(
+                    //modifier = Modifier
+                      //  .padding(30.dp)
+                //)
             }
         }
     }
-}
+//}
 
 
 
@@ -228,6 +228,166 @@ val (imageIds, setImageIds) = remember { mutableStateOf(imageID.toList()) }
             painter = imagePainter,
             contentDescription = null,
         )
+    }
+    if (isOverlayVisible) { // overlay
+        Box( //Baggrunden hvid
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.White)
+                .padding(16.dp)
+        ) {
+            Column( // Indeholder det store billede
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.Start
+            ) {
+                Box( // Det store billede
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight(0.5f)
+                        .padding(start = 16.dp, top = 0.dp, end = 16.dp, bottom = 16.dp)
+                        .background(color = Color.Gray, shape = RoundedCornerShape(40.dp))
+                )
+                Row( // Rækken for de to små billeder
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.Bottom
+                ) {
+                    Box( // Venstre mindre billede
+                        modifier = Modifier
+                            .height(180.dp)
+                            .width(180.dp)
+                            .padding(start = 16.dp, top = 0.dp, end = 0.dp, bottom = 0.dp)
+                            .background(color = Color.Gray, shape = RoundedCornerShape(40.dp))
+                    )
+                    Box( // Højre mindre billede
+                        modifier = Modifier
+                            .height(180.dp)
+                            .width(180.dp)
+                            .padding(start = 0.dp, top = 0.dp, end = 16.dp, bottom = 0.dp)
+                            .background(color = Color.Gray, shape = RoundedCornerShape(40.dp))
+                    )
+
+                }
+                Row( //Rækken for store boksen
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.Bottom
+                ) {
+                    Box( // Den sorte box
+                        modifier = Modifier
+                            .height(100.dp)
+                            .fillMaxWidth()
+                            .padding(16.dp)
+                            .background(color = Color.Black, shape = RoundedCornerShape(10.dp))
+                    ) {
+                        Text( // teksten
+                            text = "STORE",
+                            color = Color.White,
+                            style = TextStyle(
+                                fontSize = 25.sp,
+                                fontWeight = FontWeight.Bold,
+                                fontFamily = FontFamily.SansSerif
+                            ),
+                            modifier = Modifier.align(Alignment.Center)
+                        )
+                        Image( //logo'et for tasken
+                            painter = painterResource(id = R.drawable.store),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(50.dp)
+                                .align(Alignment.CenterEnd)
+                                .padding(end = 16.dp)
+                        )
+                    }
+                }
+                Column( //Rækken til camo shirt, og tøjmærket
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "CAMO SHIRT",
+                            style = TextStyle(
+                                fontFamily = FontFamily.SansSerif,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 20.sp
+                            ),
+                            color = Color.Black
+                        )
+                        Box(
+                            modifier = Modifier
+                                .height(25.dp)
+                                .width(65.dp)
+                                .background(
+                                    color = PriceTagGreen.copy(alpha = 0.5f),
+                                    shape = RoundedCornerShape(8.dp)
+                                )
+                        ) {
+                            Text(
+                                text = "118£",
+                                color = Color.Black,
+                                style = TextStyle(
+                                    fontSize = 20.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    fontFamily = FontFamily.SansSerif
+                                ),
+                                modifier = Modifier.align(Alignment.Center)
+                            )
+                        }
+                    }
+                    Text(
+                        text = "SAUNA",
+                        style = TextStyle(
+                            fontFamily = FontFamily.SansSerif,
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 18.sp
+                        ),
+                        color = Color.Gray
+                    )
+                    Row( // Bank knappen og indeholder krydset (luk overlay)
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.Bottom,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .height(100.dp)
+                                .width(250.dp)
+                                .padding(start = 0.dp, top = 8.dp, end = 0.dp, bottom = 0.dp)
+                                .background(color = BankBlue, shape = RoundedCornerShape(10.dp)),
+                        ) {
+                            Text(
+                                text = "BANK",
+                                color = Color.White,
+                                style = TextStyle(
+                                    fontSize = 25.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    fontFamily = FontFamily.SansSerif
+                                ),
+                                modifier = Modifier.align(Alignment.Center)
+                            )
+                            Image(
+                                painter = painterResource(id = R.drawable.bank),
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .size(50.dp)
+                                    .align(Alignment.CenterEnd)
+                                    .padding(end = 16.dp)
+                            )
+                        }
+                        ExitButton(
+                            onClick = { /* Handle button click */ },
+                            icon = painterResource(id = R.drawable.cross),
+                            paddingValue = 10.dp,
+                            closeOverlay = { isOverlayVisible = false }
+                        )
+                    }
+                }
+            }
+        }
     }
 }
 
