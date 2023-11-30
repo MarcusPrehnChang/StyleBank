@@ -55,7 +55,7 @@ import com.example.stylebank.viewModel
 ////////
 // Define the ObservableListObserver interface
 
-class SwipeActivity : ComponentActivity() {
+open class SwipeActivity : ComponentActivity() {
 
 }
 

@@ -15,6 +15,9 @@ android {
         versionCode = 1
         versionName = "1.0"
 
+        testApplicationId = "com.example.bdd.test"
+        testInstrumentationRunner = "com.example.bdd.test.Instrumentation"
+
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
@@ -52,6 +55,14 @@ android {
 }
 
 dependencies {
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1:") //CUCUMBER IMPLEMENTATIONS
+    androidTestImplementation("info.cukes:cucumber-android:1.2.5@jar")
+    androidTestImplementation("info.cukes:cucumber-picocontainer:1.2.4")
+
+    androidTestImplementation("com.android.support.test:rules:1.0.2")//CUCUMBER IMPLEMENTATIONS
+    androidTestImplementation("com.android.support.test:runner:1.0.2")
+    androidTestImplementation("androidx.test.espresso:espresso-web:3.5.1")
+
     implementation ("io.coil-kt:coil-compose:1.3.2")
     testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.1")
     testImplementation ("org.mockito:mockito-core:3.12.4")
