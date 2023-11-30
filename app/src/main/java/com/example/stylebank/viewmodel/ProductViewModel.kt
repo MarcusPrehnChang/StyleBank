@@ -18,22 +18,24 @@ class ProductViewModel(private val repository: ClothingRepository) {
         "likedItem" to ObservableList<Clothing>()
     )
     init{
-        repository.updateList {
-            println("call back update")
-            val clothingList = repository.getProductList()
-            for (clothing in clothingList){
-                (listsMap["product"] as? ObservableList<Clothing>)?.add(clothing)
+        if (!isTestEnvironment()){
+            repository.updateList {
+                println("call back update")
+                val clothingList = repository.getProductList()
+                for (clothing in clothingList){
+                    (listsMap["product"] as? ObservableList<Clothing>)?.add(clothing)
+                }
+                println("Size of product list" + listsMap["product"]?.size)
+                val bannerList = repository.getBanners()
+                for(banner in bannerList){
+                    (listsMap["banner"] as? ObservableList<Banner>)?.add(banner)
+                }
+                val likedList = repository.getLikedItems()
+                for (likedItem in likedList){
+                    (listsMap["likedItem"] as? ObservableList<Clothing>)?.add(likedItem)
+                }
+                isInitialized = true
             }
-            println("Size of product list" + listsMap["product"]?.size)
-            val bannerList = repository.getBanners()
-            for(banner in bannerList){
-                (listsMap["banner"] as? ObservableList<Banner>)?.add(banner)
-            }
-            val likedList = repository.getLikedItems()
-            for (likedItem in likedList){
-                (listsMap["likedItem"] as? ObservableList<Clothing>)?.add(likedItem)
-            }
-            isInitialized = true
         }
     }
 
@@ -63,5 +65,8 @@ class ProductViewModel(private val repository: ClothingRepository) {
             val result = repository.getProductList()
             addItem("product", result[result.size - 1])
         }
+    }
+    private fun isTestEnvironment() : Boolean{
+        return System.getProperty("isTestEnvironment") == "true";
     }
 }

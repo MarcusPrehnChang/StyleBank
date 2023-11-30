@@ -16,6 +16,7 @@ class ViewModelTest {
 
     @Before
     fun setup(){
+        System.setProperty("isTestEnvironment", "true")
         repo = ClothingRepository()
         viewModel = ProductViewModel(repo)
     }
@@ -42,9 +43,6 @@ class ViewModelTest {
                 gotNotification = true
             }
 
-            /*override fun setOnItemAddedListener(listener: ((item: Any) -> Unit)?) {
-                TODO("Not yet implemented")
-            }*/
         }
         viewModel.getList("product")?.registerObserver(observer)
         val array = listOf("test")

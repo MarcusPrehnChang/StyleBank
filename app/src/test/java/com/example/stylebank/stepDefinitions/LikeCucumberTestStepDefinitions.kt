@@ -1,7 +1,6 @@
 package com.example.stylebank.stepDefinitions
-import androidx.compose.runtime.Composable
 import com.example.stylebank.data.ClothingRepository
-import com.example.stylebank.ui.theme.structureOfScreen
+import com.example.stylebank.model.Clothing
 import com.example.stylebank.viewmodel.ProductViewModel
 import io.cucumber.java.Before
 import io.cucumber.java.en.Given
@@ -13,37 +12,30 @@ class LikeCucumberTest {
 
         @Before
         fun setUp() {
+                System.setProperty("isTestEnvironment", "true")
                 repo = ClothingRepository()
                 viewModel = ProductViewModel(repo)
-
-                waitForInit()
         }
 
         @Given("the user is on the clothing app")
         fun showClothingItem() {
-                //We default showing the object, there is no logic needed except for the UI to show a specific instance to show an actual Item
+                val array = listOf("test")
+                val clothing = Clothing(array, "testName", "testBrand", "123", "123", "123")
+                viewModel.addItem("product", clothing)
         }
         @When("the user clicks on the like button")
         fun likeItem() {
                 var list = viewModel.getList("product")
                 var item = list?.get(0)
-                viewModel.addItem("likedItems", item)
+                viewModel.addItem("likedItem", item)
         }
 
         @Then("the clothing item is liked")
         fun isAdded() {
                 var list = viewModel.getList("product")
                 var item = list?.get(0)
-                var likeList = viewModel.getList("likedItems")
+                var likeList = viewModel.getList("likedItem")
                 assert(likeList?.get(0) == item)
-        }
-
-        private fun waitForInit(){
-                var timeout = 0
-                while (!viewModel.isInitialized && timeout < 10000) {
-                        Thread.sleep(100)
-                        timeout += 100
-                }
         }
 }
 
