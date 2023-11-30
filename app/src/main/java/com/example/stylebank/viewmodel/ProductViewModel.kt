@@ -14,17 +14,21 @@ class ProductViewModel(private val repository: ClothingRepository) {
         "likedItem" to ObservableList<Clothing>()
     )
     init{
-        val clothingList = repository.getProductList()
-        for (clothing in clothingList){
-            (listsMap["product"] as? ObservableList<Clothing>)?.add(clothing)
-        }
-        val bannerList = repository.getBanners()
-        for(banner in bannerList){
-            (listsMap["banner"] as? ObservableList<Banner>)?.add(banner)
-        }
-        val likedList = repository.getLikedItems()
-        for (likedItem in likedList){
-            (listsMap["likedItem"] as? ObservableList<Clothing>)?.add(likedItem)
+        repository.updateList {
+            println("call back update")
+            val clothingList = repository.getProductList()
+            for (clothing in clothingList){
+                (listsMap["product"] as? ObservableList<Clothing>)?.add(clothing)
+            }
+            println("Size of product list" + listsMap["product"]?.size)
+            val bannerList = repository.getBanners()
+            for(banner in bannerList){
+                (listsMap["banner"] as? ObservableList<Banner>)?.add(banner)
+            }
+            val likedList = repository.getLikedItems()
+            for (likedItem in likedList){
+                (listsMap["likedItem"] as? ObservableList<Clothing>)?.add(likedItem)
+            }
         }
     }
 
@@ -38,7 +42,12 @@ class ProductViewModel(private val repository: ClothingRepository) {
     }
 
     fun fetchBatch(){
-        repository.updateList()
-        repository.getProductList()
+        repository.updateList(){
+
+        }
+        var result = repository.getProductList()
+        for (clothes in result){
+            addItem("product", clothes)
+        }
     }
 }

@@ -47,8 +47,8 @@ val imageID = arrayOf(
     R.drawable.skagen2,
     R.drawable.skagen3,
     )
-val repository = ClothingRepository()
-val viewModel = ProductViewModel(repository)
+//val repository = ClothingRepository()
+//val viewModel = ProductViewModel(repository)
 
 
 @Composable
