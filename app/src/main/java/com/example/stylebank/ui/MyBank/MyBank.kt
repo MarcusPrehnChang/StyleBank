@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -60,11 +61,31 @@ fun MyBankDisplay() {
             }
         }
     }
-    ImageList(imageUrls, imageLinks)
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        //listen af billeder
+        ImageList(imageUrls, imageLinks)
+
+        //Billedet af setting
+        Box(
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(8.dp)
+        ){
+            SettingsButton()
+        }
+    }
 }
 
-
-
+@Composable
+fun SettingsButton(){
+    Image(
+        painter = painterResource(id = R.drawable.settings),
+        contentDescription = null,
+        modifier = Modifier.size(50.dp)
+    )
+}
 
 @Composable
 fun ImageList(imageIds: List<String>, imageLinks: List<String>) {
