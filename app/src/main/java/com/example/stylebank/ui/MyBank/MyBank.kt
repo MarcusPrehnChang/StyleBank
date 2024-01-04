@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.widget.Button
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,9 +18,13 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -48,8 +53,11 @@ val bankObserver = object : ObservableListObserver<Any> {
 val add = viewModel.getList("likedItem")?.registerObserver(bankObserver)
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyBankDisplay() {
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+
     val imageIds = remember { mutableStateOf(list) }
     val imageUrls = mutableListOf<String>()
     val imageLinks = mutableListOf<String>()
@@ -61,29 +69,41 @@ fun MyBankDisplay() {
             }
         }
     }
-    Box(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        //listen af billeder
-        ImageList(imageUrls, imageLinks)
 
-        //Billedet af setting
-        Box(
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .padding(8.dp)
-        ){
-            SettingsButton()
+    ModalDrawer(
+        drawerState = drawerState,
+        drawerContent = {
+            Text("Menu Item 1", modifier = Modifier.padding(16.dp))
+            Text("Menu Item 2", modifier = Modifier.padding(16.dp))
+        },
+        content = {
+            Box(modifier = Modifier.fillMaxSize()) {
+                //listen af billeder
+                ImageList(imageUrls, imageLinks)
+
+                //Billedet af setting
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(8.dp)
+                ){
+                    SettingsButton { drawerState.open() }
+                }
+            }
         }
-    }
+    )
 }
 
+
 @Composable
-fun SettingsButton(){
+fun SettingsButton(onClick: () -> Unit){
     Image(
         painter = painterResource(id = R.drawable.settings),
         contentDescription = null,
-        modifier = Modifier.size(50.dp)
+        modifier = Modifier
+            .size(50.dp)
+            .clickable(onClick = onClick)
+
     )
 }
 
