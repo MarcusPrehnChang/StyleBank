@@ -44,8 +44,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModel
 import coil.compose.rememberImagePainter
 import com.example.stylebank.model.Clothing
+import com.example.stylebank.model.Filter
+import com.example.stylebank.model.FilterItem
 import com.example.stylebank.model.ObservableListObserver
 import com.example.stylebank.ui.theme.StyleBankTheme
 import com.example.stylebank.ui.theme.clothingObserver
@@ -53,7 +56,6 @@ import com.example.stylebank.ui.theme.clothingObserver
 class MyBank() : Fragment() {
     //MyBankDisplay()
 }
-
 val list = viewModel.getList("likedItem")
 val bankObserver = object : ObservableListObserver<Any> {
     override fun onItemAdded(item: Any) {
@@ -67,7 +69,6 @@ val add = viewModel.getList("likedItem")?.registerObserver(bankObserver)
 fun MyBankDisplay() {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     var selectedItems by remember { mutableStateOf(setOf<String>()) }
-
     val imageIds = remember { mutableStateOf(list) }
     val imageUrls = mutableListOf<String>()
     val imageLinks = mutableListOf<String>()
@@ -87,6 +88,8 @@ fun MyBankDisplay() {
                 val items = listOf("Trøjer", "Bukser", "T-Shirts")
                 items.forEach { item ->
                     val isSelected = selectedItems.contains(item)
+
+
                     NavigationDrawerItem(
                         label = { Text(text = item) },
                         icon = {
@@ -104,11 +107,15 @@ fun MyBankDisplay() {
                             }
                         },
                         selected = isSelected,
-                        onClick = { selectedItems = if (selectedItems.contains(item)) {
+                        onClick = {
+                            selectedItems = if (selectedItems.contains(item)) {
                             selectedItems - item
+                            //viewModel.filter.removeFilterItem(FilterItem(item))
                         }else{
                             selectedItems + item
-                            }
+                            //viewModel.filter.addFilterItem(FilterItem(item))
+                        }
+
                         }
                     )
 

@@ -6,11 +6,13 @@ import androidx.compose.runtime.setValue
 import com.example.stylebank.data.ClothingRepository
 import com.example.stylebank.model.Banner
 import com.example.stylebank.model.Clothing
+import com.example.stylebank.model.Filter
 import com.example.stylebank.model.ObservableList
 
 class ProductViewModel(private val repository: ClothingRepository) {
     //List to listen to, using some kind of observable pattern, i believe Kotlin has a unique one that is best to use.
     var index by mutableStateOf(0)
+    val filter = Filter()
     var isInitialized = false
     private val listsMap: Map<String, ObservableList<out Any>> = mapOf(
         "product" to ObservableList<Clothing>(),
