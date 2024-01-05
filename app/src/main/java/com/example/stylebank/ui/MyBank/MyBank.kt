@@ -25,6 +25,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.NavigationBarDefaults
+import androidx.compose.material3.NavigationDrawerItem
+import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
@@ -63,6 +66,7 @@ val add = viewModel.getList("likedItem")?.registerObserver(bankObserver)
 @Composable
 fun MyBankDisplay() {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    var selectedItems by remember { mutableStateOf(setOf<String>()) }
 
     val imageIds = remember { mutableStateOf(list) }
     val imageUrls = mutableListOf<String>()
@@ -75,16 +79,43 @@ fun MyBankDisplay() {
             }
         }
     }
-
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
             ModalDrawerSheet {
-            Text("T-shirt", modifier = Modifier.padding(16.dp))
-            Text("Bukser", modifier = Modifier.padding(16.dp))
-            Text("Trøjer", modifier = Modifier.padding(16.dp))
-        }
+                Spacer(Modifier.height(12.dp))
+                val items = listOf("Trøjer", "Bukser", "T-Shirts")
+                items.forEach { item ->
+                    val isSelected = selectedItems.contains(item)
+                    NavigationDrawerItem(
+                        label = { Text(text = item) },
+                        icon = {
+                        if (isSelected) {
+                            Image(
+                                painter = painterResource(id = R.drawable.fluebenskasse),
+                                contentDescription = "valgt",
+                                modifier = Modifier
+                                    .size(25.dp)
+                            )
+                        }else{
+                            Image(painter = painterResource(id = R.drawable.square),
+                                contentDescription = "ik valgt",
+                                modifier = Modifier.size(25.dp))
+                            }
+                        },
+                        selected = isSelected,
+                        onClick = { selectedItems = if (selectedItems.contains(item)) {
+                            selectedItems - item
+                        }else{
+                            selectedItems + item
+                            }
+                        }
+                    )
+
+                }
+            }
         },
+        modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
         content = {
             Box(modifier = Modifier.fillMaxSize()) {
                 //listen af billeder
@@ -154,7 +185,6 @@ fun BankCloth(imageUrl : String, link : String){
                 .height(170.dp)
                 .width(170.dp)
         )
-        Button(onClick = { openLink(context, link) }) {}
     }
 }
 
