@@ -18,16 +18,21 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
+import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -70,11 +75,10 @@ fun MyBankDisplay() {
         }
     }
 
-    ModalDrawer(
+    ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
             Text("Menu Item 1", modifier = Modifier.padding(16.dp))
-            Text("Menu Item 2", modifier = Modifier.padding(16.dp))
         },
         content = {
             Box(modifier = Modifier.fillMaxSize()) {
@@ -87,25 +91,36 @@ fun MyBankDisplay() {
                         .align(Alignment.TopEnd)
                         .padding(8.dp)
                 ){
-                    SettingsButton { drawerState.open() }
+                    SettingsButton(drawerState)
                 }
             }
         }
     )
 }
 
-
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsButton(onClick: () -> Unit){
+fun SettingsButton(drawerState: DrawerState) {
+    // Brug en remember-konstrukt til at holde en tilstand, der kan udløse LaunchedEffect
+    var openDrawer by remember { mutableStateOf(false) }
+
+    // Reager på tilstandsændringen for at åbne skuffen
+    LaunchedEffect(openDrawer) {
+        if (openDrawer) {
+            drawerState.open()
+            openDrawer = false // Reset tilstanden
+        }
+    }
+
     Image(
         painter = painterResource(id = R.drawable.settings),
         contentDescription = null,
         modifier = Modifier
             .size(50.dp)
-            .clickable(onClick = onClick)
-
+            .clickable { openDrawer = true } // Opdater tilstanden her
     )
 }
+
 
 @Composable
 fun ImageList(imageIds: List<String>, imageLinks: List<String>) {
