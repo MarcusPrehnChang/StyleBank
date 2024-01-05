@@ -23,6 +23,7 @@ import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -78,7 +79,11 @@ fun MyBankDisplay() {
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
-            Text("Menu Item 1", modifier = Modifier.padding(16.dp))
+            ModalDrawerSheet {
+            Text("T-shirt", modifier = Modifier.padding(16.dp))
+            Text("Bukser", modifier = Modifier.padding(16.dp))
+            Text("Trøjer", modifier = Modifier.padding(16.dp))
+        }
         },
         content = {
             Box(modifier = Modifier.fillMaxSize()) {
