@@ -26,6 +26,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import com.example.stylebank.R
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.material.icons.Icons
@@ -55,13 +56,14 @@ import com.example.stylebank.viewModel
 ////////
 // Define the ObservableListObserver interface
 
-open class SwipeActivity : ComponentActivity() {
+class SwipeActivity : ComponentActivity() {
 
 }
 
 val list = viewModel.getList("product")
 val clothingObserver = object : ObservableListObserver<Any> {
     override fun onItemAdded(item: Any) {
+        println("triggered")
         viewModel.index = viewModel.index + 1
     }
 }
@@ -117,14 +119,16 @@ fun ExitButton(
 
 @Composable
 fun structureOfScreen(){ // Holder strukturen for skærmen
-
+    println("recomposition")
     var currentIndex by remember { mutableIntStateOf(viewModel.index) }
+    var isOverlayVisible by remember { mutableStateOf(false) }
     LaunchedEffect(viewModel.index) {
         currentIndex = viewModel.index
     }
     val clothing = list?.get(currentIndex)
-
     var currentPiece : Clothing = clothing as Clothing
+
+
     Box (modifier = Modifier
         .fillMaxSize()
         .background(Color.White)
@@ -134,9 +138,12 @@ fun structureOfScreen(){ // Holder strukturen for skærmen
                 .fillMaxSize()
         ) {
             pictureBox(
+
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally),
-                currentPiece.pictures[0]
+                mainPicture = currentPiece.pictures[0],
+                onPictureClick = {isOverlayVisible = true}
+
             )
             Row (
                 modifier = Modifier
@@ -167,16 +174,169 @@ fun structureOfScreen(){ // Holder strukturen for skærmen
         }
     }
 
+    if (isOverlayVisible) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.White)
+                .padding(16.dp)
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(48.dp)
+                    .align(Alignment.TopEnd)
+                    .padding(8.dp)
+                    .clickable {
+                        isOverlayVisible = false
+                    }
+            ) {
+
+                val imagePainter = painterResource(id = R.drawable.cross)
+
+                Image(
+                    painter = imagePainter,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(30.dp)
+                )
+            }
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.Start
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight(0.5f)
+                        .padding(start = 16.dp, top = 0.dp, end = 16.dp, bottom = 16.dp)
+                        .background(
+                            color = Color.Gray.copy(alpha = 0f),
+                            shape = RoundedCornerShape(40.dp)
+                        )
+                ) {
+                    pictureBox(
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        currentPiece.pictures[0],
+                        onPictureClick = {}
+                    )
+                }
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.Bottom
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .height(180.dp)
+                            .width(180.dp)
+                            .padding(start = 16.dp, top = 0.dp, end = 0.dp, bottom = 0.dp)
+                            .background(
+                                color = Color.Gray.copy(alpha = 0f),
+                                shape = RoundedCornerShape(40.dp)
+                            )
+                    ) {
+                        pictureBox(
+                            modifier = Modifier
+                                .fillMaxSize(),
+                            currentPiece.pictures[1],
+                            onPictureClick = {}
+                        )
+                    }
+                    Box(
+                        modifier = Modifier
+                            .height(180.dp)
+                            .width(180.dp)
+                            .padding(start = 0.dp, top = 0.dp, end = 16.dp, bottom = 0.dp)
+                            .background(
+                                color = Color.Gray.copy(alpha = 0f),
+                                shape = RoundedCornerShape(40.dp)
+                            )
+                    ) {
+                        pictureBox(
+                            modifier = Modifier
+                                .fillMaxSize(),
+                            currentPiece.pictures[2],
+                            onPictureClick = {}
+                        )
+                    }
+
+                }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.Bottom
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .height(100.dp)
+                            .fillMaxWidth()
+                            .padding(16.dp)
+                            .background(color = Color.Black, shape = RoundedCornerShape(10.dp))
+                            .clickable {}  //currentPiece.link skal laves logik for links
+
+                    ) {
+                        Text(
+                            text = "STORE",
+                            color = Color.White,
+                            style = TextStyle(
+                                fontSize = 25.sp,
+                                fontWeight = FontWeight.Bold,
+                                fontFamily = FontFamily.SansSerif
+                            ),
+                            modifier = Modifier
+                                .align(Alignment.Center)
+                        )
+                        Image(
+                            painter = painterResource(id = R.drawable.store),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(50.dp)
+                                .align(Alignment.CenterEnd)
+                                .padding(end = 16.dp)
+                        )
+                    }
+                }
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        informationOfPicture(
+                            currentPiece.objectName,
+                            currentPiece.brandName,
+                            modifier = Modifier
+                        )
+                        Spacer(modifier = Modifier.width(120.dp))
+                        prisSkilt(
+                            modifier = Modifier
+                                .padding(30.dp),
+                            currentPiece.price
+                        )
+                    }
+                }
+            }
+        }
+    }
 }
+
+
+
 
 
 
 @Composable
 fun pictureBox(
     modifier: Modifier = Modifier,
-    mainPicture : String
+    mainPicture : String,
+    onPictureClick: () -> Unit
 
 ){
+    println("Main picture : $mainPicture")
     var isOverlayVisible by remember { mutableStateOf(false) }
 
 
@@ -187,10 +347,12 @@ fun pictureBox(
         .background(Color.White, shape = RoundedCornerShape(20.dp))
         .pointerInput(Unit) {
             detectTapGestures {
+                onPictureClick()
                 isOverlayVisible = true
             }
         }
     ){
+        println("Main picture : $mainPicture")
         val painter = rememberImagePainter(
             data = mainPicture,
             builder = {
