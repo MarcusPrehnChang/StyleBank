@@ -12,6 +12,10 @@ class Filter {
 
     //Remove FilterItem fra liste
     fun removeFilterItem(filterItem: FilterItem){
+       /* val filterItem = filterItems.find { it.name == itemName}
+        filterItem?.let {
+            filterItems.remove(it)
+        }*/
         filterItems.remove(filterItem)
     }
 }

@@ -3,6 +3,7 @@ package com.example.stylebank
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import android.widget.Button
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -45,6 +46,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberImagePainter
 import com.example.stylebank.model.Clothing
 import com.example.stylebank.model.Filter
@@ -68,7 +70,7 @@ val add = viewModel.getList("likedItem")?.registerObserver(bankObserver)
 @Composable
 fun MyBankDisplay() {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-    var selectedItems by remember { mutableStateOf(setOf<String>()) }
+    var selectedItems by remember { mutableStateOf(setOf(viewModel.filter.filterItems.toString())) }
     val imageIds = remember { mutableStateOf(list) }
     val imageUrls = mutableListOf<String>()
     val imageLinks = mutableListOf<String>()
@@ -80,18 +82,19 @@ fun MyBankDisplay() {
             }
         }
     }
+    val items = listOf(FilterItem("Trøjer"), FilterItem("Bukser"), FilterItem("T-Shirts"))
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
             ModalDrawerSheet {
                 Spacer(Modifier.height(12.dp))
-                val items = listOf("Trøjer", "Bukser", "T-Shirts")
+
                 items.forEach { item ->
-                    val isSelected = selectedItems.contains(item)
+                    val isSelected = selectedItems.contains(item.name)
 
 
                     NavigationDrawerItem(
-                        label = { Text(text = item) },
+                        label = { Text(text = item.name) },
                         icon = {
                         if (isSelected) {
                             Image(
@@ -108,17 +111,23 @@ fun MyBankDisplay() {
                         },
                         selected = isSelected,
                         onClick = {
-                            selectedItems = if (selectedItems.contains(item)) {
-                            selectedItems - item
-                            //viewModel.filter.removeFilterItem(FilterItem(item))
-                        }else{
-                            selectedItems + item
-                            //viewModel.filter.addFilterItem(FilterItem(item))
-                        }
+                            val isSelected = selectedItems.contains(item.name)
 
+                            selectedItems = if (isSelected) {
+                                viewModel.filter.removeFilterItem(item)
+                                Log.d("Selceted Items", selectedItems.toString())
+                                Log.d("Removing FilterItems", viewModel.filter.filterItems.joinToString { it.toString() })
+                                (selectedItems - item.name).toSet()
+
+                            }  else{
+                                viewModel.filter.addFilterItem(item)
+                                Log.d("Selceted Items", selectedItems.toString())
+
+                                Log.d("Adding FilterItems", viewModel.filter.filterItems.joinToString { it.toString() })
+                                (selectedItems + item.name).toSet()
+                            }
                         }
                     )
-
                 }
             }
         },
