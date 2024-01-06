@@ -73,7 +73,7 @@ val add = viewModel.getList("likedItem")?.registerObserver(bankObserver)
 @Composable
 fun MyBankDisplay() {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-    var selectedItems by remember { mutableStateOf(setOf(viewModel.filter.filterItems.toString())) }
+    var selectedItems by remember { mutableStateOf(setOf<String>()) }
     val imageIds = remember { mutableStateOf(list) }
     val imageUrls = mutableListOf<String>()
     val imageLinks = mutableListOf<String>()
@@ -95,7 +95,6 @@ fun MyBankDisplay() {
                 items.forEach { item ->
                     val isSelected = selectedItems.contains(item.name)
 
-
                     NavigationDrawerItem(
                         label = { Text(text = item.name) },
                         icon = {
@@ -116,16 +115,12 @@ fun MyBankDisplay() {
                         onClick = {
                             val isSelected = selectedItems.contains(item.name)
 
-                            selectedItems = if (isSelected) {
+                            selectedItems =  if (isSelected) {
                                 viewModel.filter.removeFilterItem(item)
-                                Log.d("Selceted Items", selectedItems.toString())
                                 Log.d("Removing FilterItems", viewModel.filter.filterItems.joinToString { it.toString() })
                                 (selectedItems - item.name).toSet()
-
                             }  else{
                                 viewModel.filter.addFilterItem(item)
-                                Log.d("Selceted Items", selectedItems.toString())
-
                                 Log.d("Adding FilterItems", viewModel.filter.filterItems.joinToString { it.toString() })
                                 (selectedItems + item.name).toSet()
                             }

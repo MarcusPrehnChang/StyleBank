@@ -34,6 +34,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 import androidx.navigation.compose.rememberNavController
 
@@ -81,6 +82,7 @@ fun app(){
             structureOfScreen()
         }
         composable("myBank"){
+            viewModel.filter.clearFilter()
             MyBankDisplay()
         }
         composable("whatsHot"){
