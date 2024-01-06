@@ -129,7 +129,6 @@ fun MyBankDisplay() {
                 }
             }
         },
-        modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
         content = {
             Box(modifier = Modifier.fillMaxSize()) {
                 //listen af billeder
