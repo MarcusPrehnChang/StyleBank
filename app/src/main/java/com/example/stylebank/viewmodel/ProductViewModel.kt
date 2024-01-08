@@ -21,6 +21,7 @@
         )
         init{
             if (!isTestEnvironment()){
+
                 repository.updateList {
                     val clothingList = repository.getProductList()
                     for (clothing in clothingList){

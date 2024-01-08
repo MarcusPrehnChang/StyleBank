@@ -18,5 +18,6 @@ class Filter {
 
     fun clearFilter(){
         filterItems.clear()
+
     }
 }

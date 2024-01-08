@@ -85,6 +85,7 @@ fun app(){
             viewModel.filter.clearFilter()
             MyBankDisplay()
         }
+
         composable("whatsHot"){
             WholeScreen()
         }

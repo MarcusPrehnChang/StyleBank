@@ -100,6 +100,7 @@ fun MyBankDisplay() {
                         icon = {
                         if (isSelected) {
                             Image(
+
                                 painter = painterResource(id = R.drawable.fluebenskasse),
                                 contentDescription = "valgt",
                                 modifier = Modifier
