@@ -135,9 +135,6 @@ fun MyBankDisplay() {
         },
         content = {
             Box(modifier = Modifier.fillMaxSize()) {
-                if (isOverlayVisible) {
-                    Overlay()
-                }
                 //listen af billeder
                 ImageList(imageUrls, imageLinks) {
                     setIsOverlayVisible(true)
@@ -149,6 +146,9 @@ fun MyBankDisplay() {
                         .padding(8.dp)
                 ){
                     SettingsButton(drawerState)
+                }
+                if (isOverlayVisible){
+                    Overlay()
                 }
             }
         }

@@ -68,6 +68,7 @@ class FirebaseRepository {
                     val price = documentSnapshot.getString("price") ?: " "
                     val pictures = documentSnapshot?.get("pictures") as? List<String> ?: emptyList()
 
+
                     val clothing = Clothing(pictures, brandName, name, price, link, id)
                     callback(clothing)
                 }else{
