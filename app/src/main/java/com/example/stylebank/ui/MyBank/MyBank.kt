@@ -58,6 +58,7 @@ import com.example.stylebank.model.ObservableListObserver
 import com.example.stylebank.ui.theme.StyleBankTheme
 import com.example.stylebank.ui.theme.clothingObserver
 
+
 class MyBank() : Fragment() {
     //MyBankDisplay()
 }
@@ -72,11 +73,13 @@ val add = viewModel.getList("likedItem")?.registerObserver(bankObserver)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyBankDisplay() {
+
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     var selectedItems by remember { mutableStateOf(setOf<String>()) }
     val imageIds = remember { mutableStateOf(list) }
     val imageUrls = mutableListOf<String>()
     val imageLinks = mutableListOf<String>()
+    val (isOverlayVisible, setIsOverlayVisible) = remember { mutableStateOf(false)}
     if (list != null) {
         for(item in list){
             if(item is Clothing){
@@ -132,9 +135,13 @@ fun MyBankDisplay() {
         },
         content = {
             Box(modifier = Modifier.fillMaxSize()) {
+                if (isOverlayVisible) {
+                    Overlay()
+                }
                 //listen af billeder
-                ImageList(imageUrls, imageLinks)
-
+                ImageList(imageUrls, imageLinks) {
+                    setIsOverlayVisible(true)
+                }
                 //Billedet af setting
                 Box(
                     modifier = Modifier
@@ -173,20 +180,23 @@ fun SettingsButton(drawerState: DrawerState) {
 
 
 @Composable
-fun ImageList(imageIds: List<String>, imageLinks: List<String>) {
+fun ImageList(imageIds: List<String>, imageLinks: List<String>,onClothClicked: () -> Unit) {
     LazyVerticalGrid(columns = GridCells.Fixed(2)) {
         items(imageIds.size) { index ->
-            BankCloth(imageIds[index], imageLinks[index])
+            BankCloth(imageIds[index], imageLinks[index], onClothClicked)
+            }
         }
     }
-}
+
 
 @Composable
-fun BankCloth(imageUrl : String, link : String){
+fun BankCloth(imageUrl : String, link : String, onClothClicked: () -> Unit){
     val context = LocalContext.current
     Box(modifier = Modifier
         .height(170.dp)
-        .width(170.dp)){
+        .width(170.dp)
+        .clickable { onClothClicked() }
+    ){
         Image(
             painter = rememberImagePainter(
                 data = imageUrl,
@@ -220,16 +230,13 @@ fun GreetingtooPreview() {
 }
 
 @Composable
-fun Overlay(){
-    var isOverlayVisible by remember { mutableStateOf(false) }
-
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .background(Color.White)
+fun Overlay() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black)
     ) {
-        Column(modifier = Modifier
-            .fillMaxSize()) {
-        }
+        // Your overlay content goes here
     }
 }
 

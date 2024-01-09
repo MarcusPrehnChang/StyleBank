@@ -1,9 +1,6 @@
 package com.example.stylebank.ui.theme
 
-import android.media.Image
-import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
 import androidx.compose.ui.unit.Dp
 import androidx.compose.material3.*
@@ -11,8 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import coil.request.ImageRequest
-import coil.ImageLoader
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -22,12 +17,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import com.example.stylebank.R
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -45,20 +38,14 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.input.pointer.positionChange
-import androidx.compose.ui.platform.LocalContext
 import androidx.fragment.app.Fragment
 import coil.compose.rememberImagePainter
 
 import com.example.stylebank.model.Clothing
 import com.example.stylebank.model.ObservableListObserver
 import com.example.stylebank.viewModel
-////////
-// Define the ObservableListObserver interface
 
-class SwipeActivity : ComponentActivity() {
-
-}
+class SwipeActivity : ComponentActivity()
 
 val list = viewModel.getList("product")
 val clothingObserver = object : ObservableListObserver<Any> {
@@ -68,23 +55,8 @@ val clothingObserver = object : ObservableListObserver<Any> {
     }
 }
 val add = viewModel.getList("product")?.registerObserver(clothingObserver)
-//val repository = ClothingRepository()
-//val viewModel = ProductViewModel(repository)
 
-
-
-
-
-
-class Listofclothing : Fragment(){}
-
-/*
-val imageID = arrayOf(
-    R.drawable.sb_skjorte,
-    R.drawable.image3,
-    R.drawable.image2,
-)*/
-
+class Listofclothing : Fragment()
 
 @Composable
 fun ExitButton(
@@ -358,13 +330,12 @@ fun pictureBox(
             builder = {
                 crossfade(true)
                 placeholder(R.drawable.loading)
-                //error("error")
             }
         )
 
         Image(
             painter = painter,
-            contentDescription = null, // Set a meaningful content description if needed
+            contentDescription = null,
             modifier = Modifier.fillMaxSize()
         )
     }
