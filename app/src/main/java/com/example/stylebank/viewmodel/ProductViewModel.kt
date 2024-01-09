@@ -8,8 +8,10 @@ import com.example.stylebank.model.Banner
 import com.example.stylebank.model.Clothing
 import com.example.stylebank.model.Filter
 import com.example.stylebank.model.ObservableList
+import com.example.stylebank.model.User
 
 class ProductViewModel(private val repository: ClothingRepository) {
+    val user = User()
     //List to listen to, using some kind of observable pattern, i believe Kotlin has a unique one that is best to use.
     var index by mutableStateOf(0)
     val filter = Filter()

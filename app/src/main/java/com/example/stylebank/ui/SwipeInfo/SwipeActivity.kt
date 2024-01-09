@@ -137,11 +137,27 @@ fun structureOfScreen(){ // Holder strukturen for skærmen
         Box(modifier = Modifier
             .align(Alignment.TopEnd)){
             bankButton {
+                for(tag in currentPiece.tags){
+                    val index = viewModel.user.preferences.indexOf(tag)
+                    if(index != -1){
+                        viewModel.user.preferences[index].value += 1
+                    }else{
+                        viewModel.user.preferences.add(tag)
+                    }
+                }
                 viewModel.fetchOne()
                 viewModel.addItem("likedItem", currentPiece)
             }
         }
         dislike {
+            for(tag in currentPiece.tags){
+                val index = viewModel.user.preferences.indexOf(tag)
+                if(index != -1){
+                    viewModel.user.preferences[index].value -= 1
+                }else{
+                    viewModel.user.preferences.add(tag)
+                }
+            }
             viewModel.fetchOne()
         }
     }

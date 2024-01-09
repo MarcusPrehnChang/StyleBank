@@ -1,6 +1,9 @@
 package com.example.stylebank.model
 
-class User {
-    var userId: Int = 0;
-    var username: String? = null;
+import com.example.stylebank.model.clothing.Tag
+
+
+class User() {
+    var preferences : MutableList<Tag> = mutableListOf()
 }
+

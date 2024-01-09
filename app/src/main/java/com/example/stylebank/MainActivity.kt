@@ -44,6 +44,7 @@ import androidx.navigation.NavController
 
 import androidx.navigation.compose.*
 import com.example.stylebank.data.ClothingRepository
+import com.example.stylebank.model.User
 
 
 import com.example.stylebank.ui.theme.MenubarGray

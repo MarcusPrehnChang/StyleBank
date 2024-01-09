@@ -25,4 +25,6 @@ class ServerCommunication(firebaseRepository: FirebaseRepository) {
         //TODO("This is what the algorithm should end up doing, this is just dummy implementation so that the app has a consistent flow")
     }
 
+
+
 }

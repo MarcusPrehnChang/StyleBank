@@ -1,6 +1,7 @@
 package com.example.stylebank.data
 
 import com.example.stylebank.model.Clothing
+import com.example.stylebank.model.clothing.Tag
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QueryDocumentSnapshot
@@ -67,9 +68,17 @@ class FirebaseRepository {
                     val link = documentSnapshot.getString("link") ?: " "
                     val price = documentSnapshot.getString("price") ?: " "
                     val pictures = documentSnapshot?.get("pictures") as? List<String> ?: emptyList()
+                    val tagsStrings = documentSnapshot?.get("tags") as List<String> ?: emptyList()
 
 
-                    val clothing = Clothing(pictures, brandName, name, price, link, id)
+                    var tags : MutableList<Tag> = mutableListOf()
+                    for (string in tagsStrings) {
+                        val tag = Tag(string, 100)
+                        tags.add(tag)
+                    }
+
+
+                    val clothing = Clothing(pictures, brandName, name, price, link, id, tags)
                     callback(clothing)
                 }else{
                     callback(null)
