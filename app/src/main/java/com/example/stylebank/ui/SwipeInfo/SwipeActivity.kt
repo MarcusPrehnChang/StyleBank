@@ -196,7 +196,7 @@ fun structureOfScreen(){ // Holder strukturen for skærmen
                     modifier = Modifier
                         .fillMaxWidth(0.95f)
                         .fillMaxHeight(0.46f)
-                        .padding(start = 22.dp, top = 0.dp, end = 16.dp, bottom = 16.dp)
+                        .padding(start = 30.dp, top = 0.dp, end = 14.dp, bottom = 16.dp)
                         .background(
                             color = Color.Black,
                             shape = RoundedCornerShape(40.dp)
