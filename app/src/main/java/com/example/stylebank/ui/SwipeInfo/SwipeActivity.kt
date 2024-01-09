@@ -31,6 +31,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -38,6 +39,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.ContentScale
 import androidx.fragment.app.Fragment
 import coil.compose.rememberImagePainter
 
@@ -110,7 +112,6 @@ fun structureOfScreen(){ // Holder strukturen for skærmen
                 .fillMaxSize()
         ) {
             pictureBox(
-
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally),
                 mainPicture = currentPiece.pictures[0],
@@ -189,7 +190,7 @@ fun structureOfScreen(){ // Holder strukturen for skærmen
                 ) {
                     pictureBox(
                         modifier = Modifier
-                            .fillMaxSize(),
+                            .background(Color.Gray),
                         currentPiece.pictures[0],
                         onPictureClick = {}
                     )
@@ -300,13 +301,11 @@ fun structureOfScreen(){ // Holder strukturen for skærmen
 
 
 
-
 @Composable
 fun pictureBox(
     modifier: Modifier = Modifier,
     mainPicture : String,
     onPictureClick: () -> Unit
-
 ){
     println("Main picture : $mainPicture")
     var isOverlayVisible by remember { mutableStateOf(false) }
@@ -314,8 +313,8 @@ fun pictureBox(
 
     Box(modifier = Modifier
         .fillMaxWidth()
-        .fillMaxHeight(0.85f)
-        .padding(16.dp, 16.dp, 16.dp, 0.dp) // Måske lav paddingen om med vertical og horizontal
+        .fillMaxHeight(0.75f)
+        .padding(16.dp, 28.dp, 16.dp, 16.dp) // Måske lav paddingen om med vertical og horizontal
         .background(Color.White, shape = RoundedCornerShape(20.dp))
         .pointerInput(Unit) {
             detectTapGestures {
@@ -336,7 +335,12 @@ fun pictureBox(
         Image(
             painter = painter,
             contentDescription = null,
-            modifier = Modifier.fillMaxSize()
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .clip(RoundedCornerShape(23.dp))
+                .size(600.dp)
+                .align(Alignment.Center)
+
         )
     }
 }
@@ -413,7 +417,6 @@ fun informationOfPicture(
 fun prisSkilt(modifier: Modifier = Modifier, price : String){
     Box( //Pris skiltet
         modifier = Modifier
-            .padding(0.dp, 0.dp)
             .height(25.dp)
             .width(65.dp)
             .background(
