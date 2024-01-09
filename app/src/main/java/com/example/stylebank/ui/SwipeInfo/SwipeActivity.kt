@@ -40,6 +40,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.HorizontalAlignmentLine
 import androidx.fragment.app.Fragment
 import coil.compose.rememberImagePainter
 
@@ -109,15 +110,28 @@ fun structureOfScreen(){ // Holder strukturen for skærmen
     ) {
         Column(
             modifier = Modifier
-                .fillMaxSize()
         ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.75f)
+                    .padding(16.dp, 28.dp, 16.dp, 16.dp),
+            ){
+                pictureBox(modifier = Modifier
+                    .fillMaxSize(),
+                    mainPicture = currentPiece.pictures[0],
+                    onPictureClick = {isOverlayVisible = true}
+                )
+            }
+            /*
             pictureBox(
                 modifier = Modifier
-                    .align(Alignment.CenterHorizontally),
+                    .fillMaxWidth()
+                    .weight(1f),
                 mainPicture = currentPiece.pictures[0],
                 onPictureClick = {isOverlayVisible = true}
-
-            )
+                )
+             */
             Row (
                 modifier = Modifier
                     .fillMaxWidth()
@@ -178,19 +192,19 @@ fun structureOfScreen(){ // Holder strukturen for skærmen
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.Start
             ) {
-                Box(
+                Box( // Store box i overlay
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .fillMaxHeight(0.5f)
-                        .padding(start = 16.dp, top = 0.dp, end = 16.dp, bottom = 16.dp)
+                        .fillMaxWidth(0.95f)
+                        .fillMaxHeight(0.46f)
+                        .padding(start = 22.dp, top = 0.dp, end = 16.dp, bottom = 16.dp)
                         .background(
-                            color = Color.Gray.copy(alpha = 0f),
+                            color = Color.Black,
                             shape = RoundedCornerShape(40.dp)
                         )
                 ) {
                     pictureBox(
                         modifier = Modifier
-                            .background(Color.Gray),
+                            .fillMaxSize(),
                         currentPiece.pictures[0],
                         onPictureClick = {}
                     )
@@ -207,7 +221,7 @@ fun structureOfScreen(){ // Holder strukturen for skærmen
                             .width(180.dp)
                             .padding(start = 16.dp, top = 0.dp, end = 0.dp, bottom = 0.dp)
                             .background(
-                                color = Color.Gray.copy(alpha = 0f),
+                                color = Color.Black,
                                 shape = RoundedCornerShape(40.dp)
                             )
                     ) {
@@ -224,18 +238,17 @@ fun structureOfScreen(){ // Holder strukturen for skærmen
                             .width(180.dp)
                             .padding(start = 0.dp, top = 0.dp, end = 16.dp, bottom = 0.dp)
                             .background(
-                                color = Color.Gray.copy(alpha = 0f),
+                                color = Color.Black,
                                 shape = RoundedCornerShape(40.dp)
                             )
                     ) {
-                        pictureBox(
+                        pictureBox( // Se mig
                             modifier = Modifier
                                 .fillMaxSize(),
                             currentPiece.pictures[2],
                             onPictureClick = {}
                         )
                     }
-
                 }
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -312,9 +325,6 @@ fun pictureBox(
 
 
     Box(modifier = Modifier
-        .fillMaxWidth()
-        .fillMaxHeight(0.75f)
-        .padding(16.dp, 28.dp, 16.dp, 16.dp) // Måske lav paddingen om med vertical og horizontal
         .background(Color.White, shape = RoundedCornerShape(20.dp))
         .pointerInput(Unit) {
             detectTapGestures {
@@ -338,7 +348,7 @@ fun pictureBox(
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .clip(RoundedCornerShape(23.dp))
-                .size(600.dp)
+                .fillMaxSize()
                 .align(Alignment.Center)
 
         )
@@ -380,6 +390,8 @@ fun dislike(onClick: () -> Unit) {
         }
     }
 }
+
+
 
 
 @Composable
