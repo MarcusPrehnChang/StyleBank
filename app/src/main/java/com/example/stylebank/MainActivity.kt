@@ -44,6 +44,7 @@ import androidx.navigation.NavController
 
 import androidx.navigation.compose.*
 import com.example.stylebank.data.ClothingRepository
+import com.example.stylebank.model.Clothing
 
 
 import com.example.stylebank.ui.theme.MenubarGray
@@ -82,8 +83,8 @@ fun app(){
             structureOfScreen()
         }
         composable("myBank"){
-            viewModel.filter.clearFilter()
-            MyBankDisplay()
+            val clothingList = viewModel.getList("likedItem").orEmpty().filterIsInstance<Clothing>()
+            MyBankDisplay(clothingList)
         }
 
         composable("whatsHot"){

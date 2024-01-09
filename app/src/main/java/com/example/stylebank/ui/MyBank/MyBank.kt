@@ -4,39 +4,38 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.util.Log
-import android.widget.Button
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.Button
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
-import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.NavigationDrawerItem
-import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -45,18 +44,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberImagePainter
 import com.example.stylebank.model.Clothing
-import com.example.stylebank.model.Filter
 import com.example.stylebank.model.FilterItem
 import com.example.stylebank.model.ObservableListObserver
 import com.example.stylebank.ui.theme.StyleBankTheme
-import com.example.stylebank.ui.theme.clothingObserver
+import com.example.stylebank.ui.theme.informationOfPicture
+import com.example.stylebank.ui.theme.pictureBox
+import com.example.stylebank.ui.theme.prisSkilt
 
 
 class MyBank() : Fragment() {
@@ -69,11 +71,11 @@ val bankObserver = object : ObservableListObserver<Any> {
 }
 val add = viewModel.getList("likedItem")?.registerObserver(bankObserver)
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MyBankDisplay() {
+fun MyBankDisplay(clothingList: List<Clothing>) {
 
+    var clickedClothing by remember { mutableStateOf<Clothing?>(null) }
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     var selectedItems by remember { mutableStateOf(setOf<String>()) }
     val imageIds = remember { mutableStateOf(list) }
@@ -101,18 +103,18 @@ fun MyBankDisplay() {
                     NavigationDrawerItem(
                         label = { Text(text = item.name) },
                         icon = {
-                        if (isSelected) {
-                            Image(
+                            if (isSelected) {
+                                Image(
 
-                                painter = painterResource(id = R.drawable.fluebenskasse),
-                                contentDescription = "valgt",
-                                modifier = Modifier
-                                    .size(25.dp)
-                            )
-                        }else{
-                            Image(painter = painterResource(id = R.drawable.square),
-                                contentDescription = "ik valgt",
-                                modifier = Modifier.size(25.dp))
+                                    painter = painterResource(id = R.drawable.fluebenskasse),
+                                    contentDescription = "valgt",
+                                    modifier = Modifier
+                                        .size(25.dp)
+                                )
+                            }else{
+                                Image(painter = painterResource(id = R.drawable.square),
+                                    contentDescription = "ik valgt",
+                                    modifier = Modifier.size(25.dp))
                             }
                         },
                         selected = isSelected,
@@ -136,8 +138,12 @@ fun MyBankDisplay() {
         content = {
             Box(modifier = Modifier.fillMaxSize()) {
                 //listen af billeder
-                ImageList(imageUrls, imageLinks) {
-                    setIsOverlayVisible(true)
+                ImageList(
+                    clothingList = clothingList,
+                    imageUrls = imageUrls,
+                    imageLinks = imageLinks
+                ) { clickedItem ->
+                    clickedClothing = clickedItem
                 }
                 //Billedet af setting
                 Box(
@@ -147,13 +153,18 @@ fun MyBankDisplay() {
                 ){
                     SettingsButton(drawerState)
                 }
-                if (isOverlayVisible){
-                    Overlay()
+                if (clickedClothing != null) {
+                    Overlay(
+                        clothing = clickedClothing!!,
+                        isOverlayVisible = isOverlayVisible,
+                        setIsOverlayVisible = setIsOverlayVisible
+                    )
                 }
             }
         }
     )
 }
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -180,23 +191,40 @@ fun SettingsButton(drawerState: DrawerState) {
 
 
 @Composable
-fun ImageList(imageIds: List<String>, imageLinks: List<String>,onClothClicked: () -> Unit) {
+fun ImageList(
+    clothingList: List<Clothing>,
+    imageUrls: List<String>,
+    imageLinks: List<String>,
+    onClothClicked: (Clothing) -> Unit
+) {
     LazyVerticalGrid(columns = GridCells.Fixed(2)) {
-        items(imageIds.size) { index ->
-            BankCloth(imageIds[index], imageLinks[index], onClothClicked)
-            }
+        items(clothingList.size) { index ->
+            val clothing = clothingList[index]
+            BankCloth(
+                imageUrl = imageUrls[index],
+                link = imageLinks[index],
+                clothing = clothing,
+                onClothClicked = { onClothClicked(clothing) }
+            )
         }
     }
+}
 
 
 @Composable
-fun BankCloth(imageUrl : String, link : String, onClothClicked: () -> Unit){
+fun BankCloth(
+    imageUrl: String,
+    link: String,
+    clothing: Clothing,
+    onClothClicked: () -> Unit
+) {
     val context = LocalContext.current
-    Box(modifier = Modifier
-        .height(170.dp)
-        .width(170.dp)
-        .clickable { onClothClicked() }
-    ){
+    Box(
+        modifier = Modifier
+            .height(170.dp)
+            .width(170.dp)
+            .clickable { onClothClicked() }
+    ) {
         Image(
             painter = rememberImagePainter(
                 data = imageUrl,
@@ -204,7 +232,8 @@ fun BankCloth(imageUrl : String, link : String, onClothClicked: () -> Unit){
                     crossfade(true)
                     placeholder(R.drawable.loading)
                 }
-            ), contentDescription = null,
+            ),
+            contentDescription = null,
             modifier = Modifier
                 .height(170.dp)
                 .width(170.dp)
@@ -230,13 +259,159 @@ fun GreetingtooPreview() {
 }
 
 @Composable
-fun Overlay() {
+fun Overlay(
+    clothing: Clothing,
+    isOverlayVisible: Boolean,
+    setIsOverlayVisible: (Boolean) -> Unit
+) {
+
+    var currentPiece : Clothing = clothing
+
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Black)
+            .background(Color.White)
+            .padding(16.dp)
     ) {
-        // Your overlay content goes here
+        Box(
+            modifier = Modifier
+                .size(48.dp)
+                .align(Alignment.TopEnd)
+                .padding(8.dp)
+                .clickable {
+                    setIsOverlayVisible(false)
+                }
+        ) {
+
+            val imagePainter = painterResource(id = R.drawable.cross)
+
+            Image(
+                painter = imagePainter,
+                contentDescription = null,
+                modifier = Modifier
+                    .size(30.dp)
+            )
+        }
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.Start
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.5f)
+                    .padding(start = 16.dp, top = 0.dp, end = 16.dp, bottom = 16.dp)
+                    .background(
+                        color = Color.Gray.copy(alpha = 0f),
+                        shape = RoundedCornerShape(40.dp)
+                    )
+            ) {
+                pictureBox(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    currentPiece.pictures[0],
+                    onPictureClick = {}
+                )
+            }
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.Bottom
+            ) {
+                Box(
+                    modifier = Modifier
+                        .height(180.dp)
+                        .width(180.dp)
+                        .padding(start = 16.dp, top = 0.dp, end = 0.dp, bottom = 0.dp)
+                        .background(
+                            color = Color.Gray.copy(alpha = 0f),
+                            shape = RoundedCornerShape(40.dp)
+                        )
+                ) {
+                    pictureBox(
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        currentPiece.pictures[1],
+                        onPictureClick = {}
+                    )
+                }
+                Box(
+                    modifier = Modifier
+                        .height(180.dp)
+                        .width(180.dp)
+                        .padding(start = 0.dp, top = 0.dp, end = 16.dp, bottom = 0.dp)
+                        .background(
+                            color = Color.Gray.copy(alpha = 0f),
+                            shape = RoundedCornerShape(40.dp)
+                        )
+                ) {
+                    pictureBox(
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        currentPiece.pictures[2],
+                        onPictureClick = {}
+                    )
+                }
+
+            }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.Bottom
+            ) {
+                Box(
+                    modifier = Modifier
+                        .height(100.dp)
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                        .background(color = Color.Black, shape = RoundedCornerShape(10.dp))
+                        .clickable {}  //currentPiece.link skal laves logik for links
+
+                ) {
+                    Text(
+                        text = "STORE",
+                        color = Color.White,
+                        style = TextStyle(
+                            fontSize = 25.sp,
+                            fontWeight = FontWeight.Bold,
+                            fontFamily = FontFamily.SansSerif
+                        ),
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                    )
+                    Image(
+                        painter = painterResource(id = R.drawable.store),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(50.dp)
+                            .align(Alignment.CenterEnd)
+                            .padding(end = 16.dp)
+                    )
+                }
+            }
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    informationOfPicture(
+                        currentPiece.objectName,
+                        currentPiece.brandName,
+                        modifier = Modifier
+                    )
+                    Spacer(modifier = Modifier.width(120.dp))
+                    prisSkilt(
+                        modifier = Modifier
+                            .padding(30.dp),
+                        currentPiece.price
+                    )
+                }
+            }
+        }
     }
 }
 
