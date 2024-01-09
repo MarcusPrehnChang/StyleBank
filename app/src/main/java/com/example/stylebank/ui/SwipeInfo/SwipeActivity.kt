@@ -109,8 +109,8 @@ fun structureOfScreen(){ // Holder strukturen for skærmen
         .background(Color.White)
     ) {
         Column(
-            modifier = Modifier
-        ) {
+            modifier = Modifier)
+        {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -170,21 +170,20 @@ fun structureOfScreen(){ // Holder strukturen for skærmen
         ) {
             Box(
                 modifier = Modifier
-                    .size(48.dp)
+                    .size(34.dp)
                     .align(Alignment.TopEnd)
-                    .padding(8.dp)
+                    .padding(6.dp)
                     .clickable {
                         isOverlayVisible = false
                     }
             ) {
 
                 val imagePainter = painterResource(id = R.drawable.cross)
-
                 Image(
                     painter = imagePainter,
                     contentDescription = null,
                     modifier = Modifier
-                        .size(30.dp)
+                        .fillMaxSize()
                 )
             }
             Column(
