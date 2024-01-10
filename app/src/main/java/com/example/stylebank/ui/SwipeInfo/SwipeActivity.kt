@@ -21,6 +21,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import com.example.stylebank.R
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
@@ -34,6 +35,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.input.pointer.consumeAllChanges
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -49,6 +51,7 @@ import coil.compose.rememberImagePainter
 import com.example.stylebank.model.Clothing
 import com.example.stylebank.model.ObservableListObserver
 import com.example.stylebank.viewModel
+import kotlin.math.absoluteValue
 
 class SwipeActivity : ComponentActivity()
 
@@ -104,6 +107,7 @@ fun structureOfScreen(){ // Holder strukturen for skærmen
     }
     val clothing = list?.get(currentIndex)
     var currentPiece : Clothing = clothing as Clothing
+    var isItemAdded by remember { mutableStateOf(false)}
 
 
     Box (modifier = Modifier
@@ -122,7 +126,15 @@ fun structureOfScreen(){ // Holder strukturen for skærmen
                 pictureBox(modifier = Modifier
                     .fillMaxSize(),
                     mainPicture = currentPiece.pictures[0],
-                    onPictureClick = {isOverlayVisible = true}
+                    onPictureClick = {isOverlayVisible = true},
+                    onSwipeLeft = { viewModel.fetchOne()},
+                    onSwipeRight = {
+                        if (!isItemAdded) {
+                            viewModel.fetchOne()
+                            viewModel.addItem("likedItem", currentPiece)
+                            isItemAdded = true
+                        }
+                    }
                 )
             }
             Row (
@@ -202,7 +214,9 @@ fun structureOfScreen(){ // Holder strukturen for skærmen
                         modifier = Modifier
                             .fillMaxSize(),
                         currentPiece.pictures[0],
-                        onPictureClick = {}
+                        onPictureClick = {},
+                        onSwipeRight = {},
+                        onSwipeLeft = {}
                     )
                 }
 
@@ -225,7 +239,9 @@ fun structureOfScreen(){ // Holder strukturen for skærmen
                             modifier = Modifier
                                 .fillMaxSize(),
                             currentPiece.pictures[1],
-                            onPictureClick = {}
+                            onPictureClick = {},
+                            onSwipeRight = {},
+                            onSwipeLeft = {}
                         )
                     }
                     Box(
@@ -242,7 +258,9 @@ fun structureOfScreen(){ // Holder strukturen for skærmen
                             modifier = Modifier
                                 .fillMaxSize(),
                             currentPiece.pictures[2],
-                            onPictureClick = {}
+                            onPictureClick = {},
+                            onSwipeRight = {},
+                            onSwipeLeft = {}
                         )
                     }
                 }
@@ -312,14 +330,33 @@ fun structureOfScreen(){ // Holder strukturen for skærmen
 fun pictureBox(
     modifier: Modifier = Modifier,
     mainPicture : String,
+    onSwipeRight: () -> Unit,
+    onSwipeLeft: () -> Unit,
     onPictureClick: () -> Unit
 ){
     println("Main picture : $mainPicture")
     var isOverlayVisible by remember { mutableStateOf(false) }
+    var offsetX by remember { mutableStateOf(0f) }
 
 
     Box(modifier = Modifier
         .background(Color.White, shape = RoundedCornerShape(20.dp))
+        .pointerInput(Unit) {
+            detectDragGestures { change, dragAmount ->
+                change.consume()
+                offsetX += dragAmount.x
+                val threshold = 50.dp.toPx()
+                if (offsetX.absoluteValue >= threshold) {
+                    if (offsetX > 0) {
+                        onSwipeRight()
+                    } else {
+                        onSwipeLeft()
+                    }
+                    offsetX = 0f
+                }
+
+            }
+        }
         .pointerInput(Unit) {
             detectTapGestures {
                 onPictureClick()
@@ -335,7 +372,6 @@ fun pictureBox(
                 placeholder(R.drawable.loading)
             }
         )
-
         Image(
             painter = painter,
             contentDescription = null,

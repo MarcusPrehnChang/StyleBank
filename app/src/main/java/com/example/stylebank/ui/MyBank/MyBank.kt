@@ -345,7 +345,9 @@ fun Overlay(
                     modifier = Modifier
                         .fillMaxSize(),
                     currentPiece.pictures[0],
-                    onPictureClick = {}
+                    onPictureClick = {},
+                    onSwipeRight = {},
+                    onSwipeLeft = {}
                 )
             }
 
@@ -368,7 +370,9 @@ fun Overlay(
                         modifier = Modifier
                             .fillMaxSize(),
                         currentPiece.pictures[1],
-                        onPictureClick = {}
+                        onPictureClick = {},
+                        onSwipeRight = {},
+                        onSwipeLeft = {}
                     )
                 }
                 Box(
@@ -385,7 +389,9 @@ fun Overlay(
                         modifier = Modifier
                             .fillMaxSize(),
                         currentPiece.pictures[2],
-                        onPictureClick = {}
+                        onPictureClick = {},
+                        onSwipeRight = {},
+                        onSwipeLeft = {}
                     )
                 }
 
