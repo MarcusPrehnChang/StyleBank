@@ -31,6 +31,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -38,6 +39,9 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.HorizontalAlignmentLine
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.fragment.app.Fragment
 import coil.compose.rememberImagePainter
 
@@ -106,43 +110,50 @@ fun structureOfScreen(){ // Holder strukturen for skærmen
         .background(Color.White)
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
-            pictureBox(
-
+            modifier = Modifier)
+        {
+            Box(
                 modifier = Modifier
-                    .align(Alignment.CenterHorizontally),
-                mainPicture = currentPiece.pictures[0],
-                onPictureClick = {isOverlayVisible = true}
-
-            )
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.75f)
+                    .padding(16.dp, 28.dp, 16.dp, 16.dp),
+            ){
+                pictureBox(modifier = Modifier
+                    .fillMaxSize(),
+                    mainPicture = currentPiece.pictures[0],
+                    onPictureClick = {isOverlayVisible = true}
+                )
+            }
             Row (
                 modifier = Modifier
                     .fillMaxWidth()
+                    .padding(horizontal = 30.dp, vertical = 0.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 informationOfPicture(
                     currentPiece.objectName,
                     currentPiece.brandName,
-                    modifier = Modifier
+                    modifier = Modifier.weight(1f)
                 )
-                Spacer(modifier = Modifier.width(120.dp))
                 prisSkilt(
-                    modifier = Modifier
-                        .padding(30.dp),
+                    modifier = Modifier,
                     currentPiece.price
                 )
             }
-        }
-        Box(modifier = Modifier
-            .align(Alignment.TopEnd)){
+            Row (
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                dislike {
+                    viewModel.fetchOne()
+                }
             bankButton {
                 viewModel.fetchOne()
                 viewModel.addItem("likedItem", currentPiece)
+                }
             }
-        }
-        dislike {
-            viewModel.fetchOne()
         }
     }
 
@@ -155,21 +166,20 @@ fun structureOfScreen(){ // Holder strukturen for skærmen
         ) {
             Box(
                 modifier = Modifier
-                    .size(48.dp)
+                    .size(34.dp)
                     .align(Alignment.TopEnd)
-                    .padding(8.dp)
+                    .padding(6.dp)
                     .clickable {
                         isOverlayVisible = false
                     }
             ) {
 
                 val imagePainter = painterResource(id = R.drawable.cross)
-
                 Image(
                     painter = imagePainter,
                     contentDescription = null,
                     modifier = Modifier
-                        .size(30.dp)
+                        .fillMaxSize()
                 )
             }
             Column(
@@ -177,13 +187,13 @@ fun structureOfScreen(){ // Holder strukturen for skærmen
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.Start
             ) {
-                Box(
+                Box( // Store box i overlay
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .fillMaxHeight(0.5f)
-                        .padding(start = 16.dp, top = 0.dp, end = 16.dp, bottom = 16.dp)
+                        .fillMaxWidth(0.95f)
+                        .fillMaxHeight(0.46f)
+                        .padding(start = 30.dp, top = 0.dp, end = 14.dp, bottom = 16.dp)
                         .background(
-                            color = Color.Gray.copy(alpha = 0f),
+                            color = Color.Black,
                             shape = RoundedCornerShape(40.dp)
                         )
                 ) {
@@ -206,7 +216,7 @@ fun structureOfScreen(){ // Holder strukturen for skærmen
                             .width(180.dp)
                             .padding(start = 16.dp, top = 0.dp, end = 0.dp, bottom = 0.dp)
                             .background(
-                                color = Color.Gray.copy(alpha = 0f),
+                                color = Color.Black,
                                 shape = RoundedCornerShape(40.dp)
                             )
                     ) {
@@ -223,18 +233,17 @@ fun structureOfScreen(){ // Holder strukturen for skærmen
                             .width(180.dp)
                             .padding(start = 0.dp, top = 0.dp, end = 16.dp, bottom = 0.dp)
                             .background(
-                                color = Color.Gray.copy(alpha = 0f),
+                                color = Color.Black,
                                 shape = RoundedCornerShape(40.dp)
                             )
                     ) {
-                        pictureBox(
+                        pictureBox( // Se mig
                             modifier = Modifier
                                 .fillMaxSize(),
                             currentPiece.pictures[2],
                             onPictureClick = {}
                         )
                     }
-
                 }
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -283,10 +292,8 @@ fun structureOfScreen(){ // Holder strukturen for skærmen
                             currentPiece.brandName,
                             modifier = Modifier
                         )
-                        Spacer(modifier = Modifier.width(120.dp))
                         prisSkilt(
-                            modifier = Modifier
-                                .padding(30.dp),
+                            modifier = Modifier,
                             currentPiece.price
                         )
                     }
@@ -300,22 +307,17 @@ fun structureOfScreen(){ // Holder strukturen for skærmen
 
 
 
-
 @Composable
 fun pictureBox(
     modifier: Modifier = Modifier,
     mainPicture : String,
     onPictureClick: () -> Unit
-
 ){
     println("Main picture : $mainPicture")
     var isOverlayVisible by remember { mutableStateOf(false) }
 
 
     Box(modifier = Modifier
-        .fillMaxWidth()
-        .fillMaxHeight(0.85f)
-        .padding(16.dp, 16.dp, 16.dp, 0.dp) // Måske lav paddingen om med vertical og horizontal
         .background(Color.White, shape = RoundedCornerShape(20.dp))
         .pointerInput(Unit) {
             detectTapGestures {
@@ -336,7 +338,11 @@ fun pictureBox(
         Image(
             painter = painter,
             contentDescription = null,
-            modifier = Modifier.fillMaxSize()
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .clip(RoundedCornerShape(23.dp))
+                .fillMaxSize()
+                .align(Alignment.Center)
         )
     }
 }
@@ -378,6 +384,8 @@ fun dislike(onClick: () -> Unit) {
 }
 
 
+
+
 @Composable
 fun informationOfPicture(
     name : String,
@@ -386,7 +394,7 @@ fun informationOfPicture(
 ){
     Column( // Række for tekst - Composable
         modifier = Modifier
-            .padding(30.dp, 0.dp)
+            .padding(0.dp, 0.dp)
     ){
         Text(
             text = name,
@@ -395,7 +403,7 @@ fun informationOfPicture(
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp
             ),
-            color = Color.Black
+            color = Color.Black,
         )
         Text(
             text =brandName,
@@ -404,7 +412,7 @@ fun informationOfPicture(
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 18.sp
             ),
-            color = Color.Gray
+            color = Color.Gray,
         )
     }
 }
@@ -413,7 +421,6 @@ fun informationOfPicture(
 fun prisSkilt(modifier: Modifier = Modifier, price : String){
     Box( //Pris skiltet
         modifier = Modifier
-            .padding(0.dp, 0.dp)
             .height(25.dp)
             .width(65.dp)
             .background(
