@@ -119,7 +119,7 @@ fun BottomBar(navController: NavController){
             val currentRoute = navBackStackEntry?.destination?.route
             MenuBarButton(
                 onClick = { navController.navigate("whatsHot") },
-                icon = painterResource(id = R.drawable.icon_ild),
+                icon = painterResource(id = R.drawable.icon_ild3),
                 iconSize = 38.dp
 
             )

@@ -103,7 +103,7 @@ fun whatsHot() { // Undertitel (Subheader)
             fontWeight = FontWeight.Bold,
         )
         Image(
-            painter = painterResource(id = R.drawable.fire__1_),
+            painter = painterResource(id = R.drawable.fire__1__),
             contentDescription = null,
             modifier = Modifier.size(23.dp)
         )
