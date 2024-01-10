@@ -254,23 +254,22 @@ fun BankCloth(
                 modifier = Modifier.fillMaxSize()
             )
             Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.Bottom
+                modifier = Modifier
+                    .align(alignment = Alignment.BottomCenter)
+                    .fillMaxWidth(),
             ) {
-                // Only displaying the brandName and price here
                 Text(
                     text = currentPiece.brandName,
-                    modifier = Modifier.padding(8.dp),
+                    modifier = Modifier.padding(0.dp),
                     style = TextStyle(
                         fontFamily = FontFamily.SansSerif,
                         fontWeight = FontWeight.Bold,
-                        fontSize = 10.sp)
+                        fontSize = 14.sp)
                 )
-                Text(
-                    text = currentPiece.price,
-                    modifier = Modifier.padding(8.dp),
-                    style = TextStyle()
+                prisSkilt(
+                    modifier = Modifier
+                        .padding(16.dp),
+                    currentPiece.price
                 )
             }
         }
@@ -312,9 +311,9 @@ fun Overlay(
     ) {
         Box(
             modifier = Modifier
-                .size(48.dp)
+                .size(34.dp)
                 .align(Alignment.TopEnd)
-                .padding(8.dp)
+                .padding(6.dp)
                 .clickable {
                     setIsOverlayVisible(false)
                 }
@@ -326,7 +325,7 @@ fun Overlay(
                 painter = imagePainter,
                 contentDescription = null,
                 modifier = Modifier
-                    .size(30.dp)
+                    .fillMaxSize()
             )
         }
         Column(
@@ -336,11 +335,11 @@ fun Overlay(
         ) {
             Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight(0.5f)
-                    .padding(start = 16.dp, top = 0.dp, end = 16.dp, bottom = 16.dp)
+                    .fillMaxWidth(0.95f)
+                    .fillMaxHeight(0.46f)
+                    .padding(start = 30.dp, top = 0.dp, end = 14.dp, bottom = 16.dp)
                     .background(
-                        color = Color.Gray.copy(alpha = 0f),
+                        color = Color.Black,
                         shape = RoundedCornerShape(40.dp)
                     )
             ) {
@@ -361,7 +360,7 @@ fun Overlay(
                     modifier = Modifier
                         .height(180.dp)
                         .width(180.dp)
-                        .padding(start = 16.dp, top = 0.dp, end = 0.dp, bottom = 0.dp)
+                        .padding(start = 16.dp, top = 0.dp, end = 8.dp, bottom = 0.dp)
                         .background(
                             color = Color.Gray.copy(alpha = 0f),
                             shape = RoundedCornerShape(40.dp)
@@ -378,7 +377,7 @@ fun Overlay(
                     modifier = Modifier
                         .height(180.dp)
                         .width(180.dp)
-                        .padding(start = 0.dp, top = 0.dp, end = 16.dp, bottom = 0.dp)
+                        .padding(start = 0.dp, top = 0.dp, end = 8.dp, bottom = 0.dp)
                         .background(
                             color = Color.Gray.copy(alpha = 0f),
                             shape = RoundedCornerShape(40.dp)
@@ -442,8 +441,7 @@ fun Overlay(
                     )
                     Spacer(modifier = Modifier.width(120.dp))
                     prisSkilt(
-                        modifier = Modifier
-                            .padding(30.dp),
+                        modifier = Modifier,
                         currentPiece.price
                     )
                 }
