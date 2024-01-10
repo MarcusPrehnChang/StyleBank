@@ -127,16 +127,16 @@ fun structureOfScreen(){ // Holder strukturen for skærmen
             Row (
                 modifier = Modifier
                     .fillMaxWidth()
+                    .padding(horizontal = 30.dp, vertical = 0.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 informationOfPicture(
                     currentPiece.objectName,
                     currentPiece.brandName,
-                    modifier = Modifier
+                    modifier = Modifier.weight(1f)
                 )
-                Spacer(modifier = Modifier.width(120.dp))
                 prisSkilt(
-                    modifier = Modifier
-                        .padding(30.dp),
+                    modifier = Modifier,
                     currentPiece.price
                 )
             }
@@ -292,10 +292,8 @@ fun structureOfScreen(){ // Holder strukturen for skærmen
                             currentPiece.brandName,
                             modifier = Modifier
                         )
-                        Spacer(modifier = Modifier.width(120.dp))
                         prisSkilt(
-                            modifier = Modifier
-                                .padding(30.dp),
+                            modifier = Modifier,
                             currentPiece.price
                         )
                     }
@@ -345,7 +343,6 @@ fun pictureBox(
                 .clip(RoundedCornerShape(23.dp))
                 .fillMaxSize()
                 .align(Alignment.Center)
-
         )
     }
 }
@@ -397,7 +394,7 @@ fun informationOfPicture(
 ){
     Column( // Række for tekst - Composable
         modifier = Modifier
-            .padding(30.dp, 0.dp)
+            .padding(0.dp, 0.dp)
     ){
         Text(
             text = name,
@@ -407,9 +404,6 @@ fun informationOfPicture(
                 fontSize = 20.sp
             ),
             color = Color.Black,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.widthIn(max = 150.dp)
         )
         Text(
             text =brandName,
@@ -419,9 +413,6 @@ fun informationOfPicture(
                 fontSize = 18.sp
             ),
             color = Color.Gray,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.widthIn(max = 150.dp)
         )
     }
 }
