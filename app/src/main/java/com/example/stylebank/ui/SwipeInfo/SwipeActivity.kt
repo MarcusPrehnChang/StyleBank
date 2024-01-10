@@ -41,6 +41,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.HorizontalAlignmentLine
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.fragment.app.Fragment
 import coil.compose.rememberImagePainter
 
@@ -123,15 +124,6 @@ fun structureOfScreen(){ // Holder strukturen for skærmen
                     onPictureClick = {isOverlayVisible = true}
                 )
             }
-            /*
-            pictureBox(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f),
-                mainPicture = currentPiece.pictures[0],
-                onPictureClick = {isOverlayVisible = true}
-                )
-             */
             Row (
                 modifier = Modifier
                     .fillMaxWidth()
@@ -148,16 +140,20 @@ fun structureOfScreen(){ // Holder strukturen for skærmen
                     currentPiece.price
                 )
             }
-        }
-        Box(modifier = Modifier
-            .align(Alignment.TopEnd)){
+            Row (
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                dislike {
+                    viewModel.fetchOne()
+                }
             bankButton {
                 viewModel.fetchOne()
                 viewModel.addItem("likedItem", currentPiece)
+                }
             }
-        }
-        dislike {
-            viewModel.fetchOne()
         }
     }
 
@@ -410,7 +406,10 @@ fun informationOfPicture(
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp
             ),
-            color = Color.Black
+            color = Color.Black,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.widthIn(max = 150.dp)
         )
         Text(
             text =brandName,
@@ -419,7 +418,10 @@ fun informationOfPicture(
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 18.sp
             ),
-            color = Color.Gray
+            color = Color.Gray,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.widthIn(max = 150.dp)
         )
     }
 }
