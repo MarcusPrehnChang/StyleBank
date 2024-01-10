@@ -40,8 +40,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.VerticalAlignmentLine
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -96,7 +98,6 @@ fun MyBankDisplay(clothingList: List<Clothing>) {
         drawerContent = {
             ModalDrawerSheet {
                 Spacer(Modifier.height(12.dp))
-
                 items.forEach { item ->
                     val isSelected = selectedItems.contains(item.name)
 
@@ -137,19 +138,19 @@ fun MyBankDisplay(clothingList: List<Clothing>) {
         },
         content = {
             Box(modifier = Modifier
-                .fillMaxSize()
-                .padding(start = 16.dp, top = 16.dp, end = 0.dp, bottom = 16.dp)
-                .background(color = Color.White.copy(alpha = 0f), shape = RoundedCornerShape(40.dp))
-            ){
-                //listen af billeder
+                .fillMaxSize())
+            { Box(modifier = Modifier.align(Alignment.TopCenter)){
                 ImageList(
                     clothingList = clothingList,
                     imageUrls = imageUrls,
-                    imageLinks = imageLinks
+                    imageLinks = imageLinks,
+
                 ) { clickedItem ->
                     clickedClothing = clickedItem
                 }
-                //Billedet af setting
+                }
+
+                //Billedet af setting   
                 Box(
                     modifier = Modifier
                         .align(Alignment.TopEnd)
@@ -201,7 +202,14 @@ fun ImageList(
     imageLinks: List<String>,
     onClothClicked: (Clothing) -> Unit
 ) {
-    LazyVerticalGrid(columns = GridCells.Fixed(2)) {
+    Box(modifier = Modifier
+        .fillMaxWidth()
+        .padding(horizontal = 30.dp)){
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(2),
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center)
+        {
         items(clothingList.size) { index ->
             val clothing = clothingList[index]
             BankCloth(
@@ -209,7 +217,9 @@ fun ImageList(
                 link = imageLinks[index],
                 clothing = clothing,
                 onClothClicked = { onClothClicked(clothing) }
-            )
+
+                )
+            }
         }
     }
 }
@@ -251,30 +261,14 @@ fun BankCloth(
                 ),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxSize()
-            )
-            Row(
                 modifier = Modifier
-                    .align(alignment = Alignment.BottomCenter)
-                    .fillMaxWidth(),
-            ) {
-                Text(
-                    text = currentPiece.brandName,
-                    modifier = Modifier.padding(0.dp),
-                    style = TextStyle(
-                        fontFamily = FontFamily.SansSerif,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 14.sp)
-                )
-                prisSkilt(
-                    modifier = Modifier
-                        .padding(16.dp),
-                    currentPiece.price
-                )
+                    .fillMaxSize()
+                    .clip(RoundedCornerShape(23.dp))
+            )
+
             }
         }
     }
-}
 
 
 
@@ -318,9 +312,7 @@ fun Overlay(
                     setIsOverlayVisible(false)
                 }
         ) {
-
             val imagePainter = painterResource(id = R.drawable.cross)
-
             Image(
                 painter = imagePainter,
                 contentDescription = null,
@@ -360,7 +352,7 @@ fun Overlay(
                     modifier = Modifier
                         .height(180.dp)
                         .width(180.dp)
-                        .padding(start = 16.dp, top = 0.dp, end = 8.dp, bottom = 0.dp)
+                        .padding(start = 16.dp, top = 0.dp, end = 0.dp, bottom = 0.dp)
                         .background(
                             color = Color.Gray.copy(alpha = 0f),
                             shape = RoundedCornerShape(40.dp)
@@ -439,7 +431,6 @@ fun Overlay(
                         currentPiece.brandName,
                         modifier = Modifier
                     )
-                    Spacer(modifier = Modifier.width(120.dp))
                     prisSkilt(
                         modifier = Modifier,
                         currentPiece.price

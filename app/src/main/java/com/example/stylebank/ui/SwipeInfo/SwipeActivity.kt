@@ -149,7 +149,7 @@ fun structureOfScreen(){ // Holder strukturen for skærmen
                 dislike {
                     viewModel.fetchOne()
                 }
-            bankButton {
+                bankButton {
                 viewModel.fetchOne()
                 viewModel.addItem("likedItem", currentPiece)
                 }
@@ -231,7 +231,7 @@ fun structureOfScreen(){ // Holder strukturen for skærmen
                         modifier = Modifier
                             .height(180.dp)
                             .width(180.dp)
-                            .padding(start = 0.dp, top = 0.dp, end = 16.dp, bottom = 0.dp)
+                            .padding(start = 0.dp, top = 0.dp, end = 8.dp, bottom = 0.dp)
                             .background(
                                 color = Color.Black,
                                 shape = RoundedCornerShape(40.dp)
