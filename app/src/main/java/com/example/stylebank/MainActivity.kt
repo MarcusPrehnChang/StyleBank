@@ -124,7 +124,7 @@ fun BottomBar(navController: NavController){
             MenuBarButton(
                 onClick = { navController.navigate("whatsHot") },
                 icon = painterResource(id = R.drawable.icon_ild),
-                iconSize = 38.dp
+                iconSize = 24.dp
 
             )
 

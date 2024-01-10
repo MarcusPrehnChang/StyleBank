@@ -35,13 +35,13 @@ import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -136,7 +136,11 @@ fun MyBankDisplay(clothingList: List<Clothing>) {
             }
         },
         content = {
-            Box(modifier = Modifier.fillMaxSize()) {
+            Box(modifier = Modifier
+                .fillMaxSize()
+                .padding(start = 16.dp, top = 16.dp, end = 0.dp, bottom = 16.dp)
+                .background(color = Color.White.copy(alpha = 0f), shape = RoundedCornerShape(40.dp))
+            ){
                 //listen af billeder
                 ImageList(
                     clothingList = clothingList,
@@ -219,27 +223,60 @@ fun BankCloth(
     onClothClicked: () -> Unit
 ) {
     val context = LocalContext.current
+    var currentPiece: Clothing = clothing
+
     Box(
         modifier = Modifier
-            .height(170.dp)
-            .width(170.dp)
+            .height(180.dp)
+            .width(180.dp)
+            .background(color = Color.Gray.copy(alpha = 0f), shape = RoundedCornerShape(40.dp))
             .clickable { onClothClicked() }
     ) {
-        Image(
-            painter = rememberImagePainter(
-                data = imageUrl,
-                builder = {
-                    crossfade(true)
-                    placeholder(R.drawable.loading)
-                }
-            ),
-            contentDescription = null,
+        Box(
             modifier = Modifier
                 .height(170.dp)
                 .width(170.dp)
-        )
+                .background(
+                    color = Color.White.copy(alpha = 0f),
+                    shape = RoundedCornerShape(40.dp)
+                )
+        ) {
+            Image(
+                painter = rememberImagePainter(
+                    data = imageUrl,
+                    builder = {
+                        crossfade(true)
+                        placeholder(R.drawable.loading)
+                    }
+                ),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize()
+            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.Bottom
+            ) {
+                // Only displaying the brandName and price here
+                Text(
+                    text = currentPiece.brandName,
+                    modifier = Modifier.padding(8.dp),
+                    style = TextStyle(
+                        fontFamily = FontFamily.SansSerif,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 10.sp)
+                )
+                Text(
+                    text = currentPiece.price,
+                    modifier = Modifier.padding(8.dp),
+                    style = TextStyle()
+                )
+            }
+        }
     }
 }
+
 
 
 @Preview(showBackground = true)
