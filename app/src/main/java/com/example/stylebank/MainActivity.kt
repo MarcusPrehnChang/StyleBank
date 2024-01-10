@@ -1,5 +1,6 @@
 package com.example.stylebank
 
+
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -17,36 +18,24 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-
-import androidx.navigation.compose.rememberNavController
-
-import com.example.stylebank.ui.theme.StyleBankTheme
-import androidx.navigation.compose.composable
 import androidx.navigation.NavController
-
-import androidx.navigation.compose.*
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import com.example.stylebank.SplashScreen.StyleBankSplashScreen
 import com.example.stylebank.data.ClothingRepository
-
-
 import com.example.stylebank.ui.theme.MenubarGray
+import com.example.stylebank.ui.theme.StyleBankTheme
 import com.example.stylebank.ui.theme.structureOfScreen
 import com.example.stylebank.ui.whatsHot.WholeScreen
 import com.example.stylebank.viewmodel.ProductViewModel
@@ -58,7 +47,7 @@ val roboto: FontFamily = FontFamily.Default
 
 
 class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
+   override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             StyleBankTheme {
@@ -76,8 +65,14 @@ fun app(){
     val navController = rememberNavController()
 
     NavHost(navController = navController,
-        startDestination = "whatsHot"
+        startDestination = "splash_screen" // Directly use the route string
     ){
+        composable("splash_screen"){ // Match the route string
+            StyleBankSplashScreen(navController) // Call your splash screen composable
+        }
+        composable("whats_hot"){
+            WholeScreen()
+        }
         composable("swipeFragment"){
             structureOfScreen()
         }
@@ -85,17 +80,19 @@ fun app(){
             viewModel.filter.clearFilter()
             MyBankDisplay()
         }
-
         composable("whatsHot"){
             WholeScreen()
         }
+
     }
+
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.BottomCenter
     ) {
         BottomBar(navController = navController)
     }
+
 }
 
 @Composable
@@ -163,3 +160,4 @@ fun MenuBarButton(
         )
     }
 }
+
