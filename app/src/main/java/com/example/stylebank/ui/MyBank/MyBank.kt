@@ -40,13 +40,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -138,24 +143,25 @@ fun MyBankDisplay(clothingList: List<Clothing>) {
         content = {
             Box(modifier = Modifier
                 .fillMaxSize()
-                .padding(start = 16.dp, top = 16.dp, end = 0.dp, bottom = 16.dp)
                 .background(color = Color.White.copy(alpha = 0f), shape = RoundedCornerShape(40.dp))
             ){
-                //listen af billeder
-                ImageList(
-                    clothingList = clothingList,
-                    imageUrls = imageUrls,
-                    imageLinks = imageLinks
-                ) { clickedItem ->
-                    clickedClothing = clickedItem
-                }
-                //Billedet af setting
                 Box(
                     modifier = Modifier
                         .align(Alignment.TopEnd)
                         .padding(8.dp)
                 ){
                     SettingsButton(drawerState)
+                }
+                Column {
+                    Headertext2()
+                    ImageList(
+                        clothingList = clothingList,
+                        imageUrls = imageUrls,
+                        imageLinks = imageLinks
+                    ) { clickedItem ->
+                        clickedClothing = clickedItem
+                    }
+                    //Billedet af setting
                 }
                 if (clickedClothing != null) {
                     Overlay(
@@ -201,15 +207,24 @@ fun ImageList(
     imageLinks: List<String>,
     onClothClicked: (Clothing) -> Unit
 ) {
-    LazyVerticalGrid(columns = GridCells.Fixed(2)) {
-        items(clothingList.size) { index ->
-            val clothing = clothingList[index]
-            BankCloth(
-                imageUrl = imageUrls[index],
-                link = imageLinks[index],
-                clothing = clothing,
-                onClothClicked = { onClothClicked(clothing) }
-            )
+    Box(modifier = Modifier
+        .fillMaxWidth()
+        .padding(horizontal = 30.dp)
+    ){
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center)
+        {
+            items(clothingList.size) { index ->
+                val clothing = clothingList[index]
+                BankCloth(
+                    imageUrl = imageUrls[index],
+                    link = imageLinks[index],
+                    clothing = clothing,
+                    onClothClicked = { onClothClicked(clothing) }
+                )
+            }
         }
     }
 }
@@ -251,27 +266,10 @@ fun BankCloth(
                 ),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxSize()
-            )
-            Row(
                 modifier = Modifier
-                    .align(alignment = Alignment.BottomCenter)
-                    .fillMaxWidth(),
-            ) {
-                Text(
-                    text = currentPiece.brandName,
-                    modifier = Modifier.padding(0.dp),
-                    style = TextStyle(
-                        fontFamily = FontFamily.SansSerif,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 14.sp)
-                )
-                prisSkilt(
-                    modifier = Modifier
-                        .padding(16.dp),
-                    currentPiece.price
-                )
-            }
+                    .fillMaxSize()
+                    .clip(RoundedCornerShape(23.dp))
+            )
         }
     }
 }
@@ -447,6 +445,44 @@ fun Overlay(
                 }
             }
         }
+    }
+}
+
+@Composable
+fun Headertext2() { // Laver hovedetitel (Header)
+    val header = buildAnnotatedString {
+        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+            append("STYLE")
+        }
+        withStyle(style = SpanStyle(fontWeight = FontWeight.Thin)) {
+            append("BANK")
+        }
+    }
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Top,
+        modifier = Modifier
+            .fillMaxWidth()
+            //.background(Color.LightGray)
+            .padding(20.dp)
+    ) {
+        Text(
+            text = header,
+            fontSize = 28.sp,
+        )
+        MyBankHeader()
+    }
+}
+@Composable
+fun MyBankHeader() { // Undertitel (Subheader)
+    Row() {
+        Text(text = "MY BANK",
+            style = TextStyle(
+                fontSize = 20.sp,
+                //fontStyle = FontStyle.Roboto
+            ),
+            fontWeight = FontWeight.Bold,
+        )
     }
 }
 
