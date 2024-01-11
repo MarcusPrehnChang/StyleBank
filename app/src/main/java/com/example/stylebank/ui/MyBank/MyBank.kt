@@ -78,13 +78,9 @@ fun MyBankDisplay() {
     val imageUrls = mutableListOf<String>()
     val imageLinks = mutableListOf<String>()
     val (isOverlayVisible, setIsOverlayVisible) = remember { mutableStateOf(false)}
-    if (list != null) {
-        for(item in list){
-            if(item is Clothing){
-                imageUrls.add(item.pictures[0])
-                imageLinks.add(item.link)
-            }
-        }
+    for(item in list){
+        imageUrls.add(item.pictures[0])
+        imageLinks.add(item.link)
     }
     val items = listOf(FilterItem("Trøjer"), FilterItem("Bukser"), FilterItem("T-Shirts"))
     ModalNavigationDrawer(

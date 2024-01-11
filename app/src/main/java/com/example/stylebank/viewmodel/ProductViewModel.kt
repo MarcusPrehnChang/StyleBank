@@ -56,8 +56,10 @@ class ProductViewModel(private val repository: ClothingRepository) {
      */
 
 
-    fun incrementIndex(){
-        index++
+    fun incrementIndex() : Boolean{
+        for (clothing in productList){
+            println(clothing.firebaseId)
+        }
         if (index == 7){
             val prevMap = productList
             val newMap = ObservableList<Clothing>()
@@ -66,16 +68,15 @@ class ProductViewModel(private val repository: ClothingRepository) {
             }
             val listOfObservers = prevMap.getObservers()
             prevMap.removeObservers()
-
             for (observer in listOfObservers){
                 newMap.registerObserver(observer)
             }
-
             productList = newMap
-
-
-
+            index = 0
+            return true
         }
+        index++
+        return false
     }
     fun getList(key: String): ObservableList<Clothing>{
         return if(key == "product"){
@@ -87,10 +88,11 @@ class ProductViewModel(private val repository: ClothingRepository) {
 
 
     fun addItem(key : String, item : Clothing){
+        println(key)
         if(key == "product"){
             productList.add(item)
         }else if (key == "likedItem"){
-            productList.add(item)
+            likedList.add(item)
         }
     }
 
@@ -106,11 +108,13 @@ class ProductViewModel(private val repository: ClothingRepository) {
     }
 
     fun fetchOne(){
+        println("fetchone called")
         repository.addOne {
             val result = repository.getProductList()
             addItem("product", result[result.size - 1])
         }
     }
+
     private fun isTestEnvironment() : Boolean{
         return System.getProperty("isTestEnvironment") == "true";
     }

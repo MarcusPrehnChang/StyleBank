@@ -17,6 +17,7 @@ class ObservableList<T> : ArrayList<T>() {
 
 
     override fun add(element: T): Boolean{
+        println("addition")
         val result = super.add(element)
         if(result){
             notifyItemAdded(element)

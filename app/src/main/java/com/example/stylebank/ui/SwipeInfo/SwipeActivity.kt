@@ -47,10 +47,12 @@ import com.example.stylebank.viewModel
 
 class SwipeActivity : ComponentActivity()
 
-val list = viewModel.getList("product")
+var list = viewModel.getList("product")
 val clothingObserver = object : ObservableListObserver<Clothing> {
     override fun onItemAdded(item: Clothing) {
-        viewModel.incrementIndex()
+        if(viewModel.incrementIndex()){
+            list = viewModel.getList("product")
+        }
     }
 }
 val add = viewModel.getList("product").registerObserver(clothingObserver)
@@ -90,13 +92,13 @@ fun ExitButton(
 
 @Composable
 fun structureOfScreen(){ // Holder strukturen for skærmen
-    println("recomposition")
     var currentIndex by remember { mutableIntStateOf(viewModel.index) }
     var isOverlayVisible by remember { mutableStateOf(false) }
+    currentIndex = viewModel.index
     LaunchedEffect(viewModel.index) {
         currentIndex = viewModel.index
     }
-    val clothing = list?.get(currentIndex)
+    val clothing = list[currentIndex]
     var currentPiece : Clothing = clothing as Clothing
 
 
@@ -323,7 +325,6 @@ fun pictureBox(
     onPictureClick: () -> Unit
 
 ){
-    println("Main picture : $mainPicture")
     var isOverlayVisible by remember { mutableStateOf(false) }
 
 
@@ -339,7 +340,6 @@ fun pictureBox(
             }
         }
     ){
-        println("Main picture : $mainPicture")
         val painter = rememberImagePainter(
             data = mainPicture,
             builder = {

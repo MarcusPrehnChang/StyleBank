@@ -65,6 +65,7 @@ class FirebaseRepository {
             .addOnSuccessListener { documentSnapshot ->
                 if (documentSnapshot.exists()) {
                     val id = documentSnapshot.id
+                    println(id)
                     val brandName = documentSnapshot.getString("headtext1") ?: ""
                     val name = documentSnapshot.getString("headtext2") ?: " "
                     val link = documentSnapshot.getString("link") ?: " "
