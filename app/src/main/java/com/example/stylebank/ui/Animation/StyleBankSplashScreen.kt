@@ -1,4 +1,4 @@
-package com.example.stylebank.SplashScreen
+package com.example.stylebank.ui.Animation
 
 import android.view.animation.OvershootInterpolator
 import androidx.compose.animation.core.Animatable
