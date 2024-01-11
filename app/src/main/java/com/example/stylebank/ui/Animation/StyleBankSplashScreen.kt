@@ -44,7 +44,7 @@ fun StyleBankSplashScreen(navController: NavController) {
                 easing = { OvershootInterpolator(8f).getInterpolation(it) }
             )
         )
-        delay(2000L)
+        delay(500L)
         navController.navigate("whats_hot")
     }
 
