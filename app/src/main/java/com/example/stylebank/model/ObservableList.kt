@@ -1,15 +1,20 @@
 package com.example.stylebank.model
 
 class ObservableList<T> : ArrayList<T>() {
-    private val observers = mutableListOf<ObservableListObserver<T>>()
+    private var observers = mutableListOf<ObservableListObserver<T>>()
 
-    fun registerObserver(observer : ObservableListObserver<T>){
+    fun registerObserver(observer: ObservableListObserver<T>){
         observers.add(observer)
     }
 
-    fun removeObserver(observer : ObservableListObserver<T>){
-        observers.remove(observer)
+    fun removeObservers(){
+        observers = mutableListOf<ObservableListObserver<T>>()
     }
+
+    fun getObservers() : MutableList<ObservableListObserver<T>>{
+        return observers
+    }
+
 
     override fun add(element: T): Boolean{
         val result = super.add(element)

@@ -48,13 +48,12 @@ import com.example.stylebank.viewModel
 class SwipeActivity : ComponentActivity()
 
 val list = viewModel.getList("product")
-val clothingObserver = object : ObservableListObserver<Any> {
-    override fun onItemAdded(item: Any) {
-        println("triggered")
-        viewModel.index = viewModel.index + 1
+val clothingObserver = object : ObservableListObserver<Clothing> {
+    override fun onItemAdded(item: Clothing) {
+        viewModel.incrementIndex()
     }
 }
-val add = viewModel.getList("product")?.registerObserver(clothingObserver)
+val add = viewModel.getList("product").registerObserver(clothingObserver)
 
 class Listofclothing : Fragment()
 

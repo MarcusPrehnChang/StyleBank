@@ -1,8 +1,10 @@
 package com.example.stylebank.data
 
 import com.example.stylebank.model.Clothing
+import com.example.stylebank.model.User
 import com.example.stylebank.model.clothing.Tag
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.Filter
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QueryDocumentSnapshot
 
@@ -88,6 +90,14 @@ class FirebaseRepository {
                 // Handle the error as needed
             }
     }
+
+    fun getBatch(user : User, filter : Filter){
+        for (i in 1..5){
+            //getClothing()
+        }
+    }
+
+
 
 
 }

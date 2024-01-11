@@ -4,12 +4,10 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.util.Log
-import android.widget.Button
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -63,11 +61,11 @@ class MyBank() : Fragment() {
     //MyBankDisplay()
 }
 val list = viewModel.getList("likedItem")
-val bankObserver = object : ObservableListObserver<Any> {
-    override fun onItemAdded(item: Any) {
+val bankObserver = object : ObservableListObserver<Clothing> {
+    override fun onItemAdded(item: Clothing) {
     }
 }
-val add = viewModel.getList("likedItem")?.registerObserver(bankObserver)
+val add = viewModel.getList("likedItem").registerObserver(bankObserver)
 
 
 @OptIn(ExperimentalMaterial3Api::class)

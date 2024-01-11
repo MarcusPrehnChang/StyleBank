@@ -16,27 +16,31 @@ class ProductViewModel(private val repository: ClothingRepository) {
     var index by mutableStateOf(0)
     val filter = Filter()
     var isInitialized = false
-    private val listsMap: Map<String, ObservableList<out Any>> = mapOf(
-        "product" to ObservableList<Clothing>(),
-        "banner" to ObservableList<Banner>(),
-        "likedItem" to ObservableList<Clothing>()
-    )
+    private var productList = ObservableList<Clothing>()
+    private val bannerList = ObservableList<Banner>()
+    private val likedList = ObservableList<Clothing>()
+
+
+
     init{
         if (!isTestEnvironment()){
 
             repository.updateList {
                 val clothingList = repository.getProductList()
                 for (clothing in clothingList){
-                    (listsMap["product"] as? ObservableList<Clothing>)?.add(clothing)
+                    productList.add(clothing)
                 }
+
                 val bannerList = repository.getBanners()
                 for(banner in bannerList){
-                    (listsMap["banner"] as? ObservableList<Banner>)?.add(banner)
+                    bannerList.add(banner)
                 }
+
                 val likedList = repository.getLikedItems()
                 for (likedItem in likedList){
-                    (listsMap["likedItem"] as? ObservableList<Clothing>)?.add(likedItem)
+                    likedList.add(likedItem)
                 }
+
                 isInitialized = true
             }
         }
@@ -52,14 +56,42 @@ class ProductViewModel(private val repository: ClothingRepository) {
      */
 
 
+    fun incrementIndex(){
+        index++
+        if (index == 7){
+            val prevMap = productList
+            val newMap = ObservableList<Clothing>()
+            for (i in index..10){
+                newMap.add(prevMap[i])
+            }
+            val listOfObservers = prevMap.getObservers()
+            prevMap.removeObservers()
 
-    fun getList(key: String): ObservableList<Any>?{
-        return listsMap[key] as? ObservableList<Any>
+            for (observer in listOfObservers){
+                newMap.registerObserver(observer)
+            }
+
+            productList = newMap
+
+
+
+        }
+    }
+    fun getList(key: String): ObservableList<Clothing>{
+        return if(key == "product"){
+            productList;
+        }else {
+            likedList
+        }
     }
 
 
-    fun <T> addItem(key : String, item : T){
-        (listsMap[key] as? ObservableList<T>)?.add(item)
+    fun addItem(key : String, item : Clothing){
+        if(key == "product"){
+            productList.add(item)
+        }else if (key == "likeditem"){
+            productList.add(item)
+        }
     }
 
 
@@ -72,6 +104,7 @@ class ProductViewModel(private val repository: ClothingRepository) {
             addItem("product", clothes)
         }
     }
+
     fun fetchOne(){
         repository.addOne {
             val result = repository.getProductList()
@@ -81,4 +114,6 @@ class ProductViewModel(private val repository: ClothingRepository) {
     private fun isTestEnvironment() : Boolean{
         return System.getProperty("isTestEnvironment") == "true";
     }
+
+
 }
