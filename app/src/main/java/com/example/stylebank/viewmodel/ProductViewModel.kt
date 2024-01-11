@@ -89,7 +89,7 @@ class ProductViewModel(private val repository: ClothingRepository) {
     fun addItem(key : String, item : Clothing){
         if(key == "product"){
             productList.add(item)
-        }else if (key == "likeditem"){
+        }else if (key == "likedItem"){
             productList.add(item)
         }
     }
