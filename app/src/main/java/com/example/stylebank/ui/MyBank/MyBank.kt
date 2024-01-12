@@ -84,6 +84,14 @@ fun MyBankDisplay(clothingList: List<Clothing>) {
     val imageUrls = mutableListOf<String>()
     val imageLinks = mutableListOf<String>()
     val (isOverlayVisible, setIsOverlayVisible) = remember { mutableStateOf(false)}
+
+    LaunchedEffect(isOverlayVisible){
+        Log.d("MyBankDisplay", "isOverlayVisible er nu $isOverlayVisible")
+        if(!isOverlayVisible){
+            clickedClothing = null
+        }
+    }
+
     if (list != null) {
         for(item in list){
             if(item is Clothing){
@@ -150,7 +158,7 @@ fun MyBankDisplay(clothingList: List<Clothing>) {
                 }
                 }
 
-                //Billedet af setting   
+                //Billedet af setting
                 Box(
                     modifier = Modifier
                         .align(Alignment.TopEnd)
@@ -161,8 +169,9 @@ fun MyBankDisplay(clothingList: List<Clothing>) {
                 if (clickedClothing != null) {
                     Overlay(
                         clothing = clickedClothing!!,
-                        isOverlayVisible = isOverlayVisible,
-                        setIsOverlayVisible = setIsOverlayVisible
+                        onCloseClicked = { clickedClothing = null }
+                        //isOverlayVisible = isOverlayVisible,
+                        //setIsOverlayVisible = setIsOverlayVisible
                     )
                 }
             }
@@ -272,29 +281,13 @@ fun BankCloth(
 
 
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingtooPreview() {
-    StyleBankTheme {
-        // A surface container using the 'background' color from the theme
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
-        ) {
-            //GreetingPreview()
-            //MyBankDisplay(nav)
-
-        }
-    }
-}
-
 @Composable
 fun Overlay(
     clothing: Clothing,
-    isOverlayVisible: Boolean,
-    setIsOverlayVisible: (Boolean) -> Unit
+    //isOverlayVisible: Boolean,
+    //setIsOverlayVisible: (Boolean) -> Unit
+    onCloseClicked: () -> Unit
 ) {
-
     var currentPiece : Clothing = clothing
 
     Box(
@@ -309,7 +302,8 @@ fun Overlay(
                 .align(Alignment.TopEnd)
                 .padding(6.dp)
                 .clickable {
-                    setIsOverlayVisible(false)
+                    Log.d("Overlay", "luk knap klikket")
+                    onCloseClicked()
                 }
         ) {
             val imagePainter = painterResource(id = R.drawable.cross)
