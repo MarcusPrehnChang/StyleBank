@@ -44,7 +44,7 @@ fun StyleBankSplashScreen(navController: NavController) {
                 easing = { OvershootInterpolator(8f).getInterpolation(it) }
             )
         )
-        delay(500L)
+        delay(1000L)
         navController.navigate("whats_hot")
     }
 
@@ -59,7 +59,7 @@ fun StyleBankSplashScreen(navController: NavController) {
                 .scale(scale.value),
             shape = CircleShape,
             color = Color.White,
-            border = BorderStroke(width = 2.dp, color = Color.LightGray)
+            border = BorderStroke(width = 2.dp, color = Color.White)
         ) {
             Column(
                 modifier = Modifier.padding(1.dp),
@@ -67,13 +67,13 @@ fun StyleBankSplashScreen(navController: NavController) {
                 verticalArrangement = Arrangement.Center
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.stylebanklogo),
+                    painter = painterResource(id = R.drawable.stylebanklogosplash),
                     contentDescription = "logo",
                     contentScale = ContentScale.Fit,
                     modifier = Modifier.size(230.dp)
                 )
                 Text(
-                    text = "Find Some Cloth?",
+                    text = "Find Some more clothes?",
                     style = MaterialTheme.typography.bodyLarge,
                     color = Color.LightGray
                 )
