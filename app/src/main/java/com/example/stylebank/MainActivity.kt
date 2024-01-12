@@ -32,8 +32,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.stylebank.ui.Animation.StyleBankSplashScreen
 import com.example.stylebank.data.ClothingRepository
+import com.example.stylebank.ui.Animation.StyleBankSplashScreen
 import com.example.stylebank.ui.theme.MenubarGray
 import com.example.stylebank.ui.theme.StyleBankTheme
 import com.example.stylebank.ui.theme.structureOfScreen
@@ -119,7 +119,7 @@ fun BottomBar(navController: NavController){
             val currentRoute = navBackStackEntry?.destination?.route
             MenuBarButton(
                 onClick = { navController.navigate("whatsHot") },
-                icon = painterResource(id = R.drawable.icon_ild3),
+                icon = painterResource(id = R.drawable.icon_ild),
                 iconSize = 38.dp
 
             )
@@ -127,12 +127,13 @@ fun BottomBar(navController: NavController){
             MenuBarButton(
                 onClick = { navController.navigate("swipeFragment") },
                 icon = painterResource(id = R.drawable.icon_swipe),
-                iconSize = 38.dp
+                iconSize = 44.dp
             )
 
             MenuBarButton(
                 onClick = { navController.navigate("myBank") },
                 icon = painterResource(id = R.drawable.icon_mb),
+                iconSize = 38.dp
             )
         }
     }

@@ -18,9 +18,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -335,7 +332,7 @@ fun pictureBox(
             data = mainPicture,
             builder = {
                 crossfade(true)
-                placeholder(R.drawable.loading)
+                placeholder(R.drawable.loading3)
             }
         )
 
@@ -360,11 +357,15 @@ fun bankButton(onClick: () -> Unit) {
         Button(
             onClick = onClick,
             modifier = Modifier
-                .padding(16.dp)
+                .padding(10.dp) // Adjust padding as needed
                 .align(Alignment.CenterStart),
         ) {
-            Icon(imageVector = Icons.Default.Add, contentDescription = null)
-            Spacer(modifier = Modifier.width(8.dp))
+            Icon(
+                painter = painterResource(id = R.drawable.patchcheck),
+                contentDescription = "Dislike",
+                modifier = Modifier.size(30.dp) // Enlarge the icon
+            )
+            Spacer(modifier = Modifier.width(15.dp))
         }
     }
 }
@@ -378,14 +379,20 @@ fun dislike(onClick: () -> Unit) {
         Button(
             onClick = onClick,
             modifier = Modifier
-                .padding(16.dp)
+                .padding(10.dp) // Adjust padding as needed
                 .align(Alignment.CenterStart),
         ) {
-            Icon(imageVector = Icons.Default.Clear, contentDescription = null)
-            Spacer(modifier = Modifier.width(8.dp))
+            Icon(
+                painter = painterResource(id = R.drawable.patchminus),
+                contentDescription = "Dislike",
+                modifier = Modifier.size(30.dp) // Enlarge the icon
+            )
+            Spacer(modifier = Modifier.width(15.dp))
         }
     }
 }
+
+
 
 
 
