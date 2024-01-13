@@ -65,7 +65,6 @@ class FirebaseRepository {
             .addOnSuccessListener { documentSnapshot ->
                 if (documentSnapshot.exists()) {
                     val id = documentSnapshot.id
-                    println(id)
                     val brandName = documentSnapshot.getString("headtext1") ?: ""
                     val name = documentSnapshot.getString("headtext2") ?: " "
                     val link = documentSnapshot.getString("link") ?: " "
@@ -92,13 +91,77 @@ class FirebaseRepository {
             }
     }
 
-    fun getBatch(user : User, filter : Filter){
+    fun getBatch(tag: List<Tag>) : List<Clothing>{
+        val db = FirebaseFirestore.getInstance()
+        val result = mutableListOf<Clothing>()
+        var clothing = Clothing(brandName = "test", firebaseId = "testID", link = "google.com", objectName = "Test object", price = "ass")
         for (i in 1..5){
-            //getClothing()
+            if(tag[i].name == "any"){
+                result.add(getRandom())
+            }else{
+                db.collection("products").whereArrayContains("tags", tag[i].name)
+                    .get().addOnSuccessListener { querySnapshot ->
+                        if(!querySnapshot.isEmpty){
+                            val document = querySnapshot.documents
+                            clothing = if(document.isNotEmpty()){
+                                val randomDoc = document.shuffled().first()
+                                makeClothing(randomDoc)
+                            }else{
+                                getRandom()
+                            }
+                        }
+                    }.addOnFailureListener{exception ->
+                        clothing = getRandom()
+                        result.add(clothing)
+                    }
+                result.add(clothing)
+            }
         }
+        return result
+    }
+
+    private fun getRandom() : Clothing{
+        val db = FirebaseFirestore.getInstance()
+        val collectionPath = "products" // Replace with your actual collection path
+        var clothing = Clothing(brandName = "test", firebaseId = "testID", link = "google.com", objectName = "Test object", price = "ass")
+        // Create a query for the "clothing" collection
+        db.collection(collectionPath)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                if (!querySnapshot.isEmpty) {
+                    val randomDocument = querySnapshot.documents.shuffled().firstOrNull()
+
+                    clothing = randomDocument?.let { makeClothing(it) }!!
+                } else {
+                    println("query yielded empty")
+                }
+            }
+            .addOnFailureListener { exception ->
+                println({"Couldnt query"})
+            }
+        return clothing
     }
 
 
+    private fun makeClothing(document: DocumentSnapshot) : Clothing{
+        val tagsStrings = document.get("tags") as List<String> ?: emptyList()
+
+        val tags: MutableList<Tag> = mutableListOf()
+        for (string in tagsStrings) {
+            val tag = Tag(string, 100)  // You might adjust the second parameter as needed
+            tags.add(tag)
+        }
+
+        return Clothing(
+            document.get("pictures") as? List<String> ?: emptyList(),
+            document.getString("headtext1") ?: "",
+            document.getString("headtext2") ?: "",
+            document.getString("price") ?: "",
+            document.getString("link") ?: "",
+            document.id,
+            tags
+        )
+    }
 
 
 }

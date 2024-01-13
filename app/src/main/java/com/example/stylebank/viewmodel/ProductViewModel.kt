@@ -10,6 +10,9 @@ import com.example.stylebank.model.Filter
 import com.example.stylebank.model.ObservableList
 import com.example.stylebank.model.User
 
+
+
+
 class ProductViewModel(private val repository: ClothingRepository) {
     val user = User()
     //List to listen to, using some kind of observable pattern, i believe Kotlin has a unique one that is best to use.
@@ -63,7 +66,7 @@ class ProductViewModel(private val repository: ClothingRepository) {
         if (index == 7){
             val prevMap = productList
             val newMap = ObservableList<Clothing>()
-            for (i in index..10){
+            for (i in index..productList.size){
                 newMap.add(prevMap[i])
             }
             val listOfObservers = prevMap.getObservers()
@@ -74,6 +77,9 @@ class ProductViewModel(private val repository: ClothingRepository) {
             productList = newMap
             index = 0
             return true
+        }
+        if(index + 3 >= productList.size){
+
         }
         index++
         return false
