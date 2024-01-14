@@ -33,9 +33,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.stylebank.data.ClothingRepository
-import com.example.stylebank.model.User
-
-
 import com.example.stylebank.ui.Animation.StyleBankSplashScreen
 import com.example.stylebank.ui.theme.MenubarGray
 import com.example.stylebank.ui.theme.StyleBankTheme
@@ -68,10 +65,10 @@ fun app(){
     val navController = rememberNavController()
 
     NavHost(navController = navController,
-        startDestination = "splash_screen" // Directly use the route string
+        startDestination = "splash_screen"
     ){
-        composable("splash_screen"){ // Match the route string
-            StyleBankSplashScreen(navController) // Call your splash screen composable
+        composable("splash_screen"){
+            StyleBankSplashScreen(navController)
         }
         composable("whats_hot"){
             WholeScreen()
