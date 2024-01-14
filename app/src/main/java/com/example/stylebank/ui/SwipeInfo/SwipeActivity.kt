@@ -165,8 +165,8 @@ fun structureOfScreen(){ // Holder strukturen for skærmen
                 }
             }
         }
-<<<<<<< HEAD
-=======
+//<<<<<<< HEAD
+//=======
         dislike {
             for(tag in currentPiece.tags){
                 val index = viewModel.user.preferences.indexOf(tag)
@@ -178,7 +178,7 @@ fun structureOfScreen(){ // Holder strukturen for skærmen
             }
             viewModel.fetchOne()
         }
->>>>>>> origin/Iteration_3_MyBank_Firebase_Algorithm
+//>>>>>>> origin/Iteration_3_MyBank_Firebase_Algorithm
     }
 
     if (isOverlayVisible) {
