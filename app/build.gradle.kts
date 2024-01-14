@@ -58,6 +58,9 @@ dependencies {
     implementation("io.cucumber:cucumber-java:7.7.0")
     implementation("io.cucumber:cucumber-junit:7.7.0")
 
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+
     androidTestImplementation("com.android.support.test:rules:1.0.2")
     androidTestImplementation("com.android.support.test:runner:1.0.2")
     //androidTestImplementation("androidx.test.espresso:espresso-web:3.5.1")

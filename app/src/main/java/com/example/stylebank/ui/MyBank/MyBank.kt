@@ -51,11 +51,11 @@ class MyBank() : Fragment() {
     //MyBankDisplay()
 }
 val list = viewModel.getList("likedItem")
-val bankObserver = object : ObservableListObserver<Any> {
-    override fun onItemAdded(item: Any) {
+val bankObserver = object : ObservableListObserver<Clothing> {
+    override fun onItemAdded(item: Clothing) {
     }
 }
-val add = viewModel.getList("likedItem")?.registerObserver(bankObserver)
+val add = viewModel.getList("likedItem").registerObserver(bankObserver)
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -68,13 +68,9 @@ fun MyBankDisplay() {
     val imageUrls = mutableListOf<String>()
     val imageLinks = mutableListOf<String>()
     val (isOverlayVisible, setIsOverlayVisible) = remember { mutableStateOf(false)}
-    if (list != null) {
-        for(item in list){
-            if(item is Clothing){
-                imageUrls.add(item.pictures[0])
-                imageLinks.add(item.link)
-            }
-        }
+    for(item in list){
+        imageUrls.add(item.pictures[0])
+        imageLinks.add(item.link)
     }
     val items = listOf(FilterItem("Trøjer"), FilterItem("Bukser"), FilterItem("T-Shirts"))
     ModalNavigationDrawer(

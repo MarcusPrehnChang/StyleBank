@@ -8,33 +8,42 @@ import com.example.stylebank.model.Banner
 import com.example.stylebank.model.Clothing
 import com.example.stylebank.model.Filter
 import com.example.stylebank.model.ObservableList
+import com.example.stylebank.model.User
+
+
+
 
 class ProductViewModel(private val repository: ClothingRepository) {
+    val user = User()
     //List to listen to, using some kind of observable pattern, i believe Kotlin has a unique one that is best to use.
     var index by mutableStateOf(0)
     val filter = Filter()
     var isInitialized = false
-    private val listsMap: Map<String, ObservableList<out Any>> = mapOf(
-        "product" to ObservableList<Clothing>(),
-        "banner" to ObservableList<Banner>(),
-        "likedItem" to ObservableList<Clothing>()
-    )
+    private var productList = ObservableList<Clothing>()
+    private val bannerList = ObservableList<Banner>()
+    private val likedList = ObservableList<Clothing>()
+
+
+
     init{
         if (!isTestEnvironment()){
 
             repository.updateList {
                 val clothingList = repository.getProductList()
                 for (clothing in clothingList){
-                    (listsMap["product"] as? ObservableList<Clothing>)?.add(clothing)
+                    productList.add(clothing)
                 }
+
                 val bannerList = repository.getBanners()
                 for(banner in bannerList){
-                    (listsMap["banner"] as? ObservableList<Banner>)?.add(banner)
+                    bannerList.add(banner)
                 }
+
                 val likedList = repository.getLikedItems()
                 for (likedItem in likedList){
-                    (listsMap["likedItem"] as? ObservableList<Clothing>)?.add(likedItem)
+                    likedList.add(likedItem)
                 }
+
                 isInitialized = true
             }
         }
@@ -50,14 +59,47 @@ class ProductViewModel(private val repository: ClothingRepository) {
      */
 
 
+    fun incrementIndex() : Boolean{
+        for (clothing in productList){
+            println(clothing.firebaseId)
+        }
+        if (index == 7){
+            val prevMap = productList
+            val newMap = ObservableList<Clothing>()
+            for (i in index..productList.size){
+                newMap.add(prevMap[i])
+            }
+            val listOfObservers = prevMap.getObservers()
+            prevMap.removeObservers()
+            for (observer in listOfObservers){
+                newMap.registerObserver(observer)
+            }
+            productList = newMap
+            index = 0
+            return true
+        }
+        if(index + 3 >= productList.size){
 
-    fun getList(key: String): ObservableList<Any>?{
-        return listsMap[key] as? ObservableList<Any>
+        }
+        index++
+        return false
+    }
+    fun getList(key: String): ObservableList<Clothing>{
+        return if(key == "product"){
+            productList;
+        }else {
+            likedList
+        }
     }
 
 
-    fun <T> addItem(key : String, item : T){
-        (listsMap[key] as? ObservableList<T>)?.add(item)
+    fun addItem(key : String, item : Clothing){
+        println(key)
+        if(key == "product"){
+            productList.add(item)
+        }else if (key == "likedItem"){
+            likedList.add(item)
+        }
     }
 
 
@@ -70,13 +112,18 @@ class ProductViewModel(private val repository: ClothingRepository) {
             addItem("product", clothes)
         }
     }
+
     fun fetchOne(){
+        println("fetchone called")
         repository.addOne {
             val result = repository.getProductList()
             addItem("product", result[result.size - 1])
         }
     }
+
     private fun isTestEnvironment() : Boolean{
         return System.getProperty("isTestEnvironment") == "true";
     }
+
+
 }
