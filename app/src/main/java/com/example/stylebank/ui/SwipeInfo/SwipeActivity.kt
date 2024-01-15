@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberImagePainter
 import com.example.stylebank.R
 import com.example.stylebank.model.Clothing
@@ -160,7 +161,7 @@ fun structureOfScreen(){ // Holder strukturen for skærmen
                         viewModel.user.preferences.add(tag)
                     }
                 }
-                viewModel.fetchOne()
+                viewModel.incrementIndex()
                 viewModel.addItem("likedItem", currentPiece)
                 }
             }
@@ -176,7 +177,7 @@ fun structureOfScreen(){ // Holder strukturen for skærmen
                     viewModel.user.preferences.add(tag)
                 }
             }
-            viewModel.fetchOne()
+            viewModel.incrementIndex()
         }
 //>>>>>>> origin/Iteration_3_MyBank_Firebase_Algorithm
     }

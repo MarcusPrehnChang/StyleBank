@@ -92,10 +92,20 @@ class FirebaseRepository {
     }
 
     fun getBatch(tag: List<Tag>) : List<Clothing>{
+        for (element in tag){
+            println("tag name = " + element.name)
+        }
+        println("getBatch was reached")
+        println("tag.size = " + tag.size)
+        println("cocka")
+        println(tag[0].name)
+        for (element in tag){
+            println(element.name)
+        }
         val db = FirebaseFirestore.getInstance()
         val result = mutableListOf<Clothing>()
         var clothing = Clothing(brandName = "test", firebaseId = "testID", link = "google.com", objectName = "Test object", price = "ass")
-        for (i in 1..5){
+        for (i in 0..4){
             if(tag[i].name == "any"){
                 result.add(getRandom())
             }else{

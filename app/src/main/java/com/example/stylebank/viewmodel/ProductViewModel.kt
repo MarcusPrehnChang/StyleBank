@@ -6,11 +6,13 @@ import androidx.compose.runtime.setValue
 import com.example.stylebank.data.ClothingRepository
 import com.example.stylebank.model.Banner
 import com.example.stylebank.model.Clothing
+import com.example.stylebank.model.CombinedData
 import com.example.stylebank.model.Filter
 import com.example.stylebank.model.ObservableList
 import com.example.stylebank.model.User
-
-
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 
 class ProductViewModel(private val repository: ClothingRepository) {
@@ -48,22 +50,14 @@ class ProductViewModel(private val repository: ClothingRepository) {
             }
         }
     }
-    /*
-    fun getFilteredItems(): List<Clothing> {
-        val allProducts = listsMap["product"] as? ObservableList<Clothing> ?: return emptyList()
-        return allProducts.filter { clothing ->
-            filter.someFilterCondition(clothing)
-        }
-    }
-
-     */
-
 
     fun incrementIndex() : Boolean{
+        println("product list size from incremenet start " +  productList.size)
         for (clothing in productList){
             println(clothing.firebaseId)
         }
         if (index == 7){
+            println("Index was 7")
             val prevMap = productList
             val newMap = ObservableList<Clothing>()
             for (i in index..productList.size){
@@ -78,8 +72,15 @@ class ProductViewModel(private val repository: ClothingRepository) {
             index = 0
             return true
         }
-        if(index + 3 >= productList.size){
-
+        if(index + 4 >= productList.size){
+            println("index + 3 = true")
+            val data = CombinedData(user.preferences, listOf("any"))
+            GlobalScope.launch(Dispatchers.Default) {
+                val result = repository.getClothes(data)
+                println("result = " + result.size)
+                productList.addAll(result)
+                println(productList.size)
+            }
         }
         index++
         return false
@@ -103,15 +104,6 @@ class ProductViewModel(private val repository: ClothingRepository) {
     }
 
 
-    fun fetchBatch(){
-        repository.updateList(){
-
-        }
-        val result = repository.getProductList()
-        for (clothes in result){
-            addItem("product", clothes)
-        }
-    }
 
     fun fetchOne(){
         println("fetchone called")
