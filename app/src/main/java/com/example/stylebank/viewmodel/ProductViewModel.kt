@@ -52,10 +52,12 @@ class ProductViewModel(private val repository: ClothingRepository) {
     }
 
     fun incrementIndex() : Boolean{
+        println("product list size from incremenet start " +  productList.size)
         for (clothing in productList){
             println(clothing.firebaseId)
         }
         if (index == 7){
+            println("Index was 7")
             val prevMap = productList
             val newMap = ObservableList<Clothing>()
             for (i in index..productList.size){
@@ -70,10 +72,14 @@ class ProductViewModel(private val repository: ClothingRepository) {
             index = 0
             return true
         }
-        if(index + 3 >= productList.size){
-            val data = CombinedData(user.preferences, emptyList())
+        if(index + 4 >= productList.size){
+            println("index + 3 = true")
+            val data = CombinedData(user.preferences, listOf("any"))
             GlobalScope.launch(Dispatchers.Default) {
-                repository.getClothes(data)
+                val result = repository.getClothes(data)
+                println("result = " + result.size)
+                productList.addAll(result)
+                println(productList.size)
             }
         }
         index++
@@ -98,15 +104,6 @@ class ProductViewModel(private val repository: ClothingRepository) {
     }
 
 
-    fun fetchBatch(){
-        repository.updateList(){
-
-        }
-        val result = repository.getProductList()
-        for (clothes in result){
-            addItem("product", clothes)
-        }
-    }
 
     fun fetchOne(){
         println("fetchone called")

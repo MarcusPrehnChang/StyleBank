@@ -39,6 +39,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberImagePainter
 
 import com.example.stylebank.model.Clothing
@@ -146,7 +147,7 @@ fun structureOfScreen(){ // Holder strukturen for skærmen
                         viewModel.user.preferences.add(tag)
                     }
                 }
-                viewModel.fetchOne()
+                viewModel.incrementIndex()
                 viewModel.addItem("likedItem", currentPiece)
             }
         }
@@ -159,7 +160,7 @@ fun structureOfScreen(){ // Holder strukturen for skærmen
                     viewModel.user.preferences.add(tag)
                 }
             }
-            viewModel.fetchOne()
+            viewModel.incrementIndex()
         }
     }
 
