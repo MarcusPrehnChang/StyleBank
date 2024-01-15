@@ -82,7 +82,7 @@ fun app(){
             structureOfScreen()
         }
         composable("myBank"){
-            viewModel.filter.clearFilter()
+            //viewModel.filter.clearFilter()
             MyBankDisplay()
         }
 

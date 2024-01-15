@@ -13,7 +13,12 @@ class Filter {
 
     //Remove FilterItem fra liste
     fun removeFilterItem(filterItem: FilterItem){
-        filterItems.remove(filterItem)
+        val itemToRemove = filterItem.name
+        //filterItems.remove(filterItem)
+        val item = filterItems.firstOrNull { it.name == itemToRemove }
+        if (item != null) {
+            filterItems.remove(item)
+        }
     }
 
     fun clearFilter(){

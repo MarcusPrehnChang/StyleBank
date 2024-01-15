@@ -73,7 +73,7 @@ val add = viewModel.getList("likedItem")?.registerObserver(bankObserver)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyBankDisplay() {
-
+    Log.d("KØR", "Kører igen?")
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     var selectedItems by remember { mutableStateOf(setOf<String>()) }
     val imageIds = remember { mutableStateOf(list) }
@@ -88,28 +88,40 @@ fun MyBankDisplay() {
             }
         }
     }
+        if (viewModel.filter.filterItems.isNotEmpty()) {
+            viewModel.filter.filterItems.forEach { filterItem ->
+                selectedItems = selectedItems + filterItem.name
+            }
+            Log.d("KIG HER NUMSEMAND", "inde i if")
+            //viewModel.filter.clearFilter()
+        }
+
+
     val items = listOf(FilterItem("Trøjer"), FilterItem("Bukser"), FilterItem("T-Shirts"))
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
             ModalDrawerSheet {
+
                 Spacer(Modifier.height(12.dp))
 
                 items.forEach { item ->
+
                     val isSelected = selectedItems.contains(item.name)
 
                     NavigationDrawerItem(
                         label = { Text(text = item.name) },
                         icon = {
                         if (isSelected) {
-                            Image(
 
+                            Image(
                                 painter = painterResource(id = R.drawable.fluebenskasse),
                                 contentDescription = "valgt",
                                 modifier = Modifier
                                     .size(25.dp)
                             )
                         }else{
+
                             Image(painter = painterResource(id = R.drawable.square),
                                 contentDescription = "ik valgt",
                                 modifier = Modifier.size(25.dp))
@@ -122,11 +134,11 @@ fun MyBankDisplay() {
                             selectedItems =  if (isSelected) {
                                 viewModel.filter.removeFilterItem(item)
                                 Log.d("Removing FilterItems", viewModel.filter.filterItems.joinToString { it.toString() })
-                                (selectedItems - item.name).toSet()
+                                selectedItems - item.name
                             }  else{
                                 viewModel.filter.addFilterItem(item)
                                 Log.d("Adding FilterItems", viewModel.filter.filterItems.joinToString { it.toString() })
-                                (selectedItems + item.name).toSet()
+                                selectedItems + item.name
                             }
                         }
                     )
