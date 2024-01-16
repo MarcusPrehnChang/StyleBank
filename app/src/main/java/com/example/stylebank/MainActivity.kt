@@ -65,10 +65,10 @@ fun app(){
     val navController = rememberNavController()
 
     NavHost(navController = navController,
-        startDestination = "splash_screen" // Directly use the route string
+        startDestination = "splash_screen"
     ){
-        composable("splash_screen"){ // Match the route string
-            StyleBankSplashScreen(navController) // Call your splash screen composable
+        composable("splash_screen"){
+            StyleBankSplashScreen(navController)
         }
         composable("whats_hot"){
             WholeScreen()

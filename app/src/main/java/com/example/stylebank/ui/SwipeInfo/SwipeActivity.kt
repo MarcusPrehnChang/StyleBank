@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberImagePainter
 import com.example.stylebank.R
 import com.example.stylebank.model.Clothing
@@ -52,14 +53,15 @@ import com.example.stylebank.viewModel
 
 class SwipeActivity : ComponentActivity()
 
-val list = viewModel.getList("product")
-val clothingObserver = object : ObservableListObserver<Any> {
-    override fun onItemAdded(item: Any) {
-        println("triggered")
-        viewModel.index = viewModel.index + 1
+var list = viewModel.getList("product")
+val clothingObserver = object : ObservableListObserver<Clothing> {
+    override fun onItemAdded(item: Clothing) {
+        if(viewModel.incrementIndex()){
+            list = viewModel.getList("product")
+        }
     }
 }
-val add = viewModel.getList("product")?.registerObserver(clothingObserver)
+val add = viewModel.getList("product").registerObserver(clothingObserver)
 
 class Listofclothing : Fragment()
 
@@ -96,13 +98,13 @@ fun ExitButton(
 
 @Composable
 fun structureOfScreen(){ // Holder strukturen for skærmen
-    println("recomposition")
     var currentIndex by remember { mutableIntStateOf(viewModel.index) }
     var isOverlayVisible by remember { mutableStateOf(false) }
+    currentIndex = viewModel.index
     LaunchedEffect(viewModel.index) {
         currentIndex = viewModel.index
     }
-    val clothing = list?.get(currentIndex)
+    val clothing = list[currentIndex]
     var currentPiece : Clothing = clothing as Clothing
 
 
@@ -151,11 +153,33 @@ fun structureOfScreen(){ // Holder strukturen for skærmen
                     viewModel.fetchOne()
                 }
             bankButton {
-                viewModel.fetchOne()
+                for(tag in currentPiece.tags){
+                    val index = viewModel.user.preferences.indexOf(tag)
+                    if(index != -1){
+                        viewModel.user.preferences[index].value += 1
+                    }else{
+                        viewModel.user.preferences.add(tag)
+                    }
+                }
+                viewModel.incrementIndex()
                 viewModel.addItem("likedItem", currentPiece)
                 }
             }
         }
+//<<<<<<< HEAD
+//=======
+        dislike {
+            for(tag in currentPiece.tags){
+                val index = viewModel.user.preferences.indexOf(tag)
+                if(index != -1){
+                    viewModel.user.preferences[index].value -= 1
+                }else{
+                    viewModel.user.preferences.add(tag)
+                }
+            }
+            viewModel.incrementIndex()
+        }
+//>>>>>>> origin/Iteration_3_MyBank_Firebase_Algorithm
     }
 
     if (isOverlayVisible) {
@@ -314,7 +338,6 @@ fun pictureBox(
     mainPicture : String,
     onPictureClick: () -> Unit
 ){
-    println("Main picture : $mainPicture")
     var isOverlayVisible by remember { mutableStateOf(false) }
 
 
@@ -327,7 +350,6 @@ fun pictureBox(
             }
         }
     ){
-        println("Main picture : $mainPicture")
         val painter = rememberImagePainter(
             data = mainPicture,
             builder = {
