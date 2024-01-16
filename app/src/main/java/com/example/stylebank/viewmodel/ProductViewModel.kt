@@ -61,7 +61,7 @@ class ProductViewModel(private val repository: ClothingRepository) {
         for (clothing in productList){
             println(clothing.firebaseId)
         }
-        if (index == 7){
+        if (index >= 7){
             val prevMap = productList
             val newMap = ObservableList<Clothing>()
             for (i in index + 1 until productList.size){
@@ -108,6 +108,7 @@ class ProductViewModel(private val repository: ClothingRepository) {
         }else if (key == "likedItem"){
             likedList.add(item)
             repository.saveLiked(likedList)
+
         }
     }
 
