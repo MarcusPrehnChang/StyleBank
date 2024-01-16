@@ -44,6 +44,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.modifier.modifierLocalConsumer
+import androidx.compose.ui.layout.VerticalAlignmentLine
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
@@ -87,6 +88,14 @@ fun MyBankDisplay(clothingList: List<Clothing>) {
     val imageUrls = mutableListOf<String>()
     val imageLinks = mutableListOf<String>()
     val (isOverlayVisible, setIsOverlayVisible) = remember { mutableStateOf(false)}
+
+    LaunchedEffect(isOverlayVisible){
+        Log.d("MyBankDisplay", "isOverlayVisible er nu $isOverlayVisible")
+        if(!isOverlayVisible){
+            clickedClothing = null
+        }
+    }
+
     if (list != null) {
         for(item in list){
             if(item is Clothing){
@@ -166,8 +175,9 @@ fun MyBankDisplay(clothingList: List<Clothing>) {
                 if (clickedClothing != null) {
                     Overlay(
                         clothing = clickedClothing!!,
-                        isOverlayVisible = isOverlayVisible,
-                        setIsOverlayVisible = setIsOverlayVisible
+                        onCloseClicked = { clickedClothing = null }
+                        //isOverlayVisible = isOverlayVisible,
+                        //setIsOverlayVisible = setIsOverlayVisible
                     )
                 }
             }
@@ -276,27 +286,12 @@ fun BankCloth(
 
 
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingtooPreview() {
-    StyleBankTheme {
-        // A surface container using the 'background' color from the theme
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
-        ) {
-            //GreetingPreview()
-            //MyBankDisplay(nav)
-
-        }
-    }
-}
-
 @Composable
 fun Overlay(
     clothing: Clothing,
-    isOverlayVisible: Boolean,
-    setIsOverlayVisible: (Boolean) -> Unit
+    //isOverlayVisible: Boolean,
+    //setIsOverlayVisible: (Boolean) -> Unit
+    onCloseClicked: () -> Unit
 ) {
 
     var currentPiece : Clothing = clothing
@@ -313,7 +308,8 @@ fun Overlay(
                 .align(Alignment.TopEnd)
                 .padding(6.dp)
                 .clickable {
-                    setIsOverlayVisible(false)
+                    Log.d("Overlay", "luk knap klikket")
+                    onCloseClicked()
                 }
         ) {
 
@@ -360,7 +356,7 @@ fun Overlay(
                     modifier = Modifier
                         .height(180.dp)
                         .width(180.dp)
-                        .padding(start = 16.dp, top = 0.dp, end = 8.dp, bottom = 0.dp)
+                        .padding(start = 16.dp, top = 0.dp, end = 0.dp, bottom = 0.dp)
                         .background(
                             color = Color.Gray.copy(alpha = 0f),
                             shape = RoundedCornerShape(40.dp)
@@ -443,7 +439,6 @@ fun Overlay(
                         currentPiece.brandName,
                         modifier = Modifier
                     )
-                    Spacer(modifier = Modifier.width(120.dp))
                     prisSkilt(
                         modifier = Modifier,
                         currentPiece.price
