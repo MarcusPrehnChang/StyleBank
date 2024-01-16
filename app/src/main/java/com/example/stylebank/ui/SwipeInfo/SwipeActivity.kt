@@ -98,6 +98,11 @@ fun ExitButton(
 
 @Composable
 fun structureOfScreen(){ // Holder strukturen for skærmen
+    list = viewModel.getList("product")
+    println("Clothes in composable: ")
+    for(cloth in list){
+        println(cloth.firebaseId)
+    }
     var currentIndex by remember { mutableIntStateOf(viewModel.index) }
     var isOverlayVisible by remember { mutableStateOf(false) }
     currentIndex = viewModel.index
@@ -106,6 +111,7 @@ fun structureOfScreen(){ // Holder strukturen for skærmen
     }
     val clothing = list[currentIndex]
     var currentPiece : Clothing = clothing as Clothing
+    println("Current piece is : " + currentPiece.firebaseId)
 
 
     Box (modifier = Modifier
@@ -154,7 +160,7 @@ fun structureOfScreen(){ // Holder strukturen for skærmen
                 }
             bankButton {
                 for(tag in currentPiece.tags){
-                    val index = viewModel.user.preferences.indexOf(tag)
+                    val index = viewModel.user.preferences.indexOfFirst { it.name == tag.name }
                     if(index != -1){
                         viewModel.user.preferences[index].value += 1
                     }else{
@@ -163,6 +169,8 @@ fun structureOfScreen(){ // Holder strukturen for skærmen
                 }
                 viewModel.incrementIndex()
                 viewModel.addItem("likedItem", currentPiece)
+                for (tag in viewModel.user.preferences){
+                    println("Name : " + tag.name + " Value : " + tag.value)
                 }
             }
         }
@@ -170,7 +178,7 @@ fun structureOfScreen(){ // Holder strukturen for skærmen
 //=======
         dislike {
             for(tag in currentPiece.tags){
-                val index = viewModel.user.preferences.indexOf(tag)
+                val index = viewModel.user.preferences.indexOfFirst { it.name == tag.name }
                 if(index != -1){
                     viewModel.user.preferences[index].value -= 1
                 }else{

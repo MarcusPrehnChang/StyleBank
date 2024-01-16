@@ -7,6 +7,10 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Filter
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QueryDocumentSnapshot
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.tasks.await
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 class FirebaseRepository {
     var iterator: DocumentSnapshot? = null
@@ -91,65 +95,56 @@ class FirebaseRepository {
             }
     }
 
-    fun getBatch(tag: List<Tag>) : List<Clothing>{
-        for (element in tag){
-            println("tag name = " + element.name)
-        }
-        println("getBatch was reached")
-        println("tag.size = " + tag.size)
-        println("cocka")
-        println(tag[0].name)
-        for (element in tag){
-            println(element.name)
-        }
+    suspend fun getBatch(tag: List<Tag>): List<Clothing> = coroutineScope {
         val db = FirebaseFirestore.getInstance()
         val result = mutableListOf<Clothing>()
-        var clothing = Clothing(brandName = "test", firebaseId = "testID", link = "google.com", objectName = "Test object", price = "ass")
-        for (i in 0..4){
-            if(tag[i].name == "any"){
-                result.add(getRandom())
-            }else{
-                db.collection("products").whereArrayContains("tags", tag[i].name)
-                    .get().addOnSuccessListener { querySnapshot ->
-                        if(!querySnapshot.isEmpty){
-                            val document = querySnapshot.documents
-                            clothing = if(document.isNotEmpty()){
-                                val randomDoc = document.shuffled().first()
-                                makeClothing(randomDoc)
-                            }else{
-                                getRandom()
-                            }
+
+        for (i in 0 until 5) {
+            if (tag[i].name == "any") {
+                val randomClothing = getRandom()
+                result.add(randomClothing)
+            } else {
+                try {
+                    val querySnapshot = db.collection("products").whereArrayContains("tags", tag[i].name).get().await()
+
+                    if (!querySnapshot.isEmpty) {
+                        val document = querySnapshot.documents
+                        val clothing = if (document.isNotEmpty()) {
+                            val randomDoc = document.shuffled().first()
+                            makeClothing(randomDoc)
+                        } else {
+                            getRandom()
                         }
-                    }.addOnFailureListener{exception ->
-                        clothing = getRandom()
                         result.add(clothing)
                     }
-                result.add(clothing)
+                } catch (exception: Exception) {
+                    println("Firestore query failed: $exception")
+                    result.add(getRandom())
+                }
             }
         }
-        return result
+        return@coroutineScope result
     }
 
-    private fun getRandom() : Clothing{
+    suspend fun getRandom(): Clothing = suspendCoroutine { continuation ->
         val db = FirebaseFirestore.getInstance()
-        val collectionPath = "products" // Replace with your actual collection path
+        val collectionPath = "products"
         var clothing = Clothing(brandName = "test", firebaseId = "testID", link = "google.com", objectName = "Test object", price = "ass")
-        // Create a query for the "clothing" collection
         db.collection(collectionPath)
             .get()
             .addOnSuccessListener { querySnapshot ->
                 if (!querySnapshot.isEmpty) {
                     val randomDocument = querySnapshot.documents.shuffled().firstOrNull()
-
                     clothing = randomDocument?.let { makeClothing(it) }!!
                 } else {
                     println("query yielded empty")
                 }
+                continuation.resume(clothing)
             }
             .addOnFailureListener { exception ->
-                println({"Couldnt query"})
+                println("Could not query")
+                continuation.resume(clothing)
             }
-        return clothing
     }
 
 
