@@ -1,6 +1,5 @@
 package com.example.stylebank
 
-
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -18,6 +17,9 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -27,12 +29,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.rememberNavController
+import com.example.stylebank.ui.theme.StyleBankTheme
+import androidx.navigation.compose.composable
 import androidx.navigation.NavController
+import androidx.navigation.compose.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.stylebank.data.ClothingRepository
+import com.example.stylebank.model.Clothing
 import com.example.stylebank.ui.Animation.StyleBankSplashScreen
 import com.example.stylebank.ui.theme.MenubarGray
 import com.example.stylebank.ui.theme.StyleBankTheme
@@ -41,10 +48,6 @@ import com.example.stylebank.ui.whatsHot.WholeScreen
 import com.example.stylebank.viewmodel.ProductViewModel
 
 val roboto: FontFamily = FontFamily.Default
-
-
-
-
 
 class MainActivity : ComponentActivity() {
    override fun onCreate(savedInstanceState: Bundle?) {
@@ -77,9 +80,10 @@ fun app(){
             structureOfScreen()
         }
         composable("myBank"){
-            viewModel.filter.clearFilter()
-            MyBankDisplay()
+            val clothingList = viewModel.getList("likedItem").orEmpty().filterIsInstance<Clothing>()
+            MyBankDisplay(clothingList)
         }
+
         composable("whatsHot"){
             WholeScreen()
         }
@@ -120,14 +124,14 @@ fun BottomBar(navController: NavController){
             MenuBarButton(
                 onClick = { navController.navigate("whatsHot") },
                 icon = painterResource(id = R.drawable.icon_ild),
-                iconSize = 38.dp
+                iconSize = 24.dp
 
             )
 
             MenuBarButton(
                 onClick = { navController.navigate("swipeFragment") },
                 icon = painterResource(id = R.drawable.icon_swipe),
-                iconSize = 44.dp
+                iconSize = 38.dp
             )
 
             MenuBarButton(
@@ -161,4 +165,5 @@ fun MenuBarButton(
         )
     }
 }
+
 

@@ -23,6 +23,15 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import com.example.stylebank.R
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -36,6 +45,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.input.pointer.consumeAllChanges
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -50,6 +60,7 @@ import com.example.stylebank.R
 import com.example.stylebank.model.Clothing
 import com.example.stylebank.model.ObservableListObserver
 import com.example.stylebank.viewModel
+import kotlin.math.absoluteValue
 
 class SwipeActivity : ComponentActivity()
 
@@ -99,10 +110,6 @@ fun ExitButton(
 @Composable
 fun structureOfScreen() { // Holder strukturen for skærmen
     list = viewModel.getList("product")
-    println("Clothes in composable: ")
-    for (cloth in list) {
-        println(cloth.firebaseId)
-    }
     var currentIndex by remember { mutableIntStateOf(viewModel.index) }
     var isOverlayVisible by remember { mutableStateOf(false) }
     currentIndex = viewModel.index
@@ -110,32 +117,37 @@ fun structureOfScreen() { // Holder strukturen for skærmen
         currentIndex = viewModel.index
     }
     val clothing = list[currentIndex]
-    var currentPiece: Clothing = clothing as Clothing
-    println("Current piece is : " + currentPiece.firebaseId)
+    var currentPiece : Clothing = clothing as Clothing
+    var isItemAdded by remember { mutableStateOf(false)}
 
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
+    Box (modifier = Modifier
+        .fillMaxSize()
+        .background(Color.White)
     ) {
         Column(
-            modifier = Modifier
-        )
+            modifier = Modifier)
         {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .fillMaxHeight(0.75f)
                     .padding(16.dp, 28.dp, 16.dp, 16.dp),
-            ) {
+            ){
                 pictureBox(modifier = Modifier
                     .fillMaxSize(),
                     mainPicture = currentPiece.pictures[0],
-                    onPictureClick = { isOverlayVisible = true }
+                    onPictureClick = {isOverlayVisible = true},
+                    onSwipeLeft = { viewModel.fetchOne()},
+                    onSwipeRight = {
+                        if (!isItemAdded) {
+                            viewModel.fetchOne()
+                            viewModel.addItem("likedItem", currentPiece)
+                            isItemAdded = true
+                        }
+                    }
                 )
             }
-            Row(
+            Row (
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 30.dp, vertical = 0.dp),
@@ -151,7 +163,7 @@ fun structureOfScreen() { // Holder strukturen for skærmen
                     currentPiece.price
                 )
             }
-            Row(
+            Row (
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
@@ -164,150 +176,154 @@ fun structureOfScreen() { // Holder strukturen for skærmen
                     like(currentPiece)
                 }
             }
-            if (isOverlayVisible) {
-                Box(
+        }
+    }
+
+    if (isOverlayVisible) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.White)
+                .padding(16.dp)
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(34.dp)
+                    .align(Alignment.TopEnd)
+                    .padding(6.dp)
+                    .clickable {
+                        isOverlayVisible = false
+                    }
+            ) {
+
+                val imagePainter = painterResource(id = R.drawable.cross)
+                Image(
+                    painter = imagePainter,
+                    contentDescription = null,
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(Color.White)
-                        .padding(16.dp)
+                )
+            }
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.Start
+            ) {
+                Box( // Store box i overlay
+                    modifier = Modifier
+                        .fillMaxWidth(0.95f)
+                        .fillMaxHeight(0.46f)
+                        .padding(start = 30.dp, top = 0.dp, end = 14.dp, bottom = 16.dp)
+                        .background(
+                            color = Color.Black,
+                            shape = RoundedCornerShape(40.dp)
+                        )
+                ) {
+                    pictureBox(
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        currentPiece.pictures[0],
+                        onPictureClick = {},
+                        onSwipeRight = {},
+                        onSwipeLeft = {}
+                    )
+                }
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.Bottom
                 ) {
                     Box(
                         modifier = Modifier
-                            .size(34.dp)
-                            .align(Alignment.TopEnd)
-                            .padding(6.dp)
-                            .clickable {
-                                isOverlayVisible = false
-                            }
+                            .height(180.dp)
+                            .width(180.dp)
+                            .padding(start = 16.dp, top = 0.dp, end = 0.dp, bottom = 0.dp)
+                            .background(
+                                color = Color.Black,
+                                shape = RoundedCornerShape(40.dp)
+                            )
                     ) {
-
-                        val imagePainter = painterResource(id = R.drawable.cross)
-                        Image(
-                            painter = imagePainter,
-                            contentDescription = null,
+                        pictureBox(
                             modifier = Modifier
-                                .fillMaxSize()
+                                .fillMaxSize(),
+                            currentPiece.pictures[1],
+                            onPictureClick = {},
+                            onSwipeRight = {},
+                            onSwipeLeft = {}
                         )
                     }
-                    Column(
-                        modifier = Modifier.fillMaxSize(),
-                        verticalArrangement = Arrangement.Top,
-                        horizontalAlignment = Alignment.Start
-                    ) {
-                        Box( // Store box i overlay
-                            modifier = Modifier
-                                .fillMaxWidth(0.95f)
-                                .fillMaxHeight(0.46f)
-                                .padding(start = 30.dp, top = 0.dp, end = 14.dp, bottom = 16.dp)
-                                .background(
-                                    color = Color.Black,
-                                    shape = RoundedCornerShape(40.dp)
-                                )
-                        ) {
-                            pictureBox(
-                                modifier = Modifier
-                                    .fillMaxSize(),
-                                currentPiece.pictures[0],
-                                onPictureClick = {}
+                    Box(
+                        modifier = Modifier
+                            .height(180.dp)
+                            .width(180.dp)
+                            .padding(start = 0.dp, top = 0.dp, end = 8.dp, bottom = 0.dp)
+                            .background(
+                                color = Color.Black,
+                                shape = RoundedCornerShape(40.dp)
                             )
-                        }
+                    ) {
+                        pictureBox( // Se mig
+                            modifier = Modifier
+                                .fillMaxSize(),
+                            currentPiece.pictures[2],
+                            onPictureClick = {},
+                            onSwipeRight = {},
+                            onSwipeLeft = {}
+                        )
+                    }
+                }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.Bottom
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .height(100.dp)
+                            .fillMaxWidth()
+                            .padding(16.dp)
+                            .background(color = Color.Black, shape = RoundedCornerShape(10.dp))
+                            .clickable {}  //currentPiece.link skal laves logik for links
 
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.Bottom
-                        ) {
-                            Box(
-                                modifier = Modifier
-                                    .height(180.dp)
-                                    .width(180.dp)
-                                    .padding(start = 16.dp, top = 0.dp, end = 0.dp, bottom = 0.dp)
-                                    .background(
-                                        color = Color.Black,
-                                        shape = RoundedCornerShape(40.dp)
-                                    )
-                            ) {
-                                pictureBox(
-                                    modifier = Modifier
-                                        .fillMaxSize(),
-                                    currentPiece.pictures[1],
-                                    onPictureClick = {}
-                                )
-                            }
-                            Box(
-                                modifier = Modifier
-                                    .height(180.dp)
-                                    .width(180.dp)
-                                    .padding(start = 0.dp, top = 0.dp, end = 16.dp, bottom = 0.dp)
-                                    .background(
-                                        color = Color.Black,
-                                        shape = RoundedCornerShape(40.dp)
-                                    )
-                            ) {
-                                pictureBox( // Se mig
-                                    modifier = Modifier
-                                        .fillMaxSize(),
-                                    currentPiece.pictures[2],
-                                    onPictureClick = {}
-                                )
-                            }
-                        }
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            verticalAlignment = Alignment.Bottom
-                        ) {
-                            Box(
-                                modifier = Modifier
-                                    .height(100.dp)
-                                    .fillMaxWidth()
-                                    .padding(16.dp)
-                                    .background(
-                                        color = Color.Black,
-                                        shape = RoundedCornerShape(10.dp)
-                                    )
-                                    .clickable {}  //currentPiece.link skal laves logik for links
-
-                            ) {
-                                Text(
-                                    text = "STORE",
-                                    color = Color.White,
-                                    style = TextStyle(
-                                        fontSize = 25.sp,
-                                        fontWeight = FontWeight.Bold,
-                                        fontFamily = FontFamily.SansSerif
-                                    ),
-                                    modifier = Modifier
-                                        .align(Alignment.Center)
-                                )
-                                Image(
-                                    painter = painterResource(id = R.drawable.store),
-                                    contentDescription = null,
-                                    modifier = Modifier
-                                        .size(50.dp)
-                                        .align(Alignment.CenterEnd)
-                                        .padding(end = 16.dp)
-                                )
-                            }
-                        }
-                        Column(
-                            modifier = Modifier.fillMaxWidth(),
-                        ) {
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                informationOfPicture(
-                                    currentPiece.objectName,
-                                    currentPiece.brandName,
-                                    modifier = Modifier
-                                )
-                                prisSkilt(
-                                    modifier = Modifier,
-                                    currentPiece.price
-                                )
-                            }
-                        }
+                    ) {
+                        Text(
+                            text = "STORE",
+                            color = Color.White,
+                            style = TextStyle(
+                                fontSize = 25.sp,
+                                fontWeight = FontWeight.Bold,
+                                fontFamily = FontFamily.SansSerif
+                            ),
+                            modifier = Modifier
+                                .align(Alignment.Center)
+                        )
+                        Image(
+                            painter = painterResource(id = R.drawable.store),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(50.dp)
+                                .align(Alignment.CenterEnd)
+                                .padding(end = 16.dp)
+                        )
+                    }
+                }
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        informationOfPicture(
+                            currentPiece.objectName,
+                            currentPiece.brandName,
+                            modifier = Modifier
+                        )
+                        prisSkilt(
+                            modifier = Modifier,
+                            currentPiece.price
+                        )
                     }
                 }
             }
@@ -323,13 +339,32 @@ fun structureOfScreen() { // Holder strukturen for skærmen
 fun pictureBox(
     modifier: Modifier = Modifier,
     mainPicture : String,
+    onSwipeRight: () -> Unit,
+    onSwipeLeft: () -> Unit,
     onPictureClick: () -> Unit
 ){
     var isOverlayVisible by remember { mutableStateOf(false) }
+    var offsetX by remember { mutableStateOf(0f) }
 
 
     Box(modifier = Modifier
         .background(Color.White, shape = RoundedCornerShape(20.dp))
+        .pointerInput(Unit) {
+            detectDragGestures { change, dragAmount ->
+                change.consume()
+                offsetX += dragAmount.x
+                val threshold = 50.dp.toPx()
+                if (offsetX.absoluteValue >= threshold) {
+                    if (offsetX > 0) {
+                        onSwipeRight()
+                    } else {
+                        onSwipeLeft()
+                    }
+                    offsetX = 0f
+                }
+
+            }
+        }
         .pointerInput(Unit) {
             detectTapGestures {
                 onPictureClick()
@@ -344,7 +379,6 @@ fun pictureBox(
                 placeholder(R.drawable.loading3)
             }
         )
-
         Image(
             painter = painter,
             contentDescription = null,

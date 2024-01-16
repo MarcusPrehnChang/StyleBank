@@ -21,6 +21,8 @@ class ProductViewModel(private val repository: ClothingRepository) {
     var index by mutableStateOf(0)
     val filter = Filter()
     var isInitialized = false
+    var selectedItems by mutableStateOf<Set<String>>(setOf())
+        private set
     private var productList = ObservableList<Clothing>()
     private val bannerList = ObservableList<Banner>()
     private val likedList = ObservableList<Clothing>()
@@ -49,6 +51,7 @@ class ProductViewModel(private val repository: ClothingRepository) {
 
                 isInitialized = true
             }
+
         }
     }
 
