@@ -56,7 +56,6 @@ import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberImagePainter
-import com.example.stylebank.R
 import com.example.stylebank.model.Clothing
 import com.example.stylebank.model.ObservableListObserver
 import com.example.stylebank.viewModel
@@ -119,6 +118,7 @@ fun structureOfScreen() { // Holder strukturen for skærmen
     val clothing = list[currentIndex]
     var currentPiece : Clothing = clothing as Clothing
     var isItemAdded by remember { mutableStateOf(false)}
+    println(currentIndex)
 
     Box (modifier = Modifier
         .fillMaxSize()
@@ -137,11 +137,10 @@ fun structureOfScreen() { // Holder strukturen for skærmen
                     .fillMaxSize(),
                     mainPicture = currentPiece.pictures[0],
                     onPictureClick = {isOverlayVisible = true},
-                    onSwipeLeft = { viewModel.fetchOne()},
+                    onSwipeLeft = { dislike(currentPiece) },
                     onSwipeRight = {
                         if (!isItemAdded) {
-                            viewModel.fetchOne()
-                            viewModel.addItem("likedItem", currentPiece)
+                            like(currentPiece)
                             isItemAdded = true
                         }
                     }
