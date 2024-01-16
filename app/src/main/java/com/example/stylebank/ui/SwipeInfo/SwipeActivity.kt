@@ -24,14 +24,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import com.example.stylebank.R
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectDragGestures
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Clear
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -45,7 +39,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.input.pointer.consumeAllChanges
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -54,7 +47,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberImagePainter
 import com.example.stylebank.model.Clothing
 import com.example.stylebank.model.ObservableListObserver
@@ -165,15 +157,17 @@ fun structureOfScreen() { // Holder strukturen for skærmen
             Row (
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                dislike {
-                    dislike(currentPiece)
-                }
-                bankButton {
-                    like(currentPiece)
-                }
+                ChoiceButton(
+                    onClick = { dislike(currentPiece) },
+                    icon = painterResource(id = R.drawable.dislike_button2)
+                )
+                ChoiceButton(
+                    onClick = { like(currentPiece) },
+                    icon = painterResource(id = R.drawable.like_button2)
+                )
             }
         }
     }
@@ -375,7 +369,7 @@ fun pictureBox(
             data = mainPicture,
             builder = {
                 crossfade(true)
-                placeholder(R.drawable.loading3)
+                placeholder(R.drawable.loading)
             }
         )
         Image(
@@ -389,52 +383,30 @@ fun pictureBox(
         )
     }
 }
+
 @Composable
-fun bankButton(onClick: () -> Unit) {
-    Box(
-        modifier = Modifier
-            .padding(16.dp)
-            .width(100.dp)
-    ) {
-        Button(
-            onClick = onClick,
-            modifier = Modifier
-                .padding(10.dp) // Adjust padding as needed
-                .align(Alignment.CenterStart),
+fun ChoiceButton(
+    onClick: () -> Unit,
+    icon: Painter,
+    iconSize: Dp = 50.dp,
+    paddingValue: Dp = 0.dp
+) {
+    Button(
+        onClick = onClick,
+        shape = CircleShape,
+        colors = ButtonDefaults.buttonColors(
+            Color.White,
+            contentColor = Color.White
+        ), modifier = Modifier.padding(paddingValue),
+
         ) {
-            Icon(
-                painter = painterResource(id = R.drawable.patchcheck),
-                contentDescription = "Dislike",
-                modifier = Modifier.size(30.dp) // Enlarge the icon
-            )
-            Spacer(modifier = Modifier.width(15.dp))
-        }
+        Image(
+            painter = icon,
+            contentDescription = null,
+            modifier = Modifier.size(iconSize)
+        )
     }
 }
-@Composable
-fun dislike(onClick: () -> Unit) {
-    Box(
-        modifier = Modifier
-            .padding(16.dp)
-            .width(100.dp)
-    ) {
-        Button(
-            onClick = onClick,
-            modifier = Modifier
-                .padding(10.dp) // Adjust padding as needed
-                .align(Alignment.CenterStart),
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.patchminus),
-                contentDescription = "Dislike",
-                modifier = Modifier.size(30.dp) // Enlarge the icon
-            )
-            Spacer(modifier = Modifier.width(15.dp))
-        }
-    }
-}
-
-
 
 
 
