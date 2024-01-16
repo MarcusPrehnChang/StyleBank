@@ -520,10 +520,3 @@ fun dislike(currentPiece : Clothing){
 }
 
 
-
-//@Preview
-@Composable
-fun SwipeScreenPreview() {
-
-}
-//SwipeScreen() }
