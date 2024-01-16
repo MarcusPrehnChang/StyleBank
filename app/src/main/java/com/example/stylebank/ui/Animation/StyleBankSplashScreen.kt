@@ -73,7 +73,7 @@ fun StyleBankSplashScreen(navController: NavController) {
                     modifier = Modifier.size(230.dp)
                 )
                 Text(
-                    text = "Find Some more clothes?",
+                    text = "FIND YOUR STYLE",
                     style = MaterialTheme.typography.bodyLarge,
                     color = Color.LightGray
                 )

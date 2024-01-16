@@ -137,7 +137,7 @@ fun BottomBar(navController: NavController){
             MenuBarButton(
                 onClick = { navController.navigate("myBank") },
                 icon = painterResource(id = R.drawable.icon_mb),
-                iconSize = 36.dp
+                iconSize = 24.dp
             )
         }
     }
