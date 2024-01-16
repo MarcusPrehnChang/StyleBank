@@ -4,6 +4,7 @@ import androidx.activity.ComponentActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -23,15 +24,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import com.example.stylebank.R
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.detectDragGestures
-import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Clear
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -45,7 +37,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.input.pointer.consumeAllChanges
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -54,9 +45,11 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberImagePainter
+import com.example.stylebank.GlobalState
+import com.example.stylebank.R
 import com.example.stylebank.model.Clothing
+import com.example.stylebank.model.ObservableList
 import com.example.stylebank.model.ObservableListObserver
 import com.example.stylebank.viewModel
 import kotlin.math.absoluteValue
@@ -72,6 +65,27 @@ val clothingObserver = object : ObservableListObserver<Clothing> {
     }
 }
 val add = viewModel.getList("product").registerObserver(clothingObserver)
+
+fun filterClothingByTagNames(clothingList: ObservableList<Clothing>): ObservableList<Clothing> {
+    // If the tagNames array is empty, return the entire list
+    val selectedItems = GlobalState.selectedFilters
+    if (selectedItems.isEmpty()) {
+        return clothingList
+    }
+
+    // Create a new ObservableList for filtered items
+    val filteredList = ObservableList<Clothing>()
+
+    // Filter the list and add matching items to the filtered list
+    for (clothing in clothingList) {
+        if (clothing.tags.any { it.name in selectedItems }) {
+            filteredList.add(clothing)
+        }
+    }
+
+    return filteredList
+}
+
 
 class Listofclothing : Fragment()
 
@@ -108,7 +122,8 @@ fun ExitButton(
 
 @Composable
 fun structureOfScreen() { // Holder strukturen for skærmen
-    list = viewModel.getList("product")
+    list = filterClothingByTagNames(viewModel.getList("product"))
+
     var currentIndex by remember { mutableIntStateOf(viewModel.index) }
     var isOverlayVisible by remember { mutableStateOf(false) }
     currentIndex = viewModel.index
