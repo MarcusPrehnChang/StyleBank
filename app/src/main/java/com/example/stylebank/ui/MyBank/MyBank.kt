@@ -104,14 +104,25 @@ fun MyBankDisplay(clothingList: List<Clothing>) {
             }
         }
     }
+        if (viewModel.filter.filterItems.isNotEmpty()) {
+            viewModel.filter.filterItems.forEach { filterItem ->
+                selectedItems = selectedItems + filterItem.name
+            }
+            Log.d("KIG HER NUMSEMAND", "inde i if")
+            //viewModel.filter.clearFilter()
+        }
+
+
     val items = listOf(FilterItem("Trøjer"), FilterItem("Bukser"), FilterItem("T-Shirts"))
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
             ModalDrawerSheet {
+
                 Spacer(Modifier.height(12.dp))
 
                 items.forEach { item ->
+
                     val isSelected = selectedItems.contains(item.name)
 
                     NavigationDrawerItem(
@@ -138,11 +149,11 @@ fun MyBankDisplay(clothingList: List<Clothing>) {
                             selectedItems =  if (isSelected) {
                                 viewModel.filter.removeFilterItem(item)
                                 Log.d("Removing FilterItems", viewModel.filter.filterItems.joinToString { it.toString() })
-                                (selectedItems - item.name).toSet()
+                                selectedItems - item.name
                             }  else{
                                 viewModel.filter.addFilterItem(item)
                                 Log.d("Adding FilterItems", viewModel.filter.filterItems.joinToString { it.toString() })
-                                (selectedItems + item.name).toSet()
+                                selectedItems + item.name
                             }
                         }
                     )
