@@ -108,8 +108,7 @@ fun MyBankDisplay(clothingList: List<Clothing>) {
             viewModel.filter.filterItems.forEach { filterItem ->
                 selectedItems = selectedItems + filterItem.name
             }
-            Log.d("KIG HER NUMSEMAND", "inde i if")
-            //viewModel.filter.clearFilter()
+
         }
 
 
@@ -152,12 +151,22 @@ fun MyBankDisplay(clothingList: List<Clothing>) {
                                 selectedItems - item.name
                             }  else{
                                 viewModel.filter.addFilterItem(item)
+                                //viewModel.filtreList()
                                 Log.d("Adding FilterItems", viewModel.filter.filterItems.joinToString { it.toString() })
                                 selectedItems + item.name
                             }
                         }
                     )
                 }
+                NavigationDrawerItem(label = { Text(text = "Apply") },
+                    selected = false,
+                    onClick = {
+                        if(viewModel.filter.filterItems.isNotEmpty()){
+                            viewModel.filtreList()
+                        }else{
+                            println("SUT MIG")
+                        }
+                    })
             }
         },
         content = {
