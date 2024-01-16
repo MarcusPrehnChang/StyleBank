@@ -10,9 +10,11 @@ import com.example.stylebank.model.CombinedData
 import com.example.stylebank.model.Filter
 import com.example.stylebank.model.ObservableList
 import com.example.stylebank.model.User
+import com.example.stylebank.viewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class ProductViewModel(private val repository: ClothingRepository) {
@@ -32,7 +34,13 @@ class ProductViewModel(private val repository: ClothingRepository) {
 
     init{
         if (!isTestEnvironment()){
-
+            GlobalScope.launch{
+                withContext(Dispatchers.IO){
+                    repository.getUser()
+                    val bankedList = repository.getLikedItems()
+                    likedList.addAll(bankedList)
+                }
+            }
             repository.updateList {
                 val clothingList = repository.getProductList()
                 for (clothing in clothingList){
@@ -44,14 +52,8 @@ class ProductViewModel(private val repository: ClothingRepository) {
                     bannerList.add(banner)
                 }
 
-                val likedList = repository.getLikedItems()
-                for (likedItem in likedList){
-                    likedList.add(likedItem)
-                }
-
                 isInitialized = true
             }
-
         }
     }
 
@@ -75,7 +77,7 @@ class ProductViewModel(private val repository: ClothingRepository) {
             return true
         }
         if(index + 5 >= productList.size && !gettingClothes){
-            val data = CombinedData(user.preferences, listOf("any"))
+            val data = CombinedData(user.preferences, listOf("any")) // <- listOf("any") er filteret
             GlobalScope.launch(Dispatchers.Default) {
                 gettingClothes = !gettingClothes
                 val result = repository.getClothes(data)
@@ -86,6 +88,11 @@ class ProductViewModel(private val repository: ClothingRepository) {
         index++
         return false
     }
+
+    fun filterList(){
+        //Filtrer productlist
+    }
+
     fun getList(key: String): ObservableList<Clothing>{
         return if(key == "product"){
             productList;
@@ -100,6 +107,7 @@ class ProductViewModel(private val repository: ClothingRepository) {
             productList.add(item)
         }else if (key == "likedItem"){
             likedList.add(item)
+            repository.saveLiked(likedList)
         }
     }
 
