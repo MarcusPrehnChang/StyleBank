@@ -33,25 +33,6 @@ class ClothingRepository {
         }
     }
 
-    fun addOne(onUpdateComplete: () -> Unit){
-        serverCommunication.getOneClothingId{ result ->
-            if (result != null) {
-                val count = result.size
-                var completed = 0
-                for (id in result){
-                    firebaseRepository.getClothing(id) { clothing ->
-                        if (clothing != null) {
-                            productList.add(clothing)
-                        }
-                        completed++
-                        if(completed == count){
-                            onUpdateComplete()
-                        }
-                    }
-                }
-            }
-        }
-    }
 
     suspend fun getClothes(combinedData: CombinedData) : List<Clothing>{
         return serverCommunication.getBundle(combinedData)
