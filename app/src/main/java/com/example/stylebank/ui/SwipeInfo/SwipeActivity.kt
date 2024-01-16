@@ -225,7 +225,7 @@ fun structureOfScreen(){ // Holder strukturen for skærmen
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.Bottom
+                    verticalAlignment = Alignment.Bottom //
                 ) {
                     Box(
                         modifier = Modifier
