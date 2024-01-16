@@ -101,7 +101,6 @@ class FirebaseRepository {
 
         for (i in 0 until 5) {
             if (tag[i].name == "any") {
-                println("any detected")
                 val randomClothing = getRandom()
                 result.add(randomClothing)
             } else {
@@ -124,12 +123,6 @@ class FirebaseRepository {
                 }
             }
         }
-
-        println("attempting for loop")
-        for (cloth in result) {
-            println("clothing in result " + cloth.firebaseId)
-        }
-
         return@coroutineScope result
     }
 
@@ -141,10 +134,8 @@ class FirebaseRepository {
             .get()
             .addOnSuccessListener { querySnapshot ->
                 if (!querySnapshot.isEmpty) {
-                    println("querySnapshot didn't yield empty")
                     val randomDocument = querySnapshot.documents.shuffled().firstOrNull()
                     clothing = randomDocument?.let { makeClothing(it) }!!
-                    println("clothing in getRandom " + clothing.firebaseId)
                 } else {
                     println("query yielded empty")
                 }

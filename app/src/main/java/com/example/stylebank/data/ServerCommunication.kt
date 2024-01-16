@@ -29,24 +29,18 @@ class ServerCommunication(firebaseRepository: FirebaseRepository) {
 
     suspend fun getBundle(combinedData: CombinedData): List<Clothing> = withContext(Dispatchers.IO) {
         var result = emptyList<Clothing>()
-        println("reached getBundle")
-        println(combinedData.tagList.size)
         try {
-            println("in try")
             val call: Call<List<Tag>> = clothingApi.processResource(combinedData)
             val response = call.execute()
 
             result = if (response.isSuccessful) {
-                println("response successful")
                 val tags: List<Tag>? = response.body()
-                println("response body : " + response.body())
                 if (tags != null) {
                     firebaseRepository.getBatch(tags)
                 } else {
                     firebaseRepository.getBatch(backupBatch)
                 }
             } else {
-                println("Response unsuccessful")
                 firebaseRepository.getBatch(backupBatch)
             }
         } catch (e: Exception) {
