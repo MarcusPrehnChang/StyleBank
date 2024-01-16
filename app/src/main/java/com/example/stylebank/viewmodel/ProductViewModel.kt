@@ -3,6 +3,7 @@ package com.example.stylebank.viewmodel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.ViewModel
 import com.example.stylebank.data.ClothingRepository
 import com.example.stylebank.model.Banner
 import com.example.stylebank.model.Clothing
@@ -19,6 +20,8 @@ class ProductViewModel(private val repository: ClothingRepository) {
         "banner" to ObservableList<Banner>(),
         "likedItem" to ObservableList<Clothing>()
     )
+    var selectedItems by mutableStateOf<Set<String>>(setOf())
+        private set
     init{
         if (!isTestEnvironment()){
 
@@ -37,6 +40,7 @@ class ProductViewModel(private val repository: ClothingRepository) {
                 }
                 isInitialized = true
             }
+
         }
     }
     /*

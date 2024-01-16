@@ -153,10 +153,10 @@ fun MyBankDisplay(clothingList: List<Clothing>) {
                     imageUrls = imageUrls,
                     imageLinks = imageLinks,
 
-                ) { clickedItem ->
+                    ) { clickedItem ->
                     clickedClothing = clickedItem
                 }
-                }
+            }
 
                 //Billedet af setting
                 Box(
@@ -214,18 +214,18 @@ fun ImageList(
     Box(modifier = Modifier
         .fillMaxWidth()
         .padding(horizontal = 30.dp)){
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.Center)
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center)
         {
-        items(clothingList.size) { index ->
-            val clothing = clothingList[index]
-            BankCloth(
-                imageUrl = imageUrls[index],
-                link = imageLinks[index],
-                clothing = clothing,
-                onClothClicked = { onClothClicked(clothing) }
+            items(clothingList.size) { index ->
+                val clothing = clothingList[index]
+                BankCloth(
+                    imageUrl = imageUrls[index],
+                    link = imageLinks[index],
+                    clothing = clothing,
+                    onClothClicked = { onClothClicked(clothing) }
 
                 )
             }
@@ -275,9 +275,9 @@ fun BankCloth(
                     .clip(RoundedCornerShape(23.dp))
             )
 
-            }
         }
     }
+}
 
 
 
