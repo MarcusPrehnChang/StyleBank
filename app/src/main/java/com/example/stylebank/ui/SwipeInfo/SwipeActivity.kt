@@ -140,6 +140,7 @@ fun structureOfScreen() { // Holder strukturen for skærmen
                     }
                 )
             }
+
             Row (
                 modifier = Modifier
                     .fillMaxWidth()
