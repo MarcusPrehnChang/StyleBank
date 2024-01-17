@@ -164,8 +164,6 @@ fun MyBankDisplay(clothingList: List<Clothing>) {
                     onClick = {
                         if(viewModel.filter.filterItems.isNotEmpty()){
                             viewModel.filtreList()
-                        }else{
-                            println("SUT MIG")
                         }
                     })
             }
