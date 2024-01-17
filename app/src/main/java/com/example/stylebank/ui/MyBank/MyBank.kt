@@ -158,6 +158,7 @@ fun MyBankDisplay(clothingList: List<Clothing>) {
                         }
                     )
                 }
+
                 NavigationDrawerItem(label = { Text(text = "Apply") },
                     selected = false,
                     onClick = {
