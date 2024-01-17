@@ -3,7 +3,7 @@ package com.example.stylebank.model
 class Filter {
 
     //Liste af FilterItems
-    val filterItems: MutableList<FilterItem> = mutableListOf()
+    var filterItems: MutableList<FilterItem> = mutableListOf()
 
 
     //Add FilterItem til liste

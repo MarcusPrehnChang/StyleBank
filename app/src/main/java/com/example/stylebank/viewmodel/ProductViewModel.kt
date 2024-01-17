@@ -2,6 +2,7 @@ package com.example.stylebank.viewmodel
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.setValue
 import com.example.stylebank.data.ClothingRepository
 import com.example.stylebank.model.Banner
@@ -75,17 +76,55 @@ class ProductViewModel(private val repository: ClothingRepository) {
             return true
         }
         if(index + 5 >= productList.size && !gettingClothes){
-            val data = CombinedData(user.preferences, listOf("any"))
+            val itemsToGet : List<String>?
+            if(filter.filterItems.isNotEmpty()){
+                // Her skal itemsToGet vaere lig filter.filterItems
+                itemsToGet = filter.filterItems.map { it.name}
+            }
+            else{
+                // hvis der ikke er valgt nogle filtre
+                itemsToGet = listOf("any")
+            }
+            val data = CombinedData(user.preferences, itemsToGet) // Her hentes nyt toej ned listOf("any") er hvis der ikke er filter til
             GlobalScope.launch(Dispatchers.Default) {
                 gettingClothes = !gettingClothes
                 val result = repository.getClothes(data)
                 productList.addAll(result)
                 gettingClothes = !gettingClothes
+
             }
         }
         index++
         return false
     }
+    fun filtreList() {
+        // Create an iterator for safe removal
+        var sut = mutableListOf<Clothing>()
+        for(i in index until productList.size  ){
+            sut.add(productList[i])
+        }
+
+        // Iterate over the products using the iterator
+        val iterator = sut.iterator()
+
+        // Iterate over the products using the iterator
+        while (iterator.hasNext()) {
+            val product = iterator.next()
+            // Check each filterItem for a match in the product tags
+            for (filterItem in filter.filterItems) {
+                if (!product.tags.any { it.name == filterItem.name }) {
+                    // Remove the product using the iterator
+                    iterator.remove()
+                    break // Stops the inner loop
+                }
+            }
+        }
+        val x = productList.size
+        productList.addAll(sut)
+        index = x
+        incrementIndex()
+    }
+
     fun getList(key: String): ObservableList<Clothing>{
         return if(key == "product"){
             productList;
