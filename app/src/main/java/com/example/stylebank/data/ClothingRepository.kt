@@ -46,9 +46,23 @@ class ClothingRepository {
         return banners
     }
     fun getLikedItems(): ArrayList<Clothing>{
+        println("returning liked items of size : " + likedItems.size)
+
         return likedItems
     }
 
+    fun saveLiked(likedItems : List<Clothing>){
+        firebaseRepository.saveLiked(likedItems)
+    }
 
+    suspend fun getUser(){
+        val listOfLiked = firebaseRepository.getUser()
+        for (item in listOfLiked){
+            val clothing = firebaseRepository.getClothingAsync(item)
+            likedItems.add(clothing)
+            println("size of likedItems " + likedItems.size)
+        }
+
+    }
 
 }

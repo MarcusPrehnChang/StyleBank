@@ -168,5 +168,49 @@ class FirebaseRepository {
         )
     }
 
+    suspend fun getClothingAsync(clothingID : String): Clothing = suspendCoroutine { continuation ->
+        val db = FirebaseFirestore.getInstance()
+        val collectionPath = "products"
+        var clothing = Clothing(brandName = "test", firebaseId = "testID", link = "google.com", objectName = "Test object", price = "ass")
+        db.collection(collectionPath)
+            .document(clothingID)
+            .get()
+            .addOnSuccessListener { documentSnapshot ->
+                if (documentSnapshot.exists()) {
+                    clothing = makeClothing(documentSnapshot)
+                } else {
+                    println("query yielded empty")
+                }
+                continuation.resume(clothing)
+            }
+            .addOnFailureListener { exception ->
+                println("Could not query")
+                continuation.resume(clothing)
+            }
+    }
+
+    fun saveLiked(likedItems : List<Clothing>){
+        val db = FirebaseFirestore.getInstance()
+        val document = db.collection("Exam").document("examUser")
+        val newLikedValues = likedItems.map { it.firebaseId }
+        val data = hashMapOf(
+            "liked" to newLikedValues
+        )
+        document.update(data as Map<String, Any>)
+    }
+
+    suspend fun getUser() : List<String>{
+        return suspendCoroutine { continuation ->
+            val db = FirebaseFirestore.getInstance()
+            val document = db.collection("Exam").document("examUser")
+            var likedItems = emptyList<String>()
+            document.get().addOnSuccessListener {documentSnapshot ->
+                likedItems = documentSnapshot?.get("liked") as List<String>
+                continuation.resume(likedItems)
+            }
+        }
+    }
+
+
 
 }
