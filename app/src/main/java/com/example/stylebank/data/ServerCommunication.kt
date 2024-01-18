@@ -5,12 +5,8 @@ import com.example.stylebank.model.Clothing
 import com.example.stylebank.model.CombinedData
 import com.example.stylebank.model.clothing.Tag
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 

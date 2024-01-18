@@ -2,7 +2,6 @@ package com.example.stylebank.viewmodel
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.produceState
 import androidx.compose.runtime.setValue
 import com.example.stylebank.data.ClothingRepository
 import com.example.stylebank.model.Banner
@@ -11,7 +10,6 @@ import com.example.stylebank.model.CombinedData
 import com.example.stylebank.model.Filter
 import com.example.stylebank.model.ObservableList
 import com.example.stylebank.model.User
-import com.example.stylebank.viewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -101,13 +99,13 @@ class ProductViewModel(private val repository: ClothingRepository) {
     }
     fun filtreList() {
         // Create an iterator for safe removal
-        var sut = mutableListOf<Clothing>()
+        var tempFilterListe = mutableListOf<Clothing>()
         for(i in index until productList.size  ){
-            sut.add(productList[i])
+            tempFilterListe.add(productList[i])
         }
 
         // Iterate over the products using the iterator
-        val iterator = sut.iterator()
+        val iterator = tempFilterListe.iterator()
 
         // Iterate over the products using the iterator
         while (iterator.hasNext()) {
@@ -122,7 +120,7 @@ class ProductViewModel(private val repository: ClothingRepository) {
             }
         }
         val x = productList.size
-        productList.addAll(sut)
+        productList.addAll(tempFilterListe)
         index = x
         incrementIndex()
     }
