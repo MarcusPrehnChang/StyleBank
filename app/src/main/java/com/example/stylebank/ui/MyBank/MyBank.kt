@@ -68,7 +68,6 @@ import com.example.stylebank.ui.theme.prisSkilt
 
 
 class MyBank() : Fragment() {
-    //MyBankDisplay()
 }
 val list = viewModel.getList("likedItem")
 val bankObserver = object : ObservableListObserver<Clothing> {
@@ -147,12 +146,9 @@ fun MyBankDisplay(clothingList: List<Clothing>) {
 
                             selectedItems =  if (isSelected) {
                                 viewModel.filter.removeFilterItem(item)
-                                Log.d("Removing FilterItems", viewModel.filter.filterItems.joinToString { it.toString() })
                                 selectedItems - item.name
                             }  else{
                                 viewModel.filter.addFilterItem(item)
-                                //viewModel.filtreList()
-                                Log.d("Adding FilterItems", viewModel.filter.filterItems.joinToString { it.toString() })
                                 selectedItems + item.name
                             }
                         }
@@ -195,8 +191,7 @@ fun MyBankDisplay(clothingList: List<Clothing>) {
                     Overlay(
                         clothing = clickedClothing!!,
                         onCloseClicked = { clickedClothing = null }
-                        //isOverlayVisible = isOverlayVisible,
-                        //setIsOverlayVisible = setIsOverlayVisible
+
                     )
                 }
             }

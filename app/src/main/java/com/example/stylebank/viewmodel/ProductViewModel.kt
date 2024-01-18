@@ -57,9 +57,7 @@ class ProductViewModel(private val repository: ClothingRepository) {
     }
 
     fun incrementIndex() : Boolean{
-        for (clothing in productList){
-            println(clothing.firebaseId)
-        }
+
         if (index >= 7){
             val prevMap = productList
             val newMap = ObservableList<Clothing>()

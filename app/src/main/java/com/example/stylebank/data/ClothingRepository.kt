@@ -46,7 +46,7 @@ class ClothingRepository {
         return banners
     }
     fun getLikedItems(): ArrayList<Clothing>{
-        println("returning liked items of size : " + likedItems.size)
+
 
         return likedItems
     }

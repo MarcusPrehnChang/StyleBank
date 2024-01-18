@@ -108,8 +108,6 @@ fun structureOfScreen() { // Holder strukturen for skærmen
     val clothing = list[currentIndex]
     var currentPiece : Clothing = clothing as Clothing
     var isItemAdded by remember { mutableStateOf(false)}
-    println(currentIndex)
-    println(currentPiece.firebaseId)
 
 
     Box (modifier = Modifier
