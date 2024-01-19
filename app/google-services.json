@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "415759798304",
+    "firebase_url": "https://stylebank-9f316-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "stylebank-9f316",
+    "storage_bucket": "stylebank-9f316.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:415759798304:android:197f95ded0582e0976ec45",
+        "android_client_info": {
+          "package_name": "com.example.stylebank"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "415759798304-o8i9bitek9nn29qcb5qbgo5llm35mbh7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDFgM9eBlIDojptKijnyrUJ0os_Jv3K7xc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "415759798304-o8i9bitek9nn29qcb5qbgo5llm35mbh7.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "415759798304-3dvv76hv0mqt6ig7ksrdmc68pl8g6e49.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.frederikbank.StyleBank"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
