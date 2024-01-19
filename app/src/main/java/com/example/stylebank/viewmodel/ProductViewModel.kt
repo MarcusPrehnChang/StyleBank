@@ -123,6 +123,8 @@ class ProductViewModel(private val repository: ClothingRepository) {
         incrementIndex()
     }
 
+
+
     fun getList(key: String): ObservableList<Clothing>{
         return if(key == "product"){
             productList;
