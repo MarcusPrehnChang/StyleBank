@@ -1,10 +1,8 @@
 package com.example.stylebank.data
 
 import com.example.stylebank.model.Clothing
-import com.example.stylebank.model.User
 import com.example.stylebank.model.clothing.Tag
 import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.Filter
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QueryDocumentSnapshot
 import kotlinx.coroutines.coroutineScope

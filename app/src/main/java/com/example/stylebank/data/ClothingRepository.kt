@@ -3,7 +3,6 @@ package com.example.stylebank.data
 import com.example.stylebank.model.Banner
 import com.example.stylebank.model.Clothing
 import com.example.stylebank.model.CombinedData
-import com.example.stylebank.model.User
 
 class ClothingRepository {
     private val productList = ArrayList<Clothing>()
