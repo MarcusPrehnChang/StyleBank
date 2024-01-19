@@ -41,6 +41,7 @@ class ServerCommunication(firebaseRepository: FirebaseRepository) {
             }
         } catch (e: Exception) {
             e.printStackTrace()
+            firebaseRepository.getBatch(backupBatch)
         }
 
         return@withContext result

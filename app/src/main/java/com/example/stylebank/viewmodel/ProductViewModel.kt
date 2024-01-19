@@ -95,7 +95,7 @@ class ProductViewModel(private val repository: ClothingRepository) {
         index++
         return false
     }
-    fun filtreList() {
+    fun filtrerList() {
         // Create an iterator for safe removal
         var tempFilterListe = mutableListOf<Clothing>()
         for(i in index until productList.size  ){

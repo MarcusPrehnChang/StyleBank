@@ -105,7 +105,13 @@ fun structureOfScreen() { // Holder strukturen for skærmen
     LaunchedEffect(viewModel.index) {
         currentIndex = viewModel.index
     }
-    val clothing = list[currentIndex]
+    var clothing : Clothing
+    if(viewModel.isInitialized && viewModel.getList("product").size < 1){
+        clothing = Clothing(
+            listOf("https://www.freeiconspng.com/img/7952"), "Loading","Loading", "0","0", "0")
+    } else {
+        clothing = list[currentIndex]
+    }
     var currentPiece : Clothing = clothing as Clothing
     var isItemAdded by remember { mutableStateOf(false)}
 

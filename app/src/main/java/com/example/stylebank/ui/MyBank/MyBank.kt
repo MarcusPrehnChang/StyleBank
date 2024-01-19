@@ -153,7 +153,7 @@ fun MyBankDisplay(clothingList: List<Clothing>) {
                     selected = false,
                     onClick = {
                         if(viewModel.filter.filterItems.isNotEmpty()){
-                            viewModel.filtreList()
+                            viewModel.filtrerList()
                         }
                     })
             }
