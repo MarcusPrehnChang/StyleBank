@@ -40,11 +40,26 @@ class ProductViewModel(private val repository: ClothingRepository) {
                     likedList.addAll(bankedList)
                 }
             }
+            val itemsToGet : List<String>?
+            if(filter.filterItems.isNotEmpty()){
+                // Her skal itemsToGet vaere lig filter.filterItems
+                itemsToGet = filter.filterItems.map { it.name}
+            }
+            else{
+                // hvis der ikke er valgt nogle filtre
+                itemsToGet = listOf("any")
+            }
+            val data = CombinedData(user.preferences, itemsToGet) // Her hentes nyt toej ned listOf("any") er hvis der ikke er filter til
+            GlobalScope.launch(Dispatchers.Default) {
+                gettingClothes = !gettingClothes
+                val result = repository.getClothes(data)
+                productList.addAll(result)
+                gettingClothes = !gettingClothes
+                println("finished")
+            }
+
+
             repository.updateList {
-                val clothingList = repository.getProductList()
-                for (clothing in clothingList){
-                    productList.add(clothing)
-                }
 
                 val bannerList = repository.getBanners()
                 for(banner in bannerList){
@@ -89,38 +104,54 @@ class ProductViewModel(private val repository: ClothingRepository) {
                 val result = repository.getClothes(data)
                 productList.addAll(result)
                 gettingClothes = !gettingClothes
-
             }
         }
         index++
         return false
     }
     fun filtrerList() {
-        // Create an iterator for safe removal
-        var tempFilterListe = mutableListOf<Clothing>()
-        for(i in index until productList.size  ){
-            tempFilterListe.add(productList[i])
+        println("FiltrerList was called")
+        val itemsToGet : List<String>?
+        if(filter.filterItems.isNotEmpty()){
+            // Her skal itemsToGet vaere lig filter.filterItems
+            itemsToGet = filter.filterItems.map { it.name}
         }
+        else{
+            // hvis der ikke er valgt nogle filtre
+            itemsToGet = listOf("any")
+        }
+        val data = CombinedData(user.preferences, itemsToGet) // Her hentes nyt toej ned listOf("any") er hvis der ikke er filter til
+        GlobalScope.launch(Dispatchers.Default) {
+            gettingClothes = true
+            var tempFilterListe = mutableListOf<Clothing>()
+            for(i in index until productList.size  ){
+                tempFilterListe.add(productList[i])
+            }
 
-        // Iterate over the products using the iterator
-        val iterator = tempFilterListe.iterator()
+            // Iterate over the products using the iterator
+            val iterator = tempFilterListe.iterator()
 
-        // Iterate over the products using the iterator
-        while (iterator.hasNext()) {
-            val product = iterator.next()
-            // Check each filterItem for a match in the product tags
-            for (filterItem in filter.filterItems) {
-                if (!product.tags.any { it.name == filterItem.name }) {
-                    // Remove the product using the iterator
-                    iterator.remove()
-                    break // Stops the inner loop
+            // Iterate over the products using the iterator
+            while (iterator.hasNext()) {
+                val product = iterator.next()
+                // Check each filterItem for a match in the product tags
+                for (filterItem in filter.filterItems) {
+                    if (!product.tags.any { it.name == filterItem.name }) {
+                        // Remove the product using the iterator
+                        iterator.remove()
+                        break // Stops the inner loop
+                    }
                 }
             }
+            val x = productList.size
+            productList.addAll(tempFilterListe)
+            index = x
+            incrementIndex()
+            val result = repository.getClothes(data)
+            productList.addAll(result)
+            gettingClothes = false
         }
-        val x = productList.size
-        productList.addAll(tempFilterListe)
-        index = x
-        incrementIndex()
+        // Create an iterator for safe removal
     }
 
 
@@ -147,6 +178,5 @@ class ProductViewModel(private val repository: ClothingRepository) {
     private fun isTestEnvironment() : Boolean{
         return System.getProperty("isTestEnvironment") == "true";
     }
-
 
 }
