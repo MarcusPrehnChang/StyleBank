@@ -1,6 +1,10 @@
 package com.example.stylebank.ui.theme
 
 import androidx.activity.ComponentActivity
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animate
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -24,6 +28,8 @@ import androidx.compose.runtime.Composable
 import com.example.stylebank.R
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -34,6 +40,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
@@ -49,7 +56,9 @@ import coil.compose.rememberImagePainter
 import com.example.stylebank.model.Clothing
 import com.example.stylebank.model.ObservableListObserver
 import com.example.stylebank.viewModel
+import com.google.firebase.analytics.connector.AnalyticsConnector
 import kotlin.math.absoluteValue
+
 
 class SwipeActivity : ComponentActivity()
 
@@ -114,7 +123,6 @@ fun structureOfScreen() { // Holder strukturen for skærmen
     }
     var currentPiece : Clothing = clothing as Clothing
     var isItemAdded by remember { mutableStateOf(false)}
-
 
     Box (modifier = Modifier
         .fillMaxSize()
@@ -367,39 +375,61 @@ fun pictureBox(
 @Composable
 fun swipeBox(
     modifier: Modifier = Modifier,
-    mainPicture : String,
+    mainPicture: String,
     onSwipeRight: () -> Unit,
     onSwipeLeft: () -> Unit,
     onPictureClick: () -> Unit
-){
+) {
     var isOverlayVisible by remember { mutableStateOf(false) }
+
+    // Use FloatState to handle the animation
     var offsetX by remember { mutableStateOf(0f) }
 
-    Box(modifier = Modifier
-        .background(Color.White, shape = RoundedCornerShape(20.dp))
-        .pointerInput(Unit) {
-            detectDragGestures { change, dragAmount ->
-                change.consume()
-                offsetX += dragAmount.x
-                val threshold = 50.dp.toPx()
-                if (offsetX.absoluteValue >= threshold) {
-                    if (offsetX > 0) {
-                        onSwipeRight()
-                    } else {
-                        onSwipeLeft()
-                    }
-                    offsetX = 0f
-                }
+    val swipeThreshold = 50.dp.value
 
+    LaunchedEffect(offsetX) {
+        if (offsetX != 0f) {
+            animate(
+                initialValue = offsetX,
+                targetValue = 0f,
+                animationSpec = spring(stiffness = Spring.StiffnessHigh)
+            ) { value, _ ->
+                offsetX = value
             }
         }
-        .pointerInput(Unit) {
-            detectTapGestures {
-                onPictureClick()
-                isOverlayVisible = true
+    }
+
+    ElevatedCard(
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 6.dp
+        ),
+        modifier = Modifier
+            .background(Color.White, shape = RoundedCornerShape(20.dp))
+            .pointerInput(Unit) {
+                detectDragGestures { change, dragAmount ->
+                    change.consume()
+                    offsetX += dragAmount.x
+
+                    if (offsetX.absoluteValue >= swipeThreshold) {
+                        if (offsetX > 0) {
+                            onSwipeRight()
+                        } else {
+                            onSwipeLeft()
+                        }
+                    }
+                }
             }
-        }
-    ){
+            .pointerInput(Unit) {
+                detectTapGestures {
+                    onPictureClick()
+                    isOverlayVisible = true
+                }
+            }
+            .graphicsLayer(
+                translationX = offsetX,
+                rotationZ = (offsetX / swipeThreshold) * 8f
+            )
+    ) {
         val painter = rememberImagePainter(
             data = mainPicture,
             builder = {
@@ -414,10 +444,16 @@ fun swipeBox(
             modifier = Modifier
                 .clip(RoundedCornerShape(23.dp))
                 .fillMaxSize()
-                .align(Alignment.Center)
+                .align(Alignment.CenterHorizontally)
         )
     }
 }
+
+
+
+
+
+
 
 @Composable
 fun ChoiceButton(
@@ -476,6 +512,7 @@ fun informationOfPicture(
         )
     }
 }
+
 
 @Composable
 fun prisSkilt(modifier: Modifier = Modifier, price : String){
